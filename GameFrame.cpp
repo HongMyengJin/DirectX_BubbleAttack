@@ -28,6 +28,7 @@ void CBubbleAttackGameFrame::CreateFrame(HINSTANCE hInstance, HWND hMainWnd)
 #endif
 	CreateDepthStencilView();
 
+	m_Timer.init();
 	//BuildObjects();
 }
 
@@ -45,6 +46,8 @@ void CBubbleAttackGameFrame::DestroyFrame()
 
 void CBubbleAttackGameFrame::UpdateFrame()
 {
+	m_Timer.Tick();
+
 	HRESULT hResult = m_pd3dCommandAllocator->Reset();
 	hResult = m_pd3dCommandList->Reset(m_pd3dCommandAllocator.Get(), nullptr);
 	// 명령 할당자, 리스트 리셋
@@ -108,6 +111,8 @@ void CBubbleAttackGameFrame::UpdateFrame()
 
 	m_iSwapChainBufferIndex = m_pdxgiSwapChain->GetCurrentBackBufferIndex();
 	//렌더 타겟 인덱스가 변경됨
+
+	m_Timer.printFPS(m_hWnd);
 }
 
 void CBubbleAttackGameFrame::CreateSwapChain()

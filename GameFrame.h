@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Timer.h"
 
 class CBubbleAttackGameFrame
 {
@@ -34,6 +35,7 @@ private:
 	const UINT					m_iSwapChainBuffers = 2;
 	UINT						m_iSwapChainBufferIndex = 0;
 
+	CTimer						m_Timer;
 	D3D12_CPU_DESCRIPTOR_HANDLE								m_pd3dSwapChainBackBufferRTVCPUHandles[SWAPCHAINBUFFER_N];
 	D3D12_CPU_DESCRIPTOR_HANDLE								m_d3dDsvDescriptorCPUHandle;
 
