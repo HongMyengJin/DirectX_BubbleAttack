@@ -39,8 +39,8 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D12Device>					m_pd3dDevice;
 
-	/*Microsoft::WRL::ComPtr<ID3D12Resource>*/ID3D12Resource*					m_ppd3dRenderTargetBuffers[SWAPCHAINBUFFER_N];
-	/*Microsoft::WRL::ComPtr<ID3D12Resource>*/ID3D12Resource*					m_pd3dDepthStencilBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource>					m_ppd3dRenderTargetBuffers[SWAPCHAINBUFFER_N];
+	Microsoft::WRL::ComPtr<ID3D12Resource>					m_pd3dDepthStencilBuffer;
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>			m_pd3dRtvDescriptorHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>			m_pd3dDsvDescriptorHeap;
