@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Timer.h"
+#include "Scene.h"
 
 class CBubbleAttackGameFrame
 {
@@ -60,4 +61,9 @@ private:
 
 	bool													m_bMsaa4xEnable = false;
 	UINT													m_nMsaa4xQualityLevels = 0;
+
+	D3D12_VIEWPORT											m_d3dViewport;
+	D3D12_RECT												m_d3dScissorRect;
+	// Scene ฐüทร
+	std::unique_ptr<CScene>									m_pCurrentScene;
 };

@@ -11,6 +11,8 @@ CBubbleAttackGameFrame::~CBubbleAttackGameFrame()
 void CBubbleAttackGameFrame::Init(HINSTANCE hInstance, HWND hMainWnd)
 {
 	CreateFrame(hInstance, hMainWnd);
+	m_pCurrentScene = std::make_unique<CScene>();
+	m_pCurrentScene->BuildObjects(m_pd3dDevice.Get());
 }
 
 void CBubbleAttackGameFrame::CreateFrame(HINSTANCE hInstance, HWND hMainWnd)
@@ -65,11 +67,14 @@ void CBubbleAttackGameFrame::UpdateFrame()
 	// 현재 렌더 타겟에 대한 렌더링이 끝날때까지 대기
 	// 프리젠트가 끝나면 렌더 타겟 버퍼의 상태는 프리젠트 상태(D3D12_RESOURCE_STATE_PRESENT)에서 렌더 타겟 상태(D3D12_RESOURCE_STATE_RENDER_TARGET)로 바뀔 것
 
+	m_pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
+	m_pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
+
 	D3D12_CPU_DESCRIPTOR_HANDLE	d3dRtvCPUDescriptorHandle = m_pd3dRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	d3dRtvCPUDescriptorHandle.ptr += (m_iSwapChainBufferIndex * gnRtvDescriptorIncrementSize);
 	// 현재의 렌더 타겟에 해당하는 서술자의 CPU 주소(핸들) 계산
 
-	float gfClearColor[4] = { 1.f, 1.f, 0.f, 1.f };
+	float gfClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
 	m_pd3dCommandList->ClearRenderTargetView(d3dRtvCPUDescriptorHandle, gfClearColor, 0, NULL);
 	// 원하는 색상으로 렌더 타겟(뷰) 지움
 
@@ -83,6 +88,7 @@ void CBubbleAttackGameFrame::UpdateFrame()
 	// 렌더 타겟 뷰(서술자)와 깊이-스텐실 뷰(서술자)를 출렵-병합 단계(OM)에 연결
 
 	//Rendering
+	m_pCurrentScene->Render(m_pd3dCommandList.Get());
 
 	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET; 
 	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
@@ -203,6 +209,16 @@ void CBubbleAttackGameFrame::CreateDirect3DDevice()
 	m_hFenceEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	// 이벤트 객체 생성(펜스와 동기화를 위해), 이벤트 객체 초기값은 FALSE, 이벤트 실행(Signal)되면 이벤트의 값을 자동적으로 False가 되도록 생성
 	
+	m_d3dViewport.TopLeftX = 0;
+	m_d3dViewport.TopLeftY = 0;
+	m_d3dViewport.Width = static_cast<float>(FRAME_BUFFER_WIDTH);
+	m_d3dViewport.Height = static_cast<float>(FRAME_BUFFER_HEIGHT);
+	m_d3dViewport.MinDepth = 0.f;
+	m_d3dViewport.MaxDepth = 1.f;
+	// 뷰포트를 클라이언트 영역 전체로 설정
+
+	m_d3dScissorRect = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT };
+
 	::gnRtvDescriptorIncrementSize = m_pd3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	::gnCbvSrvDescriptorIncrementSize = m_pd3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 

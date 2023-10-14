@@ -38,7 +38,10 @@
 #include <memory.h>
 #include <wrl.h>
 
+#include <iostream>
 #include <vector>
+
+
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
