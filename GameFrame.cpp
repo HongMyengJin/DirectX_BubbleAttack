@@ -10,9 +10,10 @@ CBubbleAttackGameFrame::~CBubbleAttackGameFrame()
 
 void CBubbleAttackGameFrame::Init(HINSTANCE hInstance, HWND hMainWnd)
 {
+	
 	CreateFrame(hInstance, hMainWnd);
-	m_pCurrentScene = std::make_unique<CScene>();
-	m_pCurrentScene->BuildObjects(m_pd3dDevice.Get());
+	//m_pCurrentScene = std::make_unique<CScene>();
+	//m_pCurrentScene->BuildObjects(m_pd3dDevice.Get());
 }
 
 void CBubbleAttackGameFrame::CreateFrame(HINSTANCE hInstance, HWND hMainWnd)
@@ -31,6 +32,9 @@ void CBubbleAttackGameFrame::CreateFrame(HINSTANCE hInstance, HWND hMainWnd)
 	CreateDepthStencilView();
 
 	m_Timer.init();
+
+	m_pSceneManager = std::make_unique<CSceneManager>();
+	m_pSceneManager->ChangeSceneComponent(SceneType::Stage1Type, m_pd3dDevice.Get());
 	//BuildObjects();
 }
 
@@ -88,7 +92,8 @@ void CBubbleAttackGameFrame::UpdateFrame()
 	// ·»´õ Å¸°Ù ºä(¼­¼úÀÚ)¿Í ±íÀÌ-½ºÅÙ½Ç ºä(¼­¼úÀÚ)¸¦ Ãâ·Æ-º´ÇÕ ´Ü°è(OM)¿¡ ¿¬°á
 
 	//Rendering
-	m_pCurrentScene->Render(m_pd3dCommandList.Get());
+	m_pSceneManager->PreRenderCurrentScene(m_pd3dCommandList.Get());
+	m_pSceneManager->RenderCurrentScene(m_pd3dCommandList.Get());
 
 	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET; 
 	d3dResourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;

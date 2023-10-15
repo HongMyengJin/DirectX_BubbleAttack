@@ -41,7 +41,8 @@
 #include <iostream>
 #include <vector>
 
-
+// 사용자 정의 헤더
+#include "Enum.h"
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;

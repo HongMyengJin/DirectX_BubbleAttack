@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Timer.h"
-#include "Scene.h"
+#include "SceneManager.h"
 
 class CBubbleAttackGameFrame
 {
@@ -64,6 +64,7 @@ private:
 
 	D3D12_VIEWPORT											m_d3dViewport;
 	D3D12_RECT												m_d3dScissorRect;
+
 	// Scene ฐüทร
-	std::unique_ptr<CScene>									m_pCurrentScene;
+	std::unique_ptr<CSceneManager>							m_pSceneManager;
 };
