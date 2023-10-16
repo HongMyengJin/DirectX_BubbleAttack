@@ -27,10 +27,10 @@ public:
 	const MaterialData& GetMaterialData() { return m_tMaterialData; };
 
 	void SetMaterialData(MaterialData tMaterialData) { m_tMaterialData = tMaterialData;}
-	void LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, UINT nType, UINT nRootParameter, _TCHAR* pwstrTextureName, UINT iTextureIndex, FILE* pInFile);
+	void LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, UINT nType, UINT nRootParameter, UINT iTextureIndex, FILE* pInFile);
 public:
 	MaterialData														m_tMaterialData;
-	std::vector<std::unique_ptr<CTextureComponent>>						m_Textures;
+	std::vector<std::shared_ptr<CTextureComponent>>						m_Textures;
 	UINT																m_nTexture;
 };
 

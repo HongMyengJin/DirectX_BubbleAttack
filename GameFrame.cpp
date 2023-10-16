@@ -10,7 +10,6 @@ CBubbleAttackGameFrame::~CBubbleAttackGameFrame()
 
 void CBubbleAttackGameFrame::Init(HINSTANCE hInstance, HWND hMainWnd)
 {
-	
 	CreateFrame(hInstance, hMainWnd);
 	//m_pCurrentScene = std::make_unique<CScene>();
 	//m_pCurrentScene->BuildObjects(m_pd3dDevice.Get());
@@ -33,8 +32,20 @@ void CBubbleAttackGameFrame::CreateFrame(HINSTANCE hInstance, HWND hMainWnd)
 
 	m_Timer.init();
 
+	m_pd3dCommandList->Reset(m_pd3dCommandAllocator.Get(), NULL);
+
 	m_pSceneManager = std::make_unique<CSceneManager>();
 	m_pSceneManager->ChangeSceneComponent(SceneType::Stage1Type, m_pd3dDevice.Get(), m_pd3dCommandList.Get());
+
+	m_pd3dCommandList->Close();
+	// 명령 리스트를 닫힌 상태로 설정
+
+	ID3D12CommandList* ppd3dCommandList[] = { m_pd3dCommandList.Get() };
+	m_pd3dCommandQueue->ExecuteCommandLists(1, ppd3dCommandList);
+	// 명령 리스트를 명령 큐에 추가하여 실행
+
+	WaitForGpuComplete();
+	//GPU가 모든 명령 리스트를 실행할때까지 대기
 	//BuildObjects();
 }
 

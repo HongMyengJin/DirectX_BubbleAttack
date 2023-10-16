@@ -9,7 +9,7 @@ CTextureComponent::CTextureComponent(UINT nTextureN, UINT nTextureType, int nSam
 	m_ppd3dTextureUploadBuffers.resize(m_nTextureN);
 	m_ppd3dTextures.resize(m_nTextureN);
 
-	m_stTextureName.resize(m_nTextureN);
+	//m_stTextureName.resize(m_nTextureN);
 	//m_pd3dSrvGpuDescriptorHandles = new D3D12_GPU_DESCRIPTOR_HANDLE[m_nTextureN];
 
 	m_pnResourceTypes.resize(m_nTextureN);

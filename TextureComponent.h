@@ -17,7 +17,7 @@ public:
 
 	void LoadTextureFromDDSFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, wchar_t* pszFileName, UINT nResourceType, UINT nIndex);
 
-	std::vector<std::array<TCHAR, 64>>						m_stTextureName;
+	std::array<TCHAR, 64>									m_stTextureName;
 private:
 	UINT													m_nTextureN = 0;
 	UINT													m_nTextureType;

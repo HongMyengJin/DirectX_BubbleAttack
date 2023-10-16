@@ -8,7 +8,7 @@ public:
 	virtual ~CMeshComponent() {};
 
 protected:
-	std::string																m_stMeshName;
+	char																	m_stMeshName[256];
 	
 	XMFLOAT3																m_xmf3AABBCenter = XMFLOAT3(0.f, 0.f, 0.f);
 	XMFLOAT3																m_xmf3AABBExtents = XMFLOAT3(0.f, 0.f, 0.f);
