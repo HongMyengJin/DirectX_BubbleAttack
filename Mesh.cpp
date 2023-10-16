@@ -157,20 +157,23 @@ void CObjectMeshComponent::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12Grap
 					nReads = fread(pstrToken, sizeof(char), nStrLength, pInFile);
 					pstrToken[nStrLength] = '\0';
 
-					if (!strcmp(pstrToken, "<SubMesh>:"))
+					if (!strcmp(pstrToken, "<SubMesh>:")) // 분명 여기 내부에 문제가 있음
 					{
+						int nSubsetIndces;
 						int nIndex = 0;
 						nReads = fread(&nIndex, sizeof(int), 1, pInFile);
-						nReads = fread(&(m_pnSubSetIndices[i]), sizeof(int), 1, pInFile);
-						if (m_pnSubSetIndices[i] <= 0)
+						nReads = fread(&nSubsetIndces, sizeof(int), 1, pInFile);
+						m_pnSubSetIndices[i] = nSubsetIndces;
+						if (nSubsetIndces <= 0)
 							continue;
-						m_ppnSubSetIndices[i].reserve(m_pnSubSetIndices[i]);
-						nReads = (UINT)::fread(&m_ppnSubSetIndices[i], sizeof(UINT) * m_pnSubSetIndices[i], 1, pInFile);
-						//m_ppd3dSubSetIndexBuffers[i] = ::CreateBufferResource(pd3dDevice, pd3dCommandList, &m_ppnSubSetIndices[i], sizeof(UINT) * m_pnSubSetIndices[i], D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, ppd3dSubSetIndexUploadBuffers);
 
-						//m_pd3dSubSetIndexBufferViews[i].BufferLocation = m_ppd3dSubSetIndexBuffers[i]->GetGPUVirtualAddress();
-						//m_pd3dSubSetIndexBufferViews[i].Format = DXGI_FORMAT_R32_UINT;
-						//m_pd3dSubSetIndexBufferViews[i].SizeInBytes = sizeof(UINT) * m_pnSubSetIndices[i];
+						m_ppnSubSetIndices[i].resize(m_pnSubSetIndices[i]);
+						nReads = (UINT)::fread(&m_ppnSubSetIndices[i][0], sizeof(UINT) * m_pnSubSetIndices[i], 1, pInFile);
+						m_ppd3dSubSetIndexBuffers[i] = ::CreateBufferResource(pd3dDevice, pd3dCommandList, &m_ppnSubSetIndices[i][0], sizeof(UINT) * m_pnSubSetIndices[i], D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, m_ppd3dSubSetIndexUploadBuffers[i].GetAddressOf());
+
+						m_pd3dSubSetIndexBufferViews[i].BufferLocation = m_ppd3dSubSetIndexBuffers[i]->GetGPUVirtualAddress();
+						m_pd3dSubSetIndexBufferViews[i].Format = DXGI_FORMAT_R32_UINT;
+						m_pd3dSubSetIndexBufferViews[i].SizeInBytes = sizeof(UINT) * m_pnSubSetIndices[i];
 					}
 				}
 			}

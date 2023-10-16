@@ -27,8 +27,9 @@ protected:
 
 	UINT																	m_nSubMeshes = 0;
 
-	std::vector<UINT>														m_pnSubSetIndices;
-	std::vector<std::vector<UINT>>											m_ppnSubSetIndices;
+
+	std::vector<int>										m_pnSubSetIndices;
+	std::vector<std::vector<UINT>>							m_ppnSubSetIndices;
 
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>>						m_ppd3dSubSetIndexBuffers;
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>>						m_ppd3dSubSetIndexUploadBuffers;
