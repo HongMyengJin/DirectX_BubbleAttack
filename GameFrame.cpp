@@ -34,7 +34,7 @@ void CBubbleAttackGameFrame::CreateFrame(HINSTANCE hInstance, HWND hMainWnd)
 	m_Timer.init();
 
 	m_pSceneManager = std::make_unique<CSceneManager>();
-	m_pSceneManager->ChangeSceneComponent(SceneType::Stage1Type, m_pd3dDevice.Get());
+	m_pSceneManager->ChangeSceneComponent(SceneType::Stage1Type, m_pd3dDevice.Get(), m_pd3dCommandList.Get());
 	//BuildObjects();
 }
 

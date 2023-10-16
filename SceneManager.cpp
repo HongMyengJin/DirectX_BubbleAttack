@@ -1,14 +1,14 @@
 #include "SceneManager.h"
 #include "Stage.h"
 
-void CSceneManager::ChangeSceneComponent(SceneType eSceneType, ID3D12Device* pd3dDevice)
+void CSceneManager::ChangeSceneComponent(SceneType eSceneType, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	switch (eSceneType)
 	{
 	case SceneType::Stage1Type:
 	{
 		m_pCurrentScene = std::make_unique<CStage>();
-		m_pCurrentScene->BuildObjects(pd3dDevice);
+		m_pCurrentScene->BuildObjects(pd3dDevice, pd3dCommandList);
 		break;
 	}
 	case SceneType::SceneTypeEnd:

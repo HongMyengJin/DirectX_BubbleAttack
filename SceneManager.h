@@ -6,7 +6,7 @@ public:
 	CSceneManager() {};
 	~CSceneManager() {};
 public:
-	void ChangeSceneComponent(SceneType eSceneType, ID3D12Device* pd3dDevice); // SceneType을 넘기면 해당 씬이 만들어짐
+	void ChangeSceneComponent(SceneType eSceneType, ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList); // SceneType을 넘기면 해당 씬이 만들어짐
 	void UpdateCurrentScene(float fTimeElapsed);
 	void PreRenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList);

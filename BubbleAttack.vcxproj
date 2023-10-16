@@ -129,27 +129,44 @@
   <ItemGroup>
     <ClInclude Include="BubbleAttack.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="DDSTextureLoader12.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="GameFrame.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="MaterialComponent.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ObjectShaderComponent.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ShaderComponent.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="WICTextureLoader12.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BubbleAttack.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="GameFrame.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="MaterialComponent.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ObjectShaderComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ShaderComponent.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TransformComponent.cpp" />
+    <ClCompile Include="WICTextureLoader12.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BubbleAttack.rc" />
@@ -159,6 +176,20 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="ObjectPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="ObjectVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="PixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

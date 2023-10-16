@@ -40,6 +40,11 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
+#include <unordered_map>
+#include <array>
+#include <locale>
+#include <codecvt>
 
 // 사용자 정의 헤더
 #include "Enum.h"
