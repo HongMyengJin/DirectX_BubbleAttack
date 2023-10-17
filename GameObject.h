@@ -5,7 +5,7 @@
 class CGameObject
 {
 public:
-	CGameObject() {};
+	CGameObject() {  };
 	~CGameObject() {};
 
 public:
@@ -18,11 +18,12 @@ public:
 
 
 	std::shared_ptr<CGameObject> LoadFrameHierarchyFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, char* pstrFileName);
+	std::shared_ptr<CGameObject> LoadFrameHierarchy(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, char* pstrFileName, FILE* pInFile);
 
-	void SetChild(std::shared_ptr<CGameObject> pChild);
+	void SetChild(std::shared_ptr<CGameObject> pParentObject, std::shared_ptr<CGameObject> pChildObject);
 
 protected:
-	std::string																				m_pstrFrameName;
+	char																					m_pstrFrameName[126];
 	std::vector<std::shared_ptr<CComponent>>												m_pComponents; // 함수에서 접근할때 포인터 접근 필요(shared_ptr)
 
 

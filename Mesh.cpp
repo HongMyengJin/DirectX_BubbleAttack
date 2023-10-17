@@ -63,7 +63,6 @@ void CObjectMeshComponent::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12Grap
 				continue;
 			if (!strcmp(pstrToken, "<Positions>:"))
 			{
-
 				m_nType |= static_cast<UINT>(VertexType::VertexPosition);
 				m_pxmf3Positions.resize(nDatas);
 
@@ -88,6 +87,7 @@ void CObjectMeshComponent::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12Grap
 				nReads = fread(&m_pxmf2TextureCoords0[0], sizeof(XMFLOAT2), nDatas, pInFile);
 
 				m_pd3dTextureCoord0Buffers = CreateBufferResource(pd3dDevice, pd3dCommandList, &m_pxmf2TextureCoords0[0], sizeof(XMFLOAT3) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, m_pd3dTextureCoord0UploadBuffer.GetAddressOf());
+				
 				m_d3dTextureCoord0BufferView.BufferLocation = m_pd3dTextureCoord0Buffers->GetGPUVirtualAddress();
 				m_d3dTextureCoord0BufferView.StrideInBytes = sizeof(XMFLOAT2);
 				m_d3dTextureCoord0BufferView.SizeInBytes = sizeof(XMFLOAT2) * m_nVertices;
@@ -169,6 +169,7 @@ void CObjectMeshComponent::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12Grap
 
 						m_ppnSubSetIndices[i].resize(m_pnSubSetIndices[i]);
 						nReads = (UINT)::fread(&m_ppnSubSetIndices[i][0], sizeof(UINT) * m_pnSubSetIndices[i], 1, pInFile);
+
 						m_ppd3dSubSetIndexBuffers[i] = ::CreateBufferResource(pd3dDevice, pd3dCommandList, &m_ppnSubSetIndices[i][0], sizeof(UINT) * m_pnSubSetIndices[i], D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_INDEX_BUFFER, m_ppd3dSubSetIndexUploadBuffers[i].GetAddressOf());
 
 						m_pd3dSubSetIndexBufferViews[i].BufferLocation = m_ppd3dSubSetIndexBuffers[i]->GetGPUVirtualAddress();

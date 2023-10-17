@@ -4,6 +4,9 @@
 class CTransformComponent : public CComponent
 {
 public:
+	CTransformComponent() {};
+	~CTransformComponent() {};
+
 	virtual void Init();
 	virtual void Update(float fTimeElapsed);
 

@@ -39,6 +39,7 @@ void CMaterialValueComponent::LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D
 		_stprintf_s(pstrDebug, 256, _T("Texture Name: %d %c %s\n"), (pstrTextureName[0] == '@') ? nRepeatedTextures++ : nTextures++, (pstrTextureName[0] == '@') ? '@' : ' ', &(m_Textures[iTextureIndex]->m_stTextureName[0]));
 		OutputDebugString(pstrDebug);
 #endif
+		// 18°³ ´©¼ö (58 -> 40)
 		m_Textures[iTextureIndex]->LoadTextureFromDDSFile(pd3dDevice, pd3dCommandList, &m_Textures[iTextureIndex]->m_stTextureName[0], (UINT)ResourceTextureType::ResourceTexture2D, 0);
 
 		//CScene::CreateShaderResourceViews(pd3dDevice, *ppTexture, 0, nRootParameter);

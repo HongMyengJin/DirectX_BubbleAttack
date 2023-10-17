@@ -35,6 +35,11 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Devic
 	::fopen_s(&pInFile, pstrFileName, "rb");
 	::rewind(pInFile);
 
+	return LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pstrFileName, pInFile);
+}
+
+std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, char* pstrFileName, FILE* pInFile)
+{
 	char pstrName[64] = { '\0' };
 	BYTE nStrLength = 0;
 	UINT nReads = 0;
@@ -42,17 +47,13 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Devic
 	int nFrame = 0, nTextures = 0;
 
 	std::shared_ptr<CGameObject> pGameObject;
-	for (; ; )
+	while (1)
 	{
 		char pstrName[64] = { '\0' };
-		std::string	strToken;
 		nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
-		strToken.resize(nStrLength + 1);
-		//strToken[nStrLength] = '\0';
 		nReads = (UINT)::fread(pstrName, sizeof(char), nStrLength, pInFile);
-		strToken = pstrName;
-		int i = 0;
-		if (strToken == "<Frame>:")
+		pstrName[nStrLength] = '\0';
+		if (!strcmp(pstrName, "<Frame>:"))
 		{
 			pGameObject = std::make_shared<CGameObject>();
 
@@ -60,11 +61,10 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Devic
 			nReads = (UINT)::fread(&nTextures, sizeof(int), 1, pInFile);
 
 			nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pInFile);
-			nReads = (UINT)::fread(&(pGameObject->m_pstrFrameName[0]), sizeof(char), nStrLength, pInFile);
-			pGameObject->m_pstrFrameName.resize(nStrLength);
+			nReads = (UINT)::fread(pGameObject->m_pstrFrameName, sizeof(char), nStrLength, pInFile);
 			pGameObject->m_pstrFrameName[nStrLength] = '\0';
 		}
-		else if (strToken == "<Transform>:")
+		else if (!strcmp(pstrName, "<Transform>:"))
 		{
 			XMFLOAT3 xmf3Position, xmf3Rotation, xmf3Scale;
 			XMFLOAT4 xmf4Rotation;
@@ -73,37 +73,40 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Devic
 			nReads = (UINT)::fread(&xmf3Scale, sizeof(float), 3, pInFile);
 			nReads = (UINT)::fread(&xmf4Rotation, sizeof(float), 4, pInFile); //Quaternion
 		}
-		else if (strToken == "<TransformMatrix>:")
+		else if (!strcmp(pstrName, "<TransformMatrix>:"))
 		{
 			std::shared_ptr<CTransformComponent> pTransformComponent = std::make_shared<CTransformComponent>(); // Mesh 持失
-			nReads = (UINT)::fread(&pTransformComponent->m_xmf4x4Transform, sizeof(float), 16, pInFile);
+			XMFLOAT4X4 xmf4x4Transform;
+			nReads = (UINT)::fread(&(pTransformComponent->m_xmf4x4Transform), sizeof(float), 16, pInFile);
+			m_pComponents.push_back(pTransformComponent);
 		}
-		else if (strToken == "<Mesh>:")
+		else if (!strcmp(pstrName, "<Mesh>:"))
 		{
 			std::shared_ptr<CObjectMeshComponent> pObjectMeshComponent = std::make_shared<CObjectMeshComponent>(pd3dDevice, pd3dCommandList); // Mesh 持失
-			m_pComponents.emplace_back(pObjectMeshComponent);
 			pObjectMeshComponent->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
+			m_pComponents.push_back(pObjectMeshComponent);
 		}
-		else if (strToken == "<Materials>:")
+		else if (!strcmp(pstrName, "<Materials>:"))
 		{
 			std::shared_ptr<CMaterialsComponent> pMaterialsComponent = std::make_shared<CMaterialsComponent>(); // Mesh 持失
 			pMaterialsComponent->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pInFile);
+			m_pComponents.push_back(pMaterialsComponent);
 		}
-		else if (strToken == "<Children>:")
+		else if (!strcmp(pstrName, "<Children>:"))
 		{
+			
 			int nChilds = 0;
 			nReads = (UINT)::fread(&nChilds, sizeof(int), 1, pInFile);
 			if (nChilds > 0)
 			{
+				nChilds = 1;
 				for (int i = 0; i < nChilds; i++)
 				{
-					//std::shared_ptr<CGameObject> pObject = ;
-					//if (pObject) 
-						//SetChild(CGameObject::LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pstrFileName));
+					SetChild(pGameObject, CGameObject::LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pstrFileName, pInFile));
 				}
 			}
 		}
-		else if (strToken == "</Frame>")
+		else if (!strcmp(pstrName, "</Frame>"))
 		{
 			break;
 		}
@@ -111,17 +114,17 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Devic
 	return(pGameObject);
 }
 
-void CGameObject::SetChild(std::shared_ptr<CGameObject> pChild)
+void CGameObject::SetChild(std::shared_ptr<CGameObject> pParentObject, std::shared_ptr<CGameObject> pChildObject)
 {
 	if (m_pChildObject)
 	{
-		pChild->m_pSiblingObject = m_pChildObject;
-		m_pChildObject->m_pSiblingObject = pChild;
+		pChildObject->m_pSiblingObject = m_pChildObject;
+		m_pChildObject->m_pSiblingObject = pChildObject;
 	}
 	else
 	{
-		m_pChildObject = pChild;
+		m_pChildObject = pChildObject;
 	}
 
-	if (pChild) pChild->m_pParentObject = static_cast<std::shared_ptr<CGameObject>>(this);
+	if (pChildObject) pChildObject->m_pParentObject = pParentObject;
 }
