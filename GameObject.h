@@ -24,10 +24,8 @@ public:
 	void AddShaderComponent(std::shared_ptr<CComponent> pComponent);
 
 protected:
-
 	char																					m_pstrFrameName[126];
-	std::vector<std::shared_ptr<CComponent>>												m_pComponents; // 함수에서 접근할때 포인터 접근 필요(shared_ptr)
-
+	std::multimap<ComponentType, std::shared_ptr<CComponent>>								m_pComponents; // 함수에서 접근할때 포인터 접근 필요(shared_ptr)
 
 	std::shared_ptr<CGameObject>															m_pChildObject;
 	std::shared_ptr<CGameObject>															m_pParentObject;

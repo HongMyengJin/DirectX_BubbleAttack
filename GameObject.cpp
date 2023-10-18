@@ -14,20 +14,20 @@ void CGameObject::Animate(float fTimeElapsed)
 
 void CGameObject::Update(float fTimeElapsed)
 {
-	for (std::shared_ptr<CComponent> pComponent : m_pComponents)
-		pComponent->Update(fTimeElapsed);
+	//for (std::shared_ptr<CComponent> pComponent : m_pComponents)
+	//	pComponent->Update(fTimeElapsed);
 }
 
 void CGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	for (std::shared_ptr<CComponent> pComponent : m_pComponents)
-		pComponent->PrepareRender(pd3dCommandList);
+	//for (std::shared_ptr<CComponent> pComponent : m_pComponents)
+	//	pComponent->PrepareRender(pd3dCommandList);
 }
 
 void CGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
 {
-	for (std::shared_ptr<CComponent> pComponent : m_pComponents)
-		pComponent->Render(pd3dCommandList, pCamera, pxmf4x4World);
+	//for (std::shared_ptr<CComponent> pComponent : m_pComponents)
+	//	pComponent->Render(pd3dCommandList, pCamera, pxmf4x4World);
 }
 
 std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, char* pstrFileName)
@@ -79,19 +79,19 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 			std::shared_ptr<CTransformComponent> pTransformComponent = std::make_shared<CTransformComponent>(); // Mesh 持失
 			XMFLOAT4X4 xmf4x4Transform;
 			nReads = (UINT)::fread(&(pTransformComponent->m_xmf4x4Transform), sizeof(float), 16, pInFile);
-			m_pComponents.push_back(pTransformComponent);
+			m_pComponents.insert(std::make_pair(ComponentType::ComponentShader, pTransformComponent));
 		}
 		else if (!strcmp(pstrName, "<Mesh>:"))
 		{
 			std::shared_ptr<CObjectMeshComponent> pObjectMeshComponent = std::make_shared<CObjectMeshComponent>(pd3dDevice, pd3dCommandList); // Mesh 持失
 			pObjectMeshComponent->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
-			m_pComponents.push_back(pObjectMeshComponent);
+			m_pComponents.insert(std::make_pair(ComponentType::ComponentMesh, pObjectMeshComponent));
 		}
 		else if (!strcmp(pstrName, "<Materials>:"))
 		{
 			std::shared_ptr<CMaterialsComponent> pMaterialsComponent = std::make_shared<CMaterialsComponent>(); // Mesh 持失
 			pMaterialsComponent->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, pInFile);
-			m_pComponents.push_back(pMaterialsComponent);
+			m_pComponents.insert(std::make_pair(ComponentType::ComponentMaterial, pMaterialsComponent));
 		}
 		else if (!strcmp(pstrName, "<Children>:"))
 		{
@@ -132,7 +132,7 @@ void CGameObject::SetChild(std::shared_ptr<CGameObject> pParentObject, std::shar
 
 void CGameObject::AddShaderComponent(std::shared_ptr<CComponent> pComponent)
 {
-	m_pComponents.push_back(pComponent);
+	m_pComponents.insert(std::make_pair(ComponentType::ComponentShader, pComponent));
 }
 
 void CPlayerGameObject::Init()

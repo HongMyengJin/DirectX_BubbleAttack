@@ -39,6 +39,8 @@ enum class ComponentType
 {
 	ComponentTransform,
 	ComponentShader,
+	ComponentMaterial,
+	ComponentMesh,
 	ComponentTypeEnd
 };
 

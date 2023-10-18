@@ -161,19 +161,10 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
     <FxCompile Include="ObjectVertexShader.hlsl">
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
     <FxCompile Include="ObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="VertexShader1.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="Light.hlsl">
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
   </ItemGroup>
