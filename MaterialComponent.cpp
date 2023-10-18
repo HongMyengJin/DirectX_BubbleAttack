@@ -6,7 +6,7 @@ CMaterialValueComponent::CMaterialValueComponent(int nTextures)
 	m_Textures.resize(nTextures);
 }
 
-void CMaterialValueComponent::LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, UINT nType, UINT nRootParameter, UINT iTextureIndex, FILE* pInFile)
+void CMaterialValueComponent::LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, UINT nType, UINT nRootParameter, UINT iTextureIndex, FILE* pInFile)
 {
 	char pstrTextureName[64] = { '\0' };
 
@@ -19,7 +19,7 @@ void CMaterialValueComponent::LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D
 	if (strcmp(pstrTextureName, "null"))
 	{
 		//SetMaterialType(nType);
-		m_Textures[iTextureIndex] = std::make_unique<CTextureComponent>(1, (UINT)ResourceTextureType::ResourceTexture2D, 0, 1);
+		m_Textures[iTextureIndex] = std::make_unique<CTextureComponent>(1, ResourceTextureType::ResourceTexture2D, 0, 1);
 
 		char pstrFilePath[64] = { '\0' };
 		strcpy_s(pstrFilePath, 64, "Model/Textures/");
@@ -39,8 +39,8 @@ void CMaterialValueComponent::LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D
 		_stprintf_s(pstrDebug, 256, _T("Texture Name: %d %c %s\n"), (pstrTextureName[0] == '@') ? nRepeatedTextures++ : nTextures++, (pstrTextureName[0] == '@') ? '@' : ' ', &(m_Textures[iTextureIndex]->m_stTextureName[0]));
 		OutputDebugString(pstrDebug);
 #endif
-		// 18개 누수 (58 -> 40)
 		m_Textures[iTextureIndex]->LoadTextureFromDDSFile(pd3dDevice, pd3dCommandList, &m_Textures[iTextureIndex]->m_stTextureName[0], (UINT)ResourceTextureType::ResourceTexture2D, 0);
+		m_Textures[iTextureIndex]->CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, nRootParameter); // 수정 필요
 
 		//CScene::CreateShaderResourceViews(pd3dDevice, *ppTexture, 0, nRootParameter);
 
@@ -67,7 +67,7 @@ void CMaterialsComponent::PostRender(ID3D12GraphicsCommandList* pd3dCommandList)
 {
 }
 
-void CMaterialsComponent::LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, FILE* pInFile)
+void CMaterialsComponent::LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, FILE* pInFile)
 {
 
 	std::string	strToken;
@@ -129,31 +129,31 @@ void CMaterialsComponent::LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12
 		}
 		else if (strToken == "<AlbedoMap>:")
 		{
-			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, (UINT)MaterialType::MaterialAlbedoMap, 3, 0, pInFile);
+			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, (UINT)MaterialType::MaterialAlbedoMap, 3, 0, pInFile);
 		}
 		else if (strToken == "<SpecularMap>:")
 		{
-			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, (UINT)MaterialType::MaterialSpecularMap, 4,  1, pInFile);
+			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, (UINT)MaterialType::MaterialSpecularMap, 4,  1, pInFile);
 		}
 		else if (strToken == "<NormalMap>:")
 		{
-			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, (UINT)MaterialType::MaterialNormalMap, 5, 2, pInFile);
+			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, (UINT)MaterialType::MaterialNormalMap, 5, 2, pInFile);
 		}
 		else if (strToken == "<MetallicMap>:")
 		{
-			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, (UINT)MaterialType::MaterialMetallicMap, 6, 3, pInFile);
+			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, (UINT)MaterialType::MaterialMetallicMap, 6, 3, pInFile);
 		}
 		else if (strToken == "<EmissionMap>:")
 		{
-			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, (UINT)MaterialType::MaterialEmissionMap, 7, 4, pInFile);
+			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, (UINT)MaterialType::MaterialEmissionMap, 7, 4, pInFile);
 		}
 		else if (strToken == "<DetailAlbedoMap>:")
 		{
-			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, (UINT)MaterialType::MaterialDetailAlbedoMap, 8, 5, pInFile);
+			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, (UINT)MaterialType::MaterialDetailAlbedoMap, 8, 5, pInFile);
 		}
 		else if (strToken == "<DetailNormalMap>:")
 		{
-			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, (UINT)MaterialType::MaterialDetailNormalMap, 9, 6, pInFile);
+			m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, (UINT)MaterialType::MaterialDetailNormalMap, 9, 6, pInFile);
 		}
 		else if (strToken == "</Materials>")
 		{
@@ -161,5 +161,19 @@ void CMaterialsComponent::LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12
 		}
 	}
 	
+}
+
+void CMaterialsComponent::UpdateShaderVariable(ID3D12GraphicsCommandList* pd3dCommandList)
+{
+	for (int i = 0; i < m_MaterialDatas.size(); i++)
+	{
+		pd3dCommandList->SetGraphicsRoot32BitConstants(1, 4, &m_MaterialDatas[i]->GetMaterialData().m_xmf4AmbientColor, 16);
+		pd3dCommandList->SetGraphicsRoot32BitConstants(1, 4, &m_MaterialDatas[i]->GetMaterialData().m_xmf4AlbedoColor, 20);
+		pd3dCommandList->SetGraphicsRoot32BitConstants(1, 4, &m_MaterialDatas[i]->GetMaterialData().m_xmf4SpecularColor, 24);
+		pd3dCommandList->SetGraphicsRoot32BitConstants(1, 4, &m_MaterialDatas[i]->GetMaterialData().m_xmf4EmissiveColor, 28);
+
+		pd3dCommandList->SetGraphicsRoot32BitConstants(1, 1, &m_MaterialDatas[i]->GetMaterialData().m_nType, 32);
+	}
+
 }
 

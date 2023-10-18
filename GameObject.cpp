@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "MaterialComponent.h"
 #include "TransformComponent.h"
+#include "ObjectShaderComponent.h"
 void CGameObject::Init()
 {
 }
@@ -29,16 +30,16 @@ void CGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pC
 		pComponent->Render(pd3dCommandList, pCamera, pxmf4x4World);
 }
 
-std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, char* pstrFileName)
+std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, char* pstrFileName)
 {
 	FILE* pInFile = NULL;
 	::fopen_s(&pInFile, pstrFileName, "rb");
 	::rewind(pInFile);
 
-	return LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pstrFileName, pInFile);
+	return LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pDescriptorHeap, pstrFileName, pInFile);
 }
 
-std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, char* pstrFileName, FILE* pInFile)
+std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, char* pstrFileName, FILE* pInFile)
 {
 	char pstrName[64] = { '\0' };
 	BYTE nStrLength = 0;
@@ -89,7 +90,7 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 		else if (!strcmp(pstrName, "<Materials>:"))
 		{
 			std::shared_ptr<CMaterialsComponent> pMaterialsComponent = std::make_shared<CMaterialsComponent>(); // Mesh »ý¼º
-			pMaterialsComponent->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pInFile);
+			pMaterialsComponent->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, pInFile);
 			m_pComponents.push_back(pMaterialsComponent);
 		}
 		else if (!strcmp(pstrName, "<Children>:"))
@@ -102,7 +103,7 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 				nChilds = 1;
 				for (int i = 0; i < nChilds; i++)
 				{
-					SetChild(pGameObject, CGameObject::LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pstrFileName, pInFile));
+					SetChild(pGameObject, CGameObject::LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pDescriptorHeap, pstrFileName, pInFile));
 				}
 			}
 		}
@@ -127,4 +128,29 @@ void CGameObject::SetChild(std::shared_ptr<CGameObject> pParentObject, std::shar
 	}
 
 	if (pChildObject) pChildObject->m_pParentObject = pParentObject;
+}
+
+void CGameObject::AddShaderComponent(std::shared_ptr<CComponent> pComponent)
+{
+	m_pComponents.push_back(pComponent);
+}
+
+void CPlayerGameObject::Init()
+{
+}
+
+void CPlayerGameObject::Animate(float fTimeElapsed)
+{
+}
+
+void CPlayerGameObject::Update(float fTimeElapsed)
+{
+}
+
+void CPlayerGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
+{
+}
+
+void CPlayerGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
+{
 }

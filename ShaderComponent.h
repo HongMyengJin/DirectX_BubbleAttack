@@ -32,10 +32,12 @@ protected:
 	Microsoft::WRL::ComPtr<ID3DBlob>									m_pd3dVertexShaderBlob;
 	Microsoft::WRL::ComPtr<ID3DBlob>									m_pd3dPixelShaderBlob;
 
-	int																	m_nPipelineStates = 0;
+	int																	m_nPipelineStates = 1;
 	int																	m_iCurrentPipelineState = 0;
 	std::vector<Microsoft::WRL::ComPtr<ID3D12PipelineState>>			m_ppd3dPipelineStates;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC									m_d3dPipelineStateDesc;
+
+	std::vector<D3D12_INPUT_ELEMENT_DESC>								m_d3dPdInputElementDescs;
 };
 

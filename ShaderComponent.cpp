@@ -21,6 +21,8 @@ void CShaderComponent::PostRender(ID3D12GraphicsCommandList* pd3dCommandList)
 
 void CShaderComponent::CreateShader(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature)
 {
+	m_ppd3dPipelineStates.resize(1);
+
 	::ZeroMemory(&m_d3dPipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
 	m_d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
 	m_d3dPipelineStateDesc.VS = CreateVertexShader();
@@ -37,7 +39,7 @@ void CShaderComponent::CreateShader(ID3D12Device* pd3dDevice, ID3D12GraphicsComm
 	m_d3dPipelineStateDesc.SampleDesc.Count = 1;
 	m_d3dPipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 
-	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&m_d3dPipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)m_ppd3dPipelineStates[0].GetAddressOf());
+	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&m_d3dPipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)(m_ppd3dPipelineStates[0].GetAddressOf()));
 }
 
 D3D12_RASTERIZER_DESC CShaderComponent::CreateRasterizerState()

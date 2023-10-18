@@ -20,7 +20,7 @@ cbuffer cbGameObjectInfo : register(b2)
 	uint		gnTexturesMask : packoffset(c8);
 };
 
-#include "Light.hlsl"
+//#include "Light.hlsl"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -88,6 +88,7 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 	{
 		normalW = normalize(input.normalW);
 	}
-	float4 cIllumination = Lighting(input.positionW, normalW);
-	return(lerp(cColor, cIllumination, 0.5f));
+	//float4 cIllumination = Lighting(input.positionW, normalW);
+	//return(lerp(cColor, cIllumination, 0.5f));
+	return cColor;
 }

@@ -10,7 +10,7 @@ public:
 	virtual void CreateGraphicsRootSignature(ID3D12Device* pd3dDevice);
 	virtual void CreateGraphicsPipelineState(ID3D12Device* pd3dDevice);
 
-	void BuildObjects(ID3D12Device* pd3dDevice);
+	void BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 
 	bool ProcessInput();
 	void AnimateObjects(float fTimeElapsed);

@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Component.h"
 #include "GameObject.h"
+#include "DescriptorHeap.h"
 class CScene
 {
 public:
@@ -21,6 +22,7 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList) = 0;
 
 protected:
+	std::unique_ptr<CDescriptorHeap>				m_pd3dDescriptorHeap;
 	Microsoft::WRL::ComPtr<ID3D12RootSignature>		m_pd3dGraphicsRootsignature; // 루트 시그니쳐의 인터페이스 포인터
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>		m_pd3dPipelineState; // 파이프라인 상태를 나타내는 인터페이스 포인터
 
