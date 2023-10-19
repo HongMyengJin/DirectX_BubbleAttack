@@ -4,7 +4,7 @@ void CObjectShaderComponent::Init()
 {
 }
 
-void CObjectShaderComponent::Update(float fTimeElapsed)
+void CObjectShaderComponent::Update(float fTimeElapsed, void* pData, void* pData2)
 {
 }
 

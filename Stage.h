@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Scene.h"
+#include "Camera.h"
 class CStage : public CScene
 {
 public:
@@ -19,5 +20,7 @@ public:
 	void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
 	void Render(ID3D12GraphicsCommandList* pd3dCommandList);
 
+protected:
+	std::unique_ptr<CCamera>				m_pCamera;
 	
 };

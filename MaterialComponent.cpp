@@ -51,7 +51,7 @@ void CMaterialsComponent::Init()
 {
 }
 
-void CMaterialsComponent::Update(float fTimeElapsed)
+void CMaterialsComponent::Update(float fTimeElapsed, void* pData, void* pData2)
 {
 }
 
@@ -59,8 +59,17 @@ void CMaterialsComponent::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandLi
 {
 }
 
-void CMaterialsComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World, void* pContext)
+void CMaterialsComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, void* pContext)
 {
+
+	UpdateShaderVariable(pd3dCommandList);
+
+	for(auto& pMaterial : m_MaterialDatas)
+	for (int i = 0; i < pMaterial->m_nTexture; i++)
+	{
+		if (pMaterial->m_Textures[i]) pMaterial->m_Textures[i]->UpdateShaderVariables(pd3dCommandList);
+	}
+	
 }
 
 void CMaterialsComponent::PostRender(ID3D12GraphicsCommandList* pd3dCommandList)

@@ -3,7 +3,7 @@
 class CDescriptorHeap
 {
 public:
-	CDescriptorHeap() { m_d3dCbvCPUDescriptorStartHandle.ptr, m_d3dCbvGPUDescriptorStartHandle.ptr, m_d3dSrvCPUDescriptorStartHandle.ptr = NULL, m_d3dSrvGPUDescriptorStartHandle.ptr = NULL; };
+	CDescriptorHeap() { m_d3dSrvCPUDescriptorStartHandle.ptr = NULL, m_d3dSrvGPUDescriptorStartHandle.ptr = NULL; };
 	~CDescriptorHeap() {};
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandleForHeapStart() { return(m_pd3dCbvSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart()); }

@@ -41,10 +41,10 @@ public:
 	~CMaterialsComponent() {};
 
 	virtual void Init();;
-	virtual void Update(float fTimeElapsed);
+	virtual void Update(float fTimeElapsed, void* pData, void* pData2);
 
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
-	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera = nullptr, XMFLOAT4X4* pxmf4x4World = nullptr, void* pContext = nullptr);
+	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera = nullptr, void* pContext = nullptr);
 	virtual void PostRender(ID3D12GraphicsCommandList* pd3dCommandList);
 
 	void LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, FILE* pInFile);
