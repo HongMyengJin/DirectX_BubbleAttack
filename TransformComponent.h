@@ -8,7 +8,7 @@ public:
 	~CTransformComponent() {};
 
 	virtual void Init();
-	virtual void Update(float fTimeElapsed);
+	virtual void Update(float fTimeElapsed, void* pData, void* pData2);
 
 	virtual void PrepareRender();
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera = nullptr, void* pContext = nullptr);

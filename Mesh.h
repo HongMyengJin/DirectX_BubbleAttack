@@ -36,7 +36,7 @@ protected:
 	std::vector<D3D12_INDEX_BUFFER_VIEW>									m_pd3dSubSetIndexBufferViews;
 
 public:
-	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, UINT nSubSet);
+	virtual void Render(ID3D12GraphicsCommandList * pd3dCommandList, class CCamera* pCamera = nullptr, void* pContext = nullptr); // UINT nSubset
 };
 
 class CObjectMeshComponent : public CMeshComponent

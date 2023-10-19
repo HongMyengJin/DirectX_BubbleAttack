@@ -1,6 +1,6 @@
 #include "ShaderComponent.h"
 
-void CShaderComponent::Update(float fTimeElapsed)
+void CShaderComponent::Update(float fTimeElapsed, void* pData, void* pData2)
 {
 }
 

@@ -1,11 +1,14 @@
 #include "Mesh.h"
 
-void CMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, UINT nSubSet)
+void CMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, void* pContext)
 {
+	UINT nSubSet = 0;
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 
 	//m_nSlot 추가 고민중
 	pd3dCommandList->IASetVertexBuffers(0, 1, &m_d3dPositionBufferView);
+	if (pContext)
+		nSubSet = *static_cast<UINT*>(pContext); // Subset 가져오기
 
 	if ((m_nSubMeshes > 0) && (nSubSet < m_nSubMeshes))
 	{

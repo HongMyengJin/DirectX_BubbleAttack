@@ -9,16 +9,17 @@ struct CameraInfo
 	XMFLOAT3						m_xmf3Position;
 };
 
-class Camera : public CGameObject
+class CCamera : public CGameObject
 {
 public:
 
-	Camera() {};
-	~Camera() {};
+	CCamera() {};
+	~CCamera() {};
 
 	virtual void Init();
 	virtual void Animate(float fTimeElapsed);
-	virtual void Update(CGameObject* pTargetObject, float fTimeElapsed);
+	virtual void Update(float fTimeElapsed);
+	virtual void Update(CGameObject* pTargetObject, XMFLOAT3& xmf3LookAt, float fTimeElapsed);
 
 	//virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
 	//virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
@@ -50,11 +51,11 @@ protected:
 	XMFLOAT3													m_xmf3Offset;
 	float           											m_fTimeLag;
 
-	XMFLOAT4X4													m_xmf4x4View;
-	XMFLOAT4X4													m_xmf4x4Projection;
+	XMFLOAT4X4													m_xmf4x4View = Matrix4x4::Identity();
+	XMFLOAT4X4													m_xmf4x4Projection = Matrix4x4::Identity();
 
-	D3D12_VIEWPORT												m_d3dViewport;
-	D3D12_RECT													m_d3dScissorRect;
+	D3D12_VIEWPORT												m_d3dViewport = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
+	D3D12_RECT													m_d3dScissorRect = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT };
 	
 	std::vector<std::unique_ptr<CameraInfo>>					m_pCameraInfo;
 	Microsoft::WRL::ComPtr<ID3D12Resource>						m_pd3dcbCamera;

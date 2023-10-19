@@ -27,8 +27,9 @@ void CTextureComponent::Init()
 {
 }
 
-void CTextureComponent::Update(float fTimeElapsed)
+void CTextureComponent::Update(float fTimeElapsed, void* pData, void* pData2)
 {
+
 }
 
 void CTextureComponent::PrepareRender(void* pContext)

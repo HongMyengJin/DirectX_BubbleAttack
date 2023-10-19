@@ -102,6 +102,7 @@ void CBubbleAttackGameFrame::UpdateFrame()
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
 	// ·»´õ Å¸°Ù ºä(¼­¼úÀÚ)¿Í ±íÀÌ-½ºÅÙ½Ç ºä(¼­¼úÀÚ)¸¦ Ãâ·Æ-º´ÇÕ ´Ü°è(OM)¿¡ ¿¬°á
 
+	m_pSceneManager->UpdateCurrentScene(0.f);
 	//Rendering
 	m_pSceneManager->PreRenderCurrentScene(m_pd3dCommandList.Get());
 	m_pSceneManager->RenderCurrentScene(m_pd3dCommandList.Get());

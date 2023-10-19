@@ -12,22 +12,98 @@ void CGameObject::Animate(float fTimeElapsed)
 	if (m_pChildObject) m_pChildObject->Animate(fTimeElapsed);
 }
 
-void CGameObject::Update(float fTimeElapsed)
+void CGameObject::Update(float fTimeElapsed, CTransformComponent* pTransformComponent)
 {
-	//for (std::shared_ptr<CComponent> pComponent : m_pComponents)
-	//	pComponent->Update(fTimeElapsed);
+	for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pComponents)
+		if(pComponents.second[UINT(ComponentType::ComponentTransform)])
+			pComponents.second[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, pTransformComponent, nullptr);
+
+	if (m_pSiblingObject)
+		for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pSiblingObject->m_pComponents)
+			if (pComponents.second[UINT(ComponentType::ComponentTransform)])
+				pComponents.second[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, pTransformComponent, nullptr);
+
+	if (m_pChildObject)
+		for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pChildObject->m_pComponents)
+			if (pComponents.second[UINT(ComponentType::ComponentTransform)])
+				pComponents.second[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, (void*)GetComponent(std::string(m_pChildObject->m_pstrFrameName), ComponentType::ComponentTransform).get(), nullptr);
+
+
 }
 
 void CGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	//for (std::shared_ptr<CComponent> pComponent : m_pComponents)
-	//	pComponent->PrepareRender(pd3dCommandList);
+	for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pComponents)
+		for (int i = 0; i < pComponents.second.size(); i++)
+		{
+			if (pComponents.second[i])
+				pComponents.second[i]->PrepareRender(pd3dCommandList);
+		}
 }
 
 void CGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
 {
-	//for (std::shared_ptr<CComponent> pComponent : m_pComponents)
-	//	pComponent->Render(pd3dCommandList, pCamera, pxmf4x4World);
+	for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pComponents)
+		if (pComponents.second[UINT(ComponentType::ComponentShader)])
+			pComponents.second[UINT(ComponentType::ComponentShader)]->PrepareRender(pd3dCommandList);
+
+	int i = 0;
+	for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pComponents)
+	{
+		if (pComponents.second[UINT(ComponentType::ComponentTransform)])
+			pComponents.second[UINT(ComponentType::ComponentTransform)]->Render(pd3dCommandList, pCamera, nullptr);
+
+		if (pComponents.second[UINT(ComponentType::ComponentMaterial)])
+			pComponents.second[UINT(ComponentType::ComponentMaterial)]->Render(pd3dCommandList, pCamera, &i);
+
+		if (pComponents.second[UINT(ComponentType::ComponentMesh)])
+		{
+			pComponents.second[UINT(ComponentType::ComponentMesh)]->Render(pd3dCommandList, pCamera, &i);
+			i++;
+		}
+	}
+
+	i = 0; 
+	if(m_pSiblingObject)
+		for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pSiblingObject->m_pComponents)
+		{
+			if (pComponents.second[UINT(ComponentType::ComponentTransform)])
+				pComponents.second[UINT(ComponentType::ComponentTransform)]->Render(pd3dCommandList, pCamera, nullptr);
+
+			if (pComponents.second[UINT(ComponentType::ComponentMaterial)])
+				pComponents.second[UINT(ComponentType::ComponentMaterial)]->Render(pd3dCommandList, pCamera, &i);
+
+			if (pComponents.second[UINT(ComponentType::ComponentMesh)])
+			{
+				pComponents.second[UINT(ComponentType::ComponentMesh)]->Render(pd3dCommandList, pCamera, &i);
+				i++;
+			}
+		}
+	
+	i = 0;
+	if(m_pChildObject)
+		for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pChildObject->m_pComponents)
+		{
+			if (pComponents.second[UINT(ComponentType::ComponentTransform)])
+				pComponents.second[UINT(ComponentType::ComponentTransform)]->Render(pd3dCommandList, pCamera, nullptr);
+
+			if (pComponents.second[UINT(ComponentType::ComponentMaterial)])
+			{
+				pComponents.second[UINT(ComponentType::ComponentMaterial)]->Render(pd3dCommandList, pCamera, &i);
+			}
+
+
+			if (pComponents.second[UINT(ComponentType::ComponentMesh)])
+			{
+				pComponents.second[UINT(ComponentType::ComponentMesh)]->Render(pd3dCommandList, pCamera, &i);
+				i++;
+			}
+		}
+}
+
+std::shared_ptr<CComponent> CGameObject::GetComponent(std::string st, ComponentType pComponentType)
+{
+	return m_pComponents.find(st)->second[(UINT)pComponentType];
 }
 
 std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, char* pstrFileName)
@@ -47,6 +123,7 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 
 	int nFrame = 0, nTextures = 0;
 
+	// 3개를 합해서 렌더를 해야함(Component 3개를 묶어야함
 	std::shared_ptr<CGameObject> pGameObject;
 	while (1)
 	{
@@ -77,21 +154,20 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 		else if (!strcmp(pstrName, "<TransformMatrix>:"))
 		{
 			std::shared_ptr<CTransformComponent> pTransformComponent = std::make_shared<CTransformComponent>(); // Mesh 생성
-			XMFLOAT4X4 xmf4x4Transform;
 			nReads = (UINT)::fread(&(pTransformComponent->m_xmf4x4Transform), sizeof(float), 16, pInFile);
-			m_pComponents.insert(std::make_pair(ComponentType::ComponentShader, pTransformComponent));
+			m_pComponents[std::string(pGameObject->m_pstrFrameName)][UINT(ComponentType::ComponentTransform)] = pTransformComponent;
 		}
 		else if (!strcmp(pstrName, "<Mesh>:"))
 		{
 			std::shared_ptr<CObjectMeshComponent> pObjectMeshComponent = std::make_shared<CObjectMeshComponent>(pd3dDevice, pd3dCommandList); // Mesh 생성
 			pObjectMeshComponent->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
-			m_pComponents.insert(std::make_pair(ComponentType::ComponentMesh, pObjectMeshComponent));
+			m_pComponents[std::string(pGameObject->m_pstrFrameName)][UINT(ComponentType::ComponentMesh)] = pObjectMeshComponent;
 		}
 		else if (!strcmp(pstrName, "<Materials>:"))
 		{
 			std::shared_ptr<CMaterialsComponent> pMaterialsComponent = std::make_shared<CMaterialsComponent>(); // Mesh 생성
 			pMaterialsComponent->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, pInFile);
-			m_pComponents.insert(std::make_pair(ComponentType::ComponentMaterial, pMaterialsComponent));
+			m_pComponents[std::string(pGameObject->m_pstrFrameName)][UINT(ComponentType::ComponentMaterial)] = pMaterialsComponent;
 		}
 		else if (!strcmp(pstrName, "<Children>:"))
 		{
@@ -100,7 +176,6 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 			nReads = (UINT)::fread(&nChilds, sizeof(int), 1, pInFile);
 			if (nChilds > 0)
 			{
-				nChilds = 1;
 				for (int i = 0; i < nChilds; i++)
 				{
 					SetChild(pGameObject, CGameObject::LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pDescriptorHeap, pstrFileName, pInFile));
@@ -132,7 +207,7 @@ void CGameObject::SetChild(std::shared_ptr<CGameObject> pParentObject, std::shar
 
 void CGameObject::AddShaderComponent(std::shared_ptr<CComponent> pComponent)
 {
-	m_pComponents.insert(std::make_pair(ComponentType::ComponentShader, pComponent));
+	m_pComponents[std::string(m_pstrFrameName)][UINT(ComponentType::ComponentShader)] = pComponent;
 }
 
 void CPlayerGameObject::Init()

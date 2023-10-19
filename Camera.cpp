@@ -1,51 +1,58 @@
 #include "Camera.h"
-
-void Camera::Init()
+#include "TransformComponent.h"
+void CCamera::Init()
 {
 }
 
-void Camera::Animate(float fTimeElapsed)
+void CCamera::Animate(float fTimeElapsed)
 {
 }
 
-void Camera::Update(CGameObject* pTargetObject, float fTimeElapsed)
+void CCamera::Update(float fTimeElapsed)
+{
+	RegenerateViewMatrix();
+}
+
+void CCamera::Update(CGameObject* pTargetObject, XMFLOAT3& xmf3LookAt, float fTimeElapsed)
 {
 	if (pTargetObject)
 	{
-		//XMFLOAT4X4 xmf4x4Rotate = Matrix4x4::Identity();
-		//XMFLOAT3 xmf3Right = pTargetObject->GetRightVector();
-		//XMFLOAT3 xmf3Up = pTargetObject->GetUpVector();
-		//XMFLOAT3 xmf3Look = pTargetObject->GetLookVector();
-		//xmf4x4Rotate._11 = xmf3Right.x; xmf4x4Rotate._21 = xmf3Up.x; xmf4x4Rotate._31 = xmf3Look.x;
-		//xmf4x4Rotate._12 = xmf3Right.y; xmf4x4Rotate._22 = xmf3Up.y; xmf4x4Rotate._32 = xmf3Look.y;
-		//xmf4x4Rotate._13 = xmf3Right.z; xmf4x4Rotate._23 = xmf3Up.z; xmf4x4Rotate._33 = xmf3Look.z;
+		XMFLOAT4X4 xmf4x4Rotate = Matrix4x4::Identity();
+		CTransformComponent* pTransformComponent = dynamic_cast<CTransformComponent*>(pTargetObject->GetComponent(std::string(pTargetObject->m_pstrFrameName), ComponentType::ComponentTransform).get());
+		XMFLOAT3 xmf3Right = pTransformComponent->GetRight();
+		XMFLOAT3 xmf3Up = pTransformComponent->GetUp();
+		XMFLOAT3 xmf3Look = pTransformComponent->GetLook();
+		xmf4x4Rotate._11 = xmf3Right.x; xmf4x4Rotate._21 = xmf3Up.x; xmf4x4Rotate._31 = xmf3Look.x;
+		xmf4x4Rotate._12 = xmf3Right.y; xmf4x4Rotate._22 = xmf3Up.y; xmf4x4Rotate._32 = xmf3Look.y;
+		xmf4x4Rotate._13 = xmf3Right.z; xmf4x4Rotate._23 = xmf3Up.z; xmf4x4Rotate._33 = xmf3Look.z;
 
-		//XMFLOAT3 xmf3Offset = Vector3::TransformCoord(m_xmf3Offset, xmf4x4Rotate);
-		//XMFLOAT3 xmf3Position = Vector3::Add(pTargetObject->GetPosition(), xmf3Offset);
-		//XMFLOAT3 xmf3Direction = Vector3::Subtract(xmf3Position, m_xmf3Position);
-		//float fLength = Vector3::Length(xmf3Direction);
-		//xmf3Direction = Vector3::Normalize(xmf3Direction);
-		//float fTimeLagScale = (m_fTimeLag) ? fTimeElapsed * (1.0f / m_fTimeLag) : 1.0f;
-		//float fDistance = fLength * fTimeLagScale;
-		//if (fDistance > fLength) fDistance = fLength;
-		//if (fLength < 0.01f) fDistance = fLength;
-		//if (fDistance > 0)
-		//{
-		//	m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Direction, fDistance);
-		//	SetLookAt(xmf3LookAt);
-		//}
+		XMFLOAT3 xmf3Offset = Vector3::TransformCoord(m_xmf3Offset, xmf4x4Rotate);
+		XMFLOAT3 xmf3Position = Vector3::Add(pTransformComponent->GetPosition(), xmf3Offset);
+		XMFLOAT3 xmf3Direction = Vector3::Subtract(xmf3Position, m_xmf3Position);
+		float fLength = Vector3::Length(xmf3Direction);
+		xmf3Direction = Vector3::Normalize(xmf3Direction);
+		float fTimeLagScale = (m_fTimeLag) ? fTimeElapsed * (1.0f / m_fTimeLag) : 1.0f;
+		float fDistance = fLength * fTimeLagScale;
+		if (fDistance > fLength) fDistance = fLength;
+		if (fLength < 0.01f) fDistance = fLength;
+		if (fDistance > 0)
+		{
+			m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Direction, fDistance);
+			SetLookAt(pTargetObject, xmf3LookAt);
+		}
 	}
 }
 
-void Camera::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
+void CCamera::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
+	m_pCameraInfo.resize(1);
 	UINT ncbElementBytes = ((sizeof(CameraInfo) + 255) & ~255); //256ÀÇ ¹è¼ö
 	m_pd3dcbCamera = ::CreateBufferResource(pd3dDevice, pd3dCommandList, NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, NULL);
 
 	m_pd3dcbCamera->Map(0, NULL, (void**)(&m_pCameraInfo[0]));
 }
 
-void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList)
+void CCamera::UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	XMFLOAT4X4 xmf4x4View;
 	XMStoreFloat4x4(&xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
@@ -61,12 +68,12 @@ void Camera::UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList)
 	pd3dCommandList->SetGraphicsRootConstantBufferView(0, d3dGpuVirtualAddress);
 }
 
-void Camera::GenerateViewMatrix()
+void CCamera::GenerateViewMatrix()
 {
 	m_xmf4x4View = Matrix4x4::LookAtLH(m_xmf3Position, m_xmf3LookAtWorld, m_xmf3Up);
 }
 
-void Camera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up)
+void CCamera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFLOAT3 xmf3Up)
 {
 	m_xmf3Position = xmf3Position;
 	m_xmf3LookAtWorld = xmf3LookAt;
@@ -75,7 +82,7 @@ void Camera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMFL
 	GenerateViewMatrix();
 }
 
-void Camera::RegenerateViewMatrix()
+void CCamera::RegenerateViewMatrix()
 {
 	m_xmf3Look = Vector3::Normalize(m_xmf3Look);
 	m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
@@ -89,12 +96,12 @@ void Camera::RegenerateViewMatrix()
 	m_xmf4x4View._43 = -Vector3::DotProduct(m_xmf3Position, m_xmf3Look);
 }
 
-void Camera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle)
+void CCamera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlaneDistance, float fAspectRatio, float fFOVAngle)
 {
 	m_xmf4x4Projection = Matrix4x4::PerspectiveFovLH(XMConvertToRadians(fFOVAngle), fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
 }
 
-void Camera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ, float fMaxZ)
+void CCamera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ, float fMaxZ)
 {
 	m_d3dViewport.TopLeftX = float(xTopLeft);
 	m_d3dViewport.TopLeftY = float(yTopLeft);
@@ -104,7 +111,7 @@ void Camera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, fl
 	m_d3dViewport.MaxDepth = fMaxZ;
 }
 
-void Camera::SetLookAt(CGameObject* pTargetObject, XMFLOAT3& xmf3LookAt)
+void CCamera::SetLookAt(CGameObject* pTargetObject, XMFLOAT3& xmf3LookAt)
 {
 	//XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(m_xmf3Position, xmf3LookAt, pTargetObject->GetUpVector());
 	//m_xmf3Right = XMFLOAT3(mtxLookAt._11, mtxLookAt._21, mtxLookAt._31);

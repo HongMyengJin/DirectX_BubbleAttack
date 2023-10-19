@@ -161,7 +161,7 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	Microsoft::WRL::ComPtr<ID3DBlob> pd3dSignatureBlob;
 	Microsoft::WRL::ComPtr<ID3DBlob> pd3dErrorBlob;
 	D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, pd3dSignatureBlob.GetAddressOf(), pd3dErrorBlob.GetAddressOf());
-	pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(), pd3dSignatureBlob->GetBufferSize(), __uuidof(ID3D12RootSignature), (void**)m_pd3dGraphicsRootsignature.GetAddressOf());
+	HRESULT hResult = pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(), pd3dSignatureBlob->GetBufferSize(), __uuidof(ID3D12RootSignature), (void**)m_pd3dGraphicsRootsignature.GetAddressOf());
 
 }
 
@@ -233,10 +233,13 @@ void CStage::CreateGraphicsPipelineState(ID3D12Device* pd3dDevice)
 void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
     CreateGraphicsRootSignature(pd3dDevice);
-    CreateGraphicsPipelineState(pd3dDevice);
+    //CreateGraphicsPipelineState(pd3dDevice);
 
 	m_pd3dDescriptorHeap = std::make_unique<CDescriptorHeap>();
 	m_pd3dDescriptorHeap->CreateCbcSrvDescriptorHeap(pd3dDevice, 0, 100);
+
+	m_pCamera = std::make_unique<CCamera>();
+	m_pCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 	std::shared_ptr<CObjectShaderComponent> pShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
@@ -256,28 +259,29 @@ void CStage::AnimateObjects(float fTimeElapsed)
 
 void CStage::UpdateObjects(float fTimeElapsed)
 {
+
 	if (m_pGameObject)
-		m_pGameObject->Update(fTimeElapsed);
+		m_pGameObject->Update(fTimeElapsed, nullptr);
 }
 
 void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 {
-    // 그래픽 루트 시그니쳐를 설정
+	////////// 삼각형 그리기 //////////
+	// 
+    //// 그래픽 루트 시그니쳐를 설정
     pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootsignature.Get());
+	pd3dCommandList->SetDescriptorHeaps(1, m_pd3dDescriptorHeap->m_pd3dCbvSrvDescriptorHeap.GetAddressOf());
 
-    // 파이프라인 상태 설정
-    pd3dCommandList->SetPipelineState(m_pd3dPipelineState.Get());
+	m_pCamera->UpdateShaderVariables(pd3dCommandList);
 
-    // 프리미티브 토폴로지(삼각형 리스트) 설정
-    pd3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 {
-    //PrepareRender(pd3dCommandList);
-
-    //pd3dCommandList->DrawInstanced(3, 1, 0, 0);
+    PrepareRender(pd3dCommandList);
 
 	if (m_pGameObject)
-		m_pGameObject->Render(pd3dCommandList, nullptr, nullptr);
+	{
+		m_pGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
 }
