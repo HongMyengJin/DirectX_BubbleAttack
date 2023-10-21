@@ -1,5 +1,6 @@
 #include "Stage.h"
 #include "ObjectShaderComponent.h"
+#include "Camera.h"
 
 CStage::CStage()
 {
@@ -7,6 +8,7 @@ CStage::CStage()
 
 CStage::~CStage()
 {
+
 }
 
 void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
@@ -233,7 +235,6 @@ void CStage::CreateGraphicsPipelineState(ID3D12Device* pd3dDevice)
 void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
     CreateGraphicsRootSignature(pd3dDevice);
-    //CreateGraphicsPipelineState(pd3dDevice);
 
 	m_pd3dDescriptorHeap = std::make_unique<CDescriptorHeap>();
 	m_pd3dDescriptorHeap->CreateCbcSrvDescriptorHeap(pd3dDevice, 0, 100);
@@ -244,8 +245,11 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	std::shared_ptr<CObjectShaderComponent> pShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
 	m_pGameObject = std::make_unique<CGameObject>();
+	m_pGameObject->Init();
+
+	m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 15.f));
 	m_pGameObject->AddShaderComponent(pShaderComponent);
-	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/SuperCobra.bin");
+	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Gunship.bin");
 }
 
 bool CStage::ProcessInput()
@@ -259,9 +263,13 @@ void CStage::AnimateObjects(float fTimeElapsed)
 
 void CStage::UpdateObjects(float fTimeElapsed)
 {
-
+	if (m_pCamera)
+		m_pCamera->Update(fTimeElapsed);
 	if (m_pGameObject)
+	{
+		m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 20.f));
 		m_pGameObject->Update(fTimeElapsed, nullptr);
+	}
 }
 
 void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -272,8 +280,10 @@ void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
     pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootsignature.Get());
 	pd3dCommandList->SetDescriptorHeaps(1, m_pd3dDescriptorHeap->m_pd3dCbvSrvDescriptorHeap.GetAddressOf());
 
-	m_pCamera->UpdateShaderVariables(pd3dCommandList);
-
+	if (m_pCamera)
+		m_pCamera->UpdateShaderVariables(pd3dCommandList);
+	if (m_pGameObject)
+		m_pGameObject->PrepareRender(pd3dCommandList);
 }
 
 void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -281,7 +291,11 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
     PrepareRender(pd3dCommandList);
 
 	if (m_pGameObject)
-	{
 		m_pGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	}
+}
+
+void CStage::Release()
+{
+	if(m_pCamera)
+		m_pCamera->Release();
 }

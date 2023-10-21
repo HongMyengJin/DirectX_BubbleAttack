@@ -4,6 +4,10 @@
 #include "ObjectShaderComponent.h"
 void CGameObject::Init()
 {
+	m_pComponents.resize(4);
+	m_pComponents[UINT(ComponentType::ComponentTransform)] = std::make_shared<CTransformComponent>();
+	m_pComponents[UINT(ComponentType::ComponentMesh)] = std::make_shared<CObjectMeshComponent>();
+	m_pComponents[UINT(ComponentType::ComponentMaterial)] = std::make_shared<CMaterialsComponent>();
 }
 
 void CGameObject::Animate(float fTimeElapsed)
@@ -12,98 +16,45 @@ void CGameObject::Animate(float fTimeElapsed)
 	if (m_pChildObject) m_pChildObject->Animate(fTimeElapsed);
 }
 
-void CGameObject::Update(float fTimeElapsed, CTransformComponent* pTransformComponent)
+void CGameObject::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent)
 {
-	for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pComponents)
-		if(pComponents.second[UINT(ComponentType::ComponentTransform)])
-			pComponents.second[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, pTransformComponent, nullptr);
+	//m_pComponents[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, pxmf4x4Parent, nullptr);
 
 	if (m_pSiblingObject)
-		for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pSiblingObject->m_pComponents)
-			if (pComponents.second[UINT(ComponentType::ComponentTransform)])
-				pComponents.second[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, pTransformComponent, nullptr);
-
+		m_pSiblingObject->m_pComponents[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, pxmf4x4Parent, nullptr);
 	if (m_pChildObject)
-		for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pChildObject->m_pComponents)
-			if (pComponents.second[UINT(ComponentType::ComponentTransform)])
-				pComponents.second[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, (void*)GetComponent(std::string(m_pChildObject->m_pstrFrameName), ComponentType::ComponentTransform).get(), nullptr);
+		m_pChildObject->m_pComponents[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, &static_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4World, nullptr);
 
 
 }
 
 void CGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pComponents)
-		for (int i = 0; i < pComponents.second.size(); i++)
-		{
-			if (pComponents.second[i])
-				pComponents.second[i]->PrepareRender(pd3dCommandList);
-		}
+	if (m_pComponents[UINT(ComponentType::ComponentShader)])
+		m_pComponents[UINT(ComponentType::ComponentShader)]->PrepareRender(pd3dCommandList);
+
+	if (m_pSiblingObject)
+		m_pSiblingObject->PrepareRender(pd3dCommandList);
+	if (m_pChildObject)
+		m_pChildObject->PrepareRender(pd3dCommandList);
 }
 
 void CGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
 {
-	for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pComponents)
-		if (pComponents.second[UINT(ComponentType::ComponentShader)])
-			pComponents.second[UINT(ComponentType::ComponentShader)]->PrepareRender(pd3dCommandList);
+	m_pComponents[UINT(ComponentType::ComponentTransform)]->Render(pd3dCommandList);
 
-	int i = 0;
-	for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pComponents)
+	UINT nMaterial = static_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->m_nMaterials;
+	for (int i = 0; i < nMaterial; i++)
 	{
-		if (pComponents.second[UINT(ComponentType::ComponentTransform)])
-			pComponents.second[UINT(ComponentType::ComponentTransform)]->Render(pd3dCommandList, pCamera, nullptr);
-
-		if (pComponents.second[UINT(ComponentType::ComponentMaterial)])
-			pComponents.second[UINT(ComponentType::ComponentMaterial)]->Render(pd3dCommandList, pCamera, &i);
-
-		if (pComponents.second[UINT(ComponentType::ComponentMesh)])
-		{
-			pComponents.second[UINT(ComponentType::ComponentMesh)]->Render(pd3dCommandList, pCamera, &i);
-			i++;
-		}
+		m_pComponents[UINT(ComponentType::ComponentMaterial)]->Render(pd3dCommandList, pCamera, &i);
+		m_pComponents[UINT(ComponentType::ComponentMesh)]->Render(pd3dCommandList, pCamera, &i);
 	}
 
-	i = 0; 
-	if(m_pSiblingObject)
-		for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pSiblingObject->m_pComponents)
-		{
-			if (pComponents.second[UINT(ComponentType::ComponentTransform)])
-				pComponents.second[UINT(ComponentType::ComponentTransform)]->Render(pd3dCommandList, pCamera, nullptr);
+	if (m_pSiblingObject)
+		m_pSiblingObject->Render(pd3dCommandList, pCamera, pxmf4x4World);
+	if (m_pChildObject)
+		m_pChildObject->Render(pd3dCommandList, pCamera, pxmf4x4World);
 
-			if (pComponents.second[UINT(ComponentType::ComponentMaterial)])
-				pComponents.second[UINT(ComponentType::ComponentMaterial)]->Render(pd3dCommandList, pCamera, &i);
-
-			if (pComponents.second[UINT(ComponentType::ComponentMesh)])
-			{
-				pComponents.second[UINT(ComponentType::ComponentMesh)]->Render(pd3dCommandList, pCamera, &i);
-				i++;
-			}
-		}
-	
-	i = 0;
-	if(m_pChildObject)
-		for (std::pair<std::string, std::array<std::shared_ptr<CComponent>, UINT(ComponentType::ComponentTypeEnd)>> pComponents : m_pChildObject->m_pComponents)
-		{
-			if (pComponents.second[UINT(ComponentType::ComponentTransform)])
-				pComponents.second[UINT(ComponentType::ComponentTransform)]->Render(pd3dCommandList, pCamera, nullptr);
-
-			if (pComponents.second[UINT(ComponentType::ComponentMaterial)])
-			{
-				pComponents.second[UINT(ComponentType::ComponentMaterial)]->Render(pd3dCommandList, pCamera, &i);
-			}
-
-
-			if (pComponents.second[UINT(ComponentType::ComponentMesh)])
-			{
-				pComponents.second[UINT(ComponentType::ComponentMesh)]->Render(pd3dCommandList, pCamera, &i);
-				i++;
-			}
-		}
-}
-
-std::shared_ptr<CComponent> CGameObject::GetComponent(std::string st, ComponentType pComponentType)
-{
-	return m_pComponents.find(st)->second[(UINT)pComponentType];
 }
 
 std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, char* pstrFileName)
@@ -134,6 +85,7 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 		if (!strcmp(pstrName, "<Frame>:"))
 		{
 			pGameObject = std::make_shared<CGameObject>();
+			pGameObject->Init();
 
 			nReads = (UINT)::fread(&nFrame, sizeof(int), 1, pInFile);
 			nReads = (UINT)::fread(&nTextures, sizeof(int), 1, pInFile);
@@ -153,27 +105,18 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 		}
 		else if (!strcmp(pstrName, "<TransformMatrix>:"))
 		{
-			std::shared_ptr<CTransformComponent> pTransformComponent = std::make_shared<CTransformComponent>(); // Mesh 持失
-			nReads = (UINT)::fread(&(pTransformComponent->m_xmf4x4Transform), sizeof(float), 16, pInFile);
-			m_pComponents[std::string(pGameObject->m_pstrFrameName)][UINT(ComponentType::ComponentTransform)] = pTransformComponent;
+			XMFLOAT4X4	m_xmf4x4Transform;
+			nReads = (UINT)::fread(&(dynamic_cast<CTransformComponent*>(pGameObject->m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4Transform), sizeof(float), 16, pInFile);
 		}
 		else if (!strcmp(pstrName, "<Mesh>:"))
-		{
-			std::shared_ptr<CObjectMeshComponent> pObjectMeshComponent = std::make_shared<CObjectMeshComponent>(pd3dDevice, pd3dCommandList); // Mesh 持失
-			pObjectMeshComponent->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
-			m_pComponents[std::string(pGameObject->m_pstrFrameName)][UINT(ComponentType::ComponentMesh)] = pObjectMeshComponent;
-		}
+			dynamic_cast<CObjectMeshComponent*>(pGameObject->m_pComponents[UINT(ComponentType::ComponentMesh)].get())->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 		else if (!strcmp(pstrName, "<Materials>:"))
-		{
-			std::shared_ptr<CMaterialsComponent> pMaterialsComponent = std::make_shared<CMaterialsComponent>(); // Mesh 持失
-			pMaterialsComponent->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, pInFile);
-			m_pComponents[std::string(pGameObject->m_pstrFrameName)][UINT(ComponentType::ComponentMaterial)] = pMaterialsComponent;
-		}
+			dynamic_cast<CMaterialsComponent*>(pGameObject->m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, pInFile);
 		else if (!strcmp(pstrName, "<Children>:"))
 		{
-			
 			int nChilds = 0;
 			nReads = (UINT)::fread(&nChilds, sizeof(int), 1, pInFile);
+
 			if (nChilds > 0)
 			{
 				for (int i = 0; i < nChilds; i++)
@@ -183,18 +126,27 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 			}
 		}
 		else if (!strcmp(pstrName, "</Frame>"))
-		{
 			break;
-		}
 	}
 	return(pGameObject);
+}
+
+void CGameObject::UpdateTransform(XMFLOAT4X4* pxmf4x4Parent)
+{
+	XMFLOAT4X4 xmf4x4Transform = static_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4Transform;
+	static_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4World = (pxmf4x4Parent) ? Matrix4x4::Multiply(xmf4x4Transform, *pxmf4x4Parent) : xmf4x4Transform;
+
+	XMFLOAT4X4 xmf4x4World = static_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4World;
+
+	if (m_pSiblingObject) m_pSiblingObject->UpdateTransform(pxmf4x4Parent);
+	if (m_pChildObject) m_pChildObject->UpdateTransform(&xmf4x4World);
 }
 
 void CGameObject::SetChild(std::shared_ptr<CGameObject> pParentObject, std::shared_ptr<CGameObject> pChildObject)
 {
 	if (m_pChildObject)
 	{
-		pChildObject->m_pSiblingObject = m_pChildObject;
+		pChildObject->m_pSiblingObject = m_pChildObject->m_pSiblingObject;
 		m_pChildObject->m_pSiblingObject = pChildObject;
 	}
 	else
@@ -207,7 +159,19 @@ void CGameObject::SetChild(std::shared_ptr<CGameObject> pParentObject, std::shar
 
 void CGameObject::AddShaderComponent(std::shared_ptr<CComponent> pComponent)
 {
-	m_pComponents[std::string(m_pstrFrameName)][UINT(ComponentType::ComponentShader)] = pComponent;
+	m_pComponents[UINT(ComponentType::ComponentShader)] = pComponent;
+}
+
+void CGameObject::SetPosition(XMFLOAT3 xmf3Position)
+{
+	dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->SetPosition(xmf3Position);
+	UpdateTransform(NULL);
+}
+
+void CGameObject::Release()
+{
+	for (int i = 0; i < m_pComponents.size(); i++)
+		m_pComponents[i]->Release();
 }
 
 void CPlayerGameObject::Init()

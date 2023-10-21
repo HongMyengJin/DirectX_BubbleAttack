@@ -21,6 +21,7 @@ public:
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList) = 0;
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList) = 0;
 
+	virtual void Release();
 protected:
 	std::unique_ptr<CDescriptorHeap>				m_pd3dDescriptorHeap;
 	Microsoft::WRL::ComPtr<ID3D12RootSignature>		m_pd3dGraphicsRootsignature; // 루트 시그니쳐의 인터페이스 포인터

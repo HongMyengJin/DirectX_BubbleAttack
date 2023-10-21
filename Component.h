@@ -12,7 +12,7 @@ public:
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList) {};
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera = nullptr, void* pContext = nullptr) {};
 	virtual void PostRender(ID3D12GraphicsCommandList* pd3dCommandList) {};
-
+	virtual void Release();
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList* pd3dCommandList) {};
 };
 

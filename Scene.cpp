@@ -20,3 +20,7 @@ bool CScene::ProcessInput()
 {
     return false;
 }
+
+void CScene::Release()
+{
+}

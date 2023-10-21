@@ -12,26 +12,26 @@ enum class SceneType
 	Stage1Type,
 	SceneTypeEnd
 };
-enum class VertexType
-{
-	VertexPosition = 1,
-	VertexColor,
-	VertexNormal,
-	VertexTangent,
-	VertexTextureCoord0,
-	VertexTextureCoord1,
-	VertexTypeEnd
-};
+//enum class VertexType
+//{
+//	VertexPosition = 1,
+//	VertexColor,
+//	VertexNormal,
+//	VertexTangent,
+//	VertexTextureCoord0,
+//	VertexTextureCoord1,
+//	VertexTypeEnd
+//};
 
 enum class MaterialType
 {
-	MaterialAlbedoMap = 1,
-	MaterialSpecularMap,
-	MaterialNormalMap,
-	MaterialMetallicMap,
-	MaterialEmissionMap,
-	MaterialDetailAlbedoMap,
-	MaterialDetailNormalMap,
+	MaterialAlbedoMap = 0x01,
+	MaterialSpecularMap = 0x02,
+	MaterialNormalMap = 0x04,
+	MaterialMetallicMap = 0x08,
+	MaterialEmissionMap = 0x10,
+	MaterialDetailAlbedoMap = 0x20,
+	MaterialDetailNormalMap = 0x40,
 	MaterialMapEnd
 };
 

@@ -37,7 +37,7 @@ D3D12_SHADER_BYTECODE CObjectShaderComponent::CreateVertexShader()
 
 D3D12_SHADER_BYTECODE CObjectShaderComponent::CreatePixelShader()
 {
-	D3DReadFileToBlob(L"PixelShader.cso", m_pd3dPixelShaderBlob.GetAddressOf());
+	D3DReadFileToBlob(L"ObjectPixelShader.cso", m_pd3dPixelShaderBlob.GetAddressOf());
 
 	D3D12_SHADER_BYTECODE d3dShaderByteCode;
 	d3dShaderByteCode.BytecodeLength = m_pd3dPixelShaderBlob->GetBufferSize();

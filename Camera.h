@@ -14,7 +14,7 @@ class CCamera : public CGameObject
 public:
 
 	CCamera() {};
-	~CCamera() {};
+	~CCamera() { };
 
 	virtual void Init();
 	virtual void Animate(float fTimeElapsed);
@@ -37,11 +37,12 @@ public:
 
 	void SetLookAt(CGameObject* pTargetObject, XMFLOAT3& vLookAt);
 
+	void Release();
 protected:
-	XMFLOAT3													m_xmf3Position;
-	XMFLOAT3													m_xmf3Right;
-	XMFLOAT3													m_xmf3Up;
-	XMFLOAT3													m_xmf3Look;
+	XMFLOAT3													m_xmf3Position = XMFLOAT3(0.f, 0.f, -25.f);
+	XMFLOAT3													m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);;
+	XMFLOAT3													m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);;
+	XMFLOAT3													m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	float           											m_fPitch;
 	float           											m_fRoll;
@@ -57,7 +58,9 @@ protected:
 	D3D12_VIEWPORT												m_d3dViewport = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
 	D3D12_RECT													m_d3dScissorRect = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT };
 	
-	std::vector<std::unique_ptr<CameraInfo>>					m_pCameraInfo;
+	std::unique_ptr<CameraInfo>									m_pCameraInfo;
 	Microsoft::WRL::ComPtr<ID3D12Resource>						m_pd3dcbCamera;
+	Microsoft::WRL::ComPtr<ID3D12Resource>						m_pd3dCameraUploadBuffers;
 
 };
+

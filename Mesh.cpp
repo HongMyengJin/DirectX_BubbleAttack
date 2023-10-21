@@ -1,5 +1,12 @@
 #include "Mesh.h"
 
+#define VERTEXT_POSITION				0x01
+#define VERTEXT_COLOR					0x02
+#define VERTEXT_NORMAL					0x04
+#define VERTEXT_TANGENT					0x08
+#define VERTEXT_TEXTURE_COORD0			0x10
+#define VERTEXT_TEXTURE_COORD1			0x20
+
 void CMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, void* pContext)
 {
 	UINT nSubSet = 0;
@@ -66,7 +73,7 @@ void CObjectMeshComponent::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12Grap
 				continue;
 			if (!strcmp(pstrToken, "<Positions>:"))
 			{
-				m_nType |= static_cast<UINT>(VertexType::VertexPosition);
+				m_nType |= VERTEXT_POSITION;
 				m_pxmf3Positions.resize(nDatas);
 
 				nReads = fread(&m_pxmf3Positions[0], sizeof(XMFLOAT3), nDatas, pInFile);
@@ -79,13 +86,13 @@ void CObjectMeshComponent::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12Grap
 			}
 			else if (!strcmp(pstrToken, "<Colors>:"))
 			{
-				m_nType |= static_cast<UINT>(VertexType::VertexColor);
+				m_nType |= VERTEXT_COLOR;
 				m_pxmf4Colors.resize(nDatas);
 				nReads = fread(&m_pxmf4Colors[0], sizeof(XMFLOAT4), nDatas, pInFile);
 			}
 			else if (!strcmp(pstrToken, "<TextureCoords0>:"))
 			{
-				m_nType |= static_cast<UINT>(VertexType::VertexTextureCoord0);
+				m_nType |= VERTEXT_TEXTURE_COORD0;
 				m_pxmf2TextureCoords0.resize(nDatas);
 				nReads = fread(&m_pxmf2TextureCoords0[0], sizeof(XMFLOAT2), nDatas, pInFile);
 
@@ -97,7 +104,7 @@ void CObjectMeshComponent::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12Grap
 			}
 			else if (!strcmp(pstrToken, "<TextureCoords1>:"))
 			{
-				m_nType |= static_cast<UINT>(VertexType::VertexTextureCoord1);
+				m_nType |= VERTEXT_TEXTURE_COORD1;
 				m_pxmf2TextureCoords1.resize(nDatas);
 				nReads = fread(&m_pxmf2TextureCoords1[0], sizeof(XMFLOAT2), nDatas, pInFile);
 
@@ -109,7 +116,7 @@ void CObjectMeshComponent::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12Grap
 			}
 			else if (!strcmp(pstrToken, "<Normals>:"))
 			{
-				m_nType |= static_cast<UINT>(VertexType::VertexNormal);
+				m_nType |= VERTEXT_NORMAL;
 				m_pxmf3Normals.resize(nDatas);
 				nReads = fread(&m_pxmf3Normals[0], sizeof(XMFLOAT3), nDatas, pInFile);
 
@@ -121,7 +128,7 @@ void CObjectMeshComponent::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12Grap
 			}
 			else if (!strcmp(pstrToken, "<Tangents>:"))
 			{
-				m_nType |= static_cast<UINT>(VertexType::VertexTangent);
+				m_nType |= VERTEXT_TANGENT;//VERTEXT_TANGENT
 				m_pxmf3Tangents.resize(nDatas);
 				nReads = fread(&m_pxmf3Tangents[0], sizeof(XMFLOAT3), nDatas, pInFile);
 
@@ -182,6 +189,28 @@ void CObjectMeshComponent::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12Grap
 				}
 			}
 		}
+	}
+}
+
+void CObjectMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, void* pContext)
+{
+
+	UINT nSubSet = 0;
+	if (pContext) nSubSet = *static_cast<UINT*>(pContext); // Subset 가져오기
+
+	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
+
+	D3D12_VERTEX_BUFFER_VIEW pVertexBufferViews[5] = { m_d3dPositionBufferView, m_d3dTextureCoord0BufferView, m_d3dNormalBufferView, m_d3dTangentBufferView, m_d3dBiTangentBufferView };
+	pd3dCommandList->IASetVertexBuffers(m_nSlot, 5, pVertexBufferViews);
+
+	if ((m_nSubMeshes > 0) && (nSubSet < m_nSubMeshes))
+	{
+		pd3dCommandList->IASetIndexBuffer(&(m_pd3dSubSetIndexBufferViews[nSubSet]));
+		pd3dCommandList->DrawIndexedInstanced(m_pnSubSetIndices[nSubSet], 1, 0, 0, 0);
+	}
+	else
+	{
+		pd3dCommandList->DrawInstanced(m_nVertices, 1, m_nOffset, 0);
 	}
 }
 

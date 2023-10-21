@@ -19,7 +19,7 @@ public:
 
 	void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
 	void Render(ID3D12GraphicsCommandList* pd3dCommandList);
-
+	virtual void Release();
 protected:
 	std::unique_ptr<CCamera>				m_pCamera;
 	

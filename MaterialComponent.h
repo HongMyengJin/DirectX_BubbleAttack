@@ -24,7 +24,7 @@ public:
 	CMaterialValueComponent(int nTextures);
 	~CMaterialValueComponent() {};
 
-	const MaterialData& GetMaterialData() { return m_tMaterialData; };
+	MaterialData& GetMaterialData() { return m_tMaterialData; };
 
 	void SetMaterialData(MaterialData tMaterialData) { m_tMaterialData = tMaterialData;}
 	void LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, UINT nType, UINT nRootParameter, UINT iTextureIndex, FILE* pInFile);
@@ -49,10 +49,10 @@ public:
 
 	void LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, FILE* pInFile);
 	
-	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList* pd3dCommandList);
+	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList* pd3dCommandList, int iIndex);
 
 
-private:
+public:
 	UINT													m_nMaterials = 0;
 	std::vector<std::unique_ptr<CMaterialValueComponent>>	m_MaterialDatas;
 };

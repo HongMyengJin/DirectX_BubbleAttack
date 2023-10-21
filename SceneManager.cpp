@@ -7,6 +7,7 @@ void CSceneManager::ChangeSceneComponent(SceneType eSceneType, ID3D12Device* pd3
 	{
 	case SceneType::Stage1Type:
 	{
+		Release();
 		m_pCurrentScene = std::make_unique<CStage>();
 		m_pCurrentScene->BuildObjects(pd3dDevice, pd3dCommandList);
 		break;
@@ -34,4 +35,10 @@ void CSceneManager::RenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommandLis
 {
 	if (m_pCurrentScene)
 		m_pCurrentScene->Render(pd3dCommandList);
+}
+
+void CSceneManager::Release()
+{
+	if (m_pCurrentScene)
+		m_pCurrentScene->Release();
 }

@@ -51,6 +51,7 @@ void CBubbleAttackGameFrame::CreateFrame(HINSTANCE hInstance, HWND hMainWnd)
 
 void CBubbleAttackGameFrame::DestroyFrame()
 {
+	m_pSceneManager->Release();
 	WaitForGpuComplete();
 	// GPU가 모든 명령 리스트를 실행할때까지 대기
 
