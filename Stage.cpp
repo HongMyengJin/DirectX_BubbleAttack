@@ -247,9 +247,9 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pGameObject = std::make_unique<CGameObject>();
 	m_pGameObject->Init();
 
-	m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 15.f));
+	m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
 	m_pGameObject->AddShaderComponent(pShaderComponent);
-	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Gunship.bin");
+	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_Fireballer.bin");
 }
 
 bool CStage::ProcessInput()

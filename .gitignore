@@ -39,4 +39,6 @@
 
 # File
 x64/
-Model/
+*.dds
+*.png
+*.fbx

@@ -10,7 +10,7 @@ void CCamera::Animate(float fTimeElapsed)
 
 void CCamera::Update(float fTimeElapsed)
 {
-	GenerateProjectionMatrix(1.01f, 5000.0f, (float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT)), 60.f);
+	GenerateProjectionMatrix(1.01f, 5000.0f, (float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT)), 10.f);
 	RegenerateViewMatrix();
 	//RegenerateViewMatrix();
 }
