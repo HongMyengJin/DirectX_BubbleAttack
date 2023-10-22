@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Component.h"
 #include "GameObject.h"
+#include "Light.h"
 #include "DescriptorHeap.h"
 class CScene
 {
@@ -28,4 +29,5 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>		m_pd3dPipelineState; // 파이프라인 상태를 나타내는 인터페이스 포인터
 
 	std::unique_ptr<CGameObject>					m_pGameObject;
+	std::unique_ptr<CLight>							m_pLightObject;
 };

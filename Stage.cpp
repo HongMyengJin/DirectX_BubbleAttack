@@ -173,7 +173,11 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
 	m_pGameObject->AddShaderComponent(pShaderComponent);
-	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_Fireballer.bin");
+	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_PlasmaRain.bin");
+
+	m_pLightObject = std::make_unique<CLight>();
+	m_pLightObject->Init();
+	m_pLightObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }
 
 bool CStage::ProcessInput()
@@ -206,6 +210,8 @@ void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 
 	if (m_pCamera)
 		m_pCamera->UpdateShaderVariables(pd3dCommandList);
+	if (m_pLightObject)
+		m_pLightObject->UpdateShaderVariables(pd3dCommandList);
 	if (m_pGameObject)
 		m_pGameObject->PrepareRender(pd3dCommandList);
 }
@@ -222,4 +228,6 @@ void CStage::Release()
 {
 	if(m_pCamera)
 		m_pCamera->Release();
+	if (m_pLightObject)
+		m_pLightObject->Release();
 }

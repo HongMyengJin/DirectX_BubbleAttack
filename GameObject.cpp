@@ -8,6 +8,7 @@ void CGameObject::Init()
 	m_pComponents[UINT(ComponentType::ComponentTransform)] = std::make_shared<CTransformComponent>();
 	m_pComponents[UINT(ComponentType::ComponentMesh)] = std::make_shared<CObjectMeshComponent>();
 	m_pComponents[UINT(ComponentType::ComponentMaterial)] = std::make_shared<CMaterialsComponent>();
+
 }
 
 void CGameObject::Animate(float fTimeElapsed)
@@ -18,14 +19,10 @@ void CGameObject::Animate(float fTimeElapsed)
 
 void CGameObject::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent)
 {
-	//m_pComponents[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, pxmf4x4Parent, nullptr);
-
 	if (m_pSiblingObject)
 		m_pSiblingObject->m_pComponents[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, pxmf4x4Parent, nullptr);
 	if (m_pChildObject)
 		m_pChildObject->m_pComponents[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, &static_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4World, nullptr);
-
-
 }
 
 void CGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
