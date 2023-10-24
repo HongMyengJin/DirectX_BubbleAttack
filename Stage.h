@@ -24,5 +24,5 @@ public:
 protected:
 	std::unique_ptr<CCamera>				m_pCamera;
 	std::unique_ptr<CTerrainObject>			m_pTerrain;
-	
+	std::unique_ptr<CTerrainWater>			m_pTerrainWater;
 };

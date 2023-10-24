@@ -151,7 +151,10 @@
     <ClInclude Include="TerrainMeshComponent.h" />
     <ClInclude Include="TerrainObject.h" />
     <ClInclude Include="TerrainObjectShaderComponent.h" />
+    <ClInclude Include="TerrainWaterShaderComponent.h" />
     <ClInclude Include="TextureComponent.h" />
+    <ClInclude Include="TexturedMeshComponent.h" />
+    <ClInclude Include="TextureMesh.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="WICTextureLoader12.h" />
@@ -177,7 +180,10 @@
     <ClCompile Include="TerrainMeshComponent.cpp" />
     <ClCompile Include="TerrainObject.cpp" />
     <ClCompile Include="TerrainObjectShaderComponent.cpp" />
+    <ClCompile Include="TerrainWaterShaderComponent.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
+    <ClCompile Include="TexturedMeshComponent.cpp" />
+    <ClCompile Include="TextureMesh.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="WICTextureLoader12.cpp" />
@@ -230,6 +236,24 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).cso</ObjectFileOutput>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSTerrain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="TerrainWaterObjectPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSTerrainWater</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="TerrainWaterObjectVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSTerrainWater</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).cso</ObjectFileOutput>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

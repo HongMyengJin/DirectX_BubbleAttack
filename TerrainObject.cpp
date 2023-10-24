@@ -2,6 +2,7 @@
 #include "TerrainMeshComponent.h"
 #include "MaterialComponent.h"
 #include "TransformComponent.h"
+#include "TexturedMeshComponent.h"
 void CTerrainObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, LPCTSTR pFileName, CDescriptorHeap* pDescriptorHeap, int nWidth, int nLength, int nBlockWidth, int nBlockLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color)
 {
 	m_pComponents.resize(4);
@@ -56,6 +57,28 @@ void CTerrainObject::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent)
 {
 }
 
-//void CTerrainObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
-//{
-//}
+void CTerrainWater::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, float fWidth, float fLength)
+{
+	m_pComponents.resize(4);
+	m_pComponents[UINT(ComponentType::ComponentMesh)] = std::make_shared<CTexturedMeshComponent>();
+	m_pComponents[UINT(ComponentType::ComponentMaterial)] = std::make_shared<CMaterialsComponent>();
+	m_pComponents[UINT(ComponentType::ComponentTransform)] = std::make_shared<CTransformComponent>();
+
+	dynamic_cast<CTexturedMeshComponent*>(m_pComponents[UINT(ComponentType::ComponentMesh)].get())->Init(pd3dDevice, pd3dCommandList, fWidth, 0.0f, fLength, 0.0f, 0.0f, 0.0f);
+
+	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->Init(1, 3);
+
+	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, ResourceTextureType::ResourceTexture2D, 3, 0, 0, L"Image/Water_Base_Texture_0.dds");
+	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, ResourceTextureType::ResourceTexture2D, 3, 0, 1, L"Image/Water_Detail_Texture_0.dds");
+	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, ResourceTextureType::ResourceTexture2D, 3, 0, 2, L"Image/Lava(Diffuse).dds");
+	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 3, 3); // 수정 필요
+
+}
+
+void CTerrainWater::Animate(float fTimeElapsed)
+{
+}
+
+void CTerrainWater::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent)
+{
+}

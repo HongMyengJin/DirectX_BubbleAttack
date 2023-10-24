@@ -102,6 +102,15 @@
     <ClInclude Include="TerrainObjectShaderComponent.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="TexturedMeshComponent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMesh.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainWaterShaderComponent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BubbleAttack.cpp">
@@ -176,6 +185,15 @@
     <ClCompile Include="TerrainObjectShaderComponent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TexturedMeshComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMesh.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainWaterShaderComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BubbleAttack.rc">
@@ -204,6 +222,12 @@
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
     <FxCompile Include="TerrainObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainWaterObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainWaterObjectPixelShader.hlsl">
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
   </ItemGroup>

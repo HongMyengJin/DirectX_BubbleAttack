@@ -1,7 +1,10 @@
 #include "Stage.h"
 #include "ObjectShaderComponent.h"
 #include "TerrainObjectShaderComponent.h"
+#include "TerrainWaterShaderComponent.h"
 #include "Camera.h"
+
+
 CStage::CStage()
 {
 }
@@ -22,7 +25,6 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	pd3dDescriptorRanges[0].BaseShaderRegister = 6; //t6: gtxtAlbedoTexture
 	pd3dDescriptorRanges[0].RegisterSpace = 0;
 	pd3dDescriptorRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
 
 	D3D12_ROOT_PARAMETER pd3dRootParameters[4];
 
@@ -189,6 +191,15 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pTerrain->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), _T("Image/HeightMap.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 257, 257, xmf3Scale, xmf4Color);
 	m_pTerrain->AddShaderComponent(pTerrainShaderComponent);
 	m_pTerrain->SetPosition(XMFLOAT3(0.f, -250.f, 0.f));
+
+	std::shared_ptr<CTerrainWaterShaderComponent> pTerrainWaterShaderComponent = std::make_shared<CTerrainWaterShaderComponent>();
+	pTerrainWaterShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
+
+	m_pTerrainWater = std::make_unique<CTerrainWater>();
+	m_pTerrainWater->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 257 * xmf3Scale.x, 257 * xmf3Scale.z);
+	m_pTerrainWater->AddShaderComponent(pTerrainWaterShaderComponent);
+	m_pTerrainWater->SetPosition(XMFLOAT3(0.f, 155.0f - 250.f, 0.f));
+	//m_pTerrainWater->SetPosition(XMFLOAT3((257 * xmf3Scale.x * 0.5f), 155.0f - 250.f, +(257 * xmf3Scale.z * 0.5f)));
 }
 
 bool CStage::ProcessInput()
@@ -241,6 +252,12 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 
 	if(m_pTerrain)
 		m_pTerrain->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+
+	if (m_pTerrainWater)
+		m_pTerrainWater->PrepareRender(pd3dCommandList);
+
+	if (m_pTerrainWater)
+		m_pTerrainWater->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 }
 
 void CStage::Release()
