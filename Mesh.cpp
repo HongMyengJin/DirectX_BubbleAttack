@@ -7,6 +7,7 @@
 #define VERTEXT_TEXTURE_COORD0			0x10
 #define VERTEXT_TEXTURE_COORD1			0x20
 
+
 void CMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, void* pContext)
 {
 	UINT nSubSet = 0;
@@ -213,4 +214,3 @@ void CObjectMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, CC
 		pd3dCommandList->DrawInstanced(m_nVertices, 1, m_nOffset, 0);
 	}
 }
-

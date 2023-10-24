@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "TerrainObject.h"
 class CStage : public CScene
 {
 public:
@@ -22,5 +23,6 @@ public:
 	virtual void Release();
 protected:
 	std::unique_ptr<CCamera>				m_pCamera;
+	std::unique_ptr<CTerrainObject>			m_pTerrain;
 	
 };

@@ -1,15 +1,16 @@
 #include "TextureComponent.h"
-CTextureComponent::CTextureComponent(UINT nTextureN, ResourceTextureType nTextureType, int nSamplers, int nRootParameters)
+
+CTextureComponent::CTextureComponent(UINT nTextureN)
 {
 	m_nTextureN = nTextureN;
 	if (m_nTextureN <= 0)
 		return;
 
-	m_iTextureType = nTextureType;
+
 	m_ppd3dTextureUploadBuffers.resize(m_nTextureN);
 	m_ppd3dTextures.resize(m_nTextureN);
 
-	//m_stTextureName.resize(m_nTextureN);
+	m_stTextureName.resize(m_nTextureN);
 	m_pd3dSrvGpuDescriptorHandles.resize(m_nTextureN);
 	m_pd3dSamplerGpuDescriptorHandles.resize(m_nTextureN);
 
@@ -17,14 +18,15 @@ CTextureComponent::CTextureComponent(UINT nTextureN, ResourceTextureType nTextur
 	m_pdxgiBufferFormats.resize(m_nTextureN);
 	m_pnBufferElements.resize(m_nTextureN);
 
+}
+
+void CTextureComponent::Init(ResourceTextureType nTextureType, int nSamplers, int nRootParameters)
+{
+	m_iTextureType = nTextureType;
 	m_nRootParameters = nRootParameters;
 	m_pnRootParameterIndices.resize(m_nRootParameters);
 
 	m_nSamplers = nSamplers;
-}
-
-void CTextureComponent::Init()
-{
 }
 
 void CTextureComponent::Update(float fTimeElapsed, void* pData, void* pData2)
@@ -44,12 +46,12 @@ void CTextureComponent::PostRender(void* pContext)
 {
 }
 
-void CTextureComponent::CreateShaderResourceView(ID3D12Device* pd3dDevice, CDescriptorHeap* pDescriptorHeap, UINT nDescriptorHeapIndex, UINT nRootParameterStartIndex)
+void CTextureComponent::CreateShaderResourceView(ID3D12Device* pd3dDevice, CDescriptorHeap* pDescriptorHeap, UINT nDescriptorHeapIndex, UINT nRootParameterStartIndex, UINT nTextureN)
 {
 	pDescriptorHeap->m_d3dSrvCPUDescriptorNextHandle.ptr += (::gnCbvSrvDescriptorIncrementSize * nDescriptorHeapIndex);
 	pDescriptorHeap->m_d3dSrvGPUDescriptorNextHandle.ptr += (::gnCbvSrvDescriptorIncrementSize * nDescriptorHeapIndex);
 
-	for (int i = 0; i < m_nTextureN; i++)
+	for (int i = 0; i < nTextureN; i++)
 	{
 		D3D12_SHADER_RESOURCE_VIEW_DESC d3dShaderResourceViewDesc = GetShaderResourceViewDesc(i);
 		pd3dDevice->CreateShaderResourceView(m_ppd3dTextures[i].Get(), &d3dShaderResourceViewDesc, pDescriptorHeap->m_d3dSrvCPUDescriptorNextHandle);
@@ -81,7 +83,8 @@ void CTextureComponent::UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCom
 	{
 		for (int i = 0; i < m_nRootParameters; i++)
 		{
-			if (m_pd3dSrvGpuDescriptorHandles[i].ptr && (m_pnRootParameterIndices[i] != -1)) pd3dCommandList->SetGraphicsRootDescriptorTable(m_pnRootParameterIndices[i], m_pd3dSrvGpuDescriptorHandles[i]);
+			if (m_pd3dSrvGpuDescriptorHandles[i].ptr && (m_pnRootParameterIndices[i] != -1)) 
+				pd3dCommandList->SetGraphicsRootDescriptorTable(m_pnRootParameterIndices[i], m_pd3dSrvGpuDescriptorHandles[i]);
 		}
 	}
 	else

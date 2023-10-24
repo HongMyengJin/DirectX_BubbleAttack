@@ -1,11 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "Component.h"
+
 class CMeshComponent : public CComponent
 {
 public:
-	CMeshComponent() {};
-	virtual ~CMeshComponent() {};
+	CMeshComponent() : CComponent() {}
+	~CMeshComponent() {};
 
 protected:
 	char																	m_stMeshName[256];
@@ -43,8 +44,8 @@ public:
 class CObjectMeshComponent : public CMeshComponent
 {
 public:
-	CObjectMeshComponent() : CMeshComponent() {};
-	~CObjectMeshComponent() {};
+	CObjectMeshComponent() : CMeshComponent() {}
+	~CObjectMeshComponent() {}
 
 public:
 	void LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, FILE* pInFile);
@@ -78,3 +79,4 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource>		m_pd3dBiTangentBuffer;
 	Microsoft::WRL::ComPtr<ID3D12Resource>		m_pd3dBiTangentUploadBuffer;
 };
+

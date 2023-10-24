@@ -1,7 +1,7 @@
 #include "Stage.h"
 #include "ObjectShaderComponent.h"
+#include "TerrainObjectShaderComponent.h"
 #include "Camera.h"
-
 CStage::CStage()
 {
 }
@@ -166,18 +166,29 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pCamera = std::make_unique<CCamera>();
 	m_pCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	std::shared_ptr<CObjectShaderComponent> pShaderComponent = std::make_shared<CObjectShaderComponent>();
-	pShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
+	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
+	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
 	m_pGameObject = std::make_unique<CGameObject>();
 	m_pGameObject->Init();
 
 	m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
-	m_pGameObject->AddShaderComponent(pShaderComponent);
+	m_pGameObject->AddShaderComponent(pObjectShaderComponent);
 	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_PlasmaRain.bin");
 
 	m_pLightObject = std::make_unique<CLight>();
 	m_pLightObject->Init();
 	m_pLightObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+
+	XMFLOAT3 xmf3Scale(8.0f, 2.0f, 8.0f);
+	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
+
+	std::shared_ptr<CTerrainObjectShaderComponent> pTerrainShaderComponent = std::make_shared<CTerrainObjectShaderComponent>();
+	pTerrainShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
+
+	m_pTerrain = std::make_unique<CTerrainObject>();
+	m_pTerrain->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), _T("Image/HeightMap.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 257, 257, xmf3Scale, xmf4Color);
+	m_pTerrain->AddShaderComponent(pTerrainShaderComponent);
+	m_pTerrain->SetPosition(XMFLOAT3(0.f, -250.f, 0.f));
 }
 
 bool CStage::ProcessInput()
@@ -212,8 +223,8 @@ void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 		m_pCamera->UpdateShaderVariables(pd3dCommandList);
 	if (m_pLightObject)
 		m_pLightObject->UpdateShaderVariables(pd3dCommandList);
-	if (m_pGameObject)
-		m_pGameObject->PrepareRender(pd3dCommandList);
+
+
 }
 
 void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -221,7 +232,15 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
     PrepareRender(pd3dCommandList);
 
 	if (m_pGameObject)
+		m_pGameObject->PrepareRender(pd3dCommandList);
+	if (m_pGameObject)
 		m_pGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+
+	if (m_pTerrain)
+		m_pTerrain->PrepareRender(pd3dCommandList);
+
+	if(m_pTerrain)
+		m_pTerrain->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 }
 
 void CStage::Release()

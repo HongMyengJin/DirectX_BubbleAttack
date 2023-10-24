@@ -6,17 +6,17 @@
 class CTextureComponent : public CComponent
 {
 public:
-	CTextureComponent(UINT nTextureN, ResourceTextureType nTextureType, int nSamplers, int nRootParameters);
+	CTextureComponent(UINT nTextureN);
 	~CTextureComponent() {};
 
-	virtual void Init();
+	virtual void Init(ResourceTextureType nTextureType, int nSamplers, int nRootParameters);
 	virtual void Update(float fTimeElapsed, void* pData, void* pData2);
 
 	virtual void PrepareRender(void* pContext = nullptr);
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera = nullptr, void* pContext = nullptr);
 	virtual void PostRender(void* pContext = nullptr);
 
-	void CreateShaderResourceView(ID3D12Device* pd3dDevice, CDescriptorHeap* pDescriptorHeap, UINT nDescriptorHeapIndex, UINT nRootParameterStartIndex);
+	void CreateShaderResourceView(ID3D12Device* pd3dDevice, CDescriptorHeap* pDescriptorHeap, UINT nDescriptorHeapIndex, UINT nRootParameterStartIndex, UINT nTextureN);
 	void SetSampler(int nIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dSamplerGpuDescriptorHandle);
 	void SetRootParameterIndex(int nIndex, UINT nRootParameterIndex);
 	void SetGpuDescriptorHandle(int nIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGpuDescriptorHandle);
@@ -25,7 +25,7 @@ public:
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC GetShaderResourceViewDesc(int nIndex);
 
-	std::array<TCHAR, 64>									m_stTextureName;
+	std::vector<std::array<TCHAR, 64>>						m_stTextureName;
 private:
 	UINT													m_nTextureN = 0;
 	//std::vector<std::string>								m_stTextureName;
