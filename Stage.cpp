@@ -3,6 +3,8 @@
 #include "TerrainObjectShaderComponent.h"
 #include "TerrainWaterShaderComponent.h"
 #include "SkyBoxShaderComponent.h"
+#include "TextureRectObject.h"
+#include "TextureRectMeshShaderComponent.h"
 #include "Camera.h"
 
 
@@ -48,7 +50,7 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	pd3dRootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	pd3dRootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
 	pd3dRootParameters[3].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[0]);
-	pd3dRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	pd3dRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	D3D12_STATIC_SAMPLER_DESC pd3dSamplerDescs[2];
 
@@ -63,7 +65,7 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	pd3dSamplerDescs[0].MaxLOD = D3D12_FLOAT32_MAX;
 	pd3dSamplerDescs[0].ShaderRegister = 0;
 	pd3dSamplerDescs[0].RegisterSpace = 0;
-	pd3dSamplerDescs[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	pd3dSamplerDescs[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	pd3dSamplerDescs[1].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
 	pd3dSamplerDescs[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
@@ -76,9 +78,9 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	pd3dSamplerDescs[1].MaxLOD = D3D12_FLOAT32_MAX;
 	pd3dSamplerDescs[1].ShaderRegister = 1;
 	pd3dSamplerDescs[1].RegisterSpace = 0;
-	pd3dSamplerDescs[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	pd3dSamplerDescs[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-	D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
+	D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | D3D12_ROOT_SIGNATURE_FLAG_ALLOW_STREAM_OUTPUT | D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS;
 	D3D12_ROOT_SIGNATURE_DESC d3dRootSignatureDesc;
 	::ZeroMemory(&d3dRootSignatureDesc, sizeof(D3D12_ROOT_SIGNATURE_DESC));
 	d3dRootSignatureDesc.NumParameters = _countof(pd3dRootParameters);
@@ -208,6 +210,21 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pSkyBoxObject = std::make_unique<CSkyBoxObject>();
 	m_pSkyBoxObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get());
 	m_pSkyBoxObject->AddShaderComponent(pSkyBoxShaderComponent);
+
+	std::shared_ptr<CTextureRectMeshShaderComponent> pTextureRectMeshShaderComponent = std::make_shared<CTextureRectMeshShaderComponent>();
+	pTextureRectMeshShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+
+	for (int i = 0; i < 30; i++)
+	{
+		std::shared_ptr<CTextureRectObject> pTextureRectObject = std::make_shared<CTextureRectObject>();
+
+		pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f));
+		pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
+		pTextureRectObject->SetPosition(XMFLOAT3(i * 20.f - 30 * 0.5f * 20.f - 100.f, 0.f, i * 20.f - 30 * 0.5f * 20.f));
+		m_pTextureRectObjects.push_back(pTextureRectObject);
+	}
+
+	
 }
 
 bool CStage::ProcessInput()
@@ -272,6 +289,16 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 
 	if (m_pTerrainWater)
 		m_pTerrainWater->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+
+	for (int i = 0; i < m_pTextureRectObjects.size(); i++)
+	{
+		if (m_pTextureRectObjects[i])
+		{
+			m_pTextureRectObjects[i]->PrepareRender(pd3dCommandList);
+			m_pTextureRectObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+		}
+	}
+	
 }
 
 void CStage::Release()

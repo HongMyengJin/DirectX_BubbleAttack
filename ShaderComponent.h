@@ -14,11 +14,13 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera = nullptr, void* pContext = nullptr);
 	virtual void PostRender(ID3D12GraphicsCommandList* pd3dCommandList);
 
-	virtual void CreateShader(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature);
+	virtual void CreateShader(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, D3D12_PRIMITIVE_TOPOLOGY_TYPE eprimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader() { return D3D12_SHADER_BYTECODE(); }; // VertexShader
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader() { return D3D12_SHADER_BYTECODE(); }; // PixelShader
+	virtual D3D12_SHADER_BYTECODE CreateGeometryShader() { return D3D12_SHADER_BYTECODE(); };
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout() { return D3D12_INPUT_LAYOUT_DESC(); };
+	virtual D3D12_STREAM_OUTPUT_DESC CreateStreamOutputLayout() { return D3D12_STREAM_OUTPUT_DESC(); };
 
 	virtual void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList) {};
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList) {};
@@ -39,5 +41,7 @@ protected:
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC									m_d3dPipelineStateDesc;
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC>								m_d3dPdInputElementDescs;
+
+	std::vector<D3D12_SO_DECLARATION_ENTRY>								m_d3dPdDeclarationEntry;
 };
 

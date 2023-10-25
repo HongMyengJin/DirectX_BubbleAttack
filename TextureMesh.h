@@ -13,3 +13,4 @@ public:
 	CTextureMesh(XMFLOAT3 xmf3Position, XMFLOAT2 xmf2TexCoord = XMFLOAT2(0.0f, 0.0f)) { m_xmf3Position = xmf3Position; m_xmf2TexCoord = xmf2TexCoord; }
 	~CTextureMesh() { }
 };
+
