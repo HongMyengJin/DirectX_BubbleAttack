@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "TerrainObject.h"
+#include "SkyBoxObject.h"
 class CStage : public CScene
 {
 public:
@@ -25,4 +26,5 @@ protected:
 	std::unique_ptr<CCamera>				m_pCamera;
 	std::unique_ptr<CTerrainObject>			m_pTerrain;
 	std::unique_ptr<CTerrainWater>			m_pTerrainWater;
+	std::unique_ptr<CSkyBoxObject>			m_pSkyBoxObject;
 };

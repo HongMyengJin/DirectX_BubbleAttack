@@ -2,6 +2,7 @@
 #include "ObjectShaderComponent.h"
 #include "TerrainObjectShaderComponent.h"
 #include "TerrainWaterShaderComponent.h"
+#include "SkyBoxShaderComponent.h"
 #include "Camera.h"
 
 
@@ -170,12 +171,12 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
-	m_pGameObject = std::make_unique<CGameObject>();
+	/*m_pGameObject = std::make_unique<CGameObject>();
 	m_pGameObject->Init();
 
 	m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
 	m_pGameObject->AddShaderComponent(pObjectShaderComponent);
-	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_PlasmaRain.bin");
+	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_PlasmaRain.bin");*/
 
 	m_pLightObject = std::make_unique<CLight>();
 	m_pLightObject->Init();
@@ -200,6 +201,13 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pTerrainWater->AddShaderComponent(pTerrainWaterShaderComponent);
 	m_pTerrainWater->SetPosition(XMFLOAT3(0.f, 155.0f - 250.f, 0.f));
 	//m_pTerrainWater->SetPosition(XMFLOAT3((257 * xmf3Scale.x * 0.5f), 155.0f - 250.f, +(257 * xmf3Scale.z * 0.5f)));
+
+	std::shared_ptr<CSkyBoxShaderComponent> pSkyBoxShaderComponent = std::make_shared<CSkyBoxShaderComponent>();
+	pSkyBoxShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
+
+	m_pSkyBoxObject = std::make_unique<CSkyBoxObject>();
+	m_pSkyBoxObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get());
+	m_pSkyBoxObject->AddShaderComponent(pSkyBoxShaderComponent);
 }
 
 bool CStage::ProcessInput()
@@ -241,6 +249,12 @@ void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 {
     PrepareRender(pd3dCommandList);
+
+	if (m_pSkyBoxObject)
+		m_pSkyBoxObject->PrepareRender(pd3dCommandList);
+
+	if (m_pSkyBoxObject)
+		m_pSkyBoxObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 
 	if (m_pGameObject)
 		m_pGameObject->PrepareRender(pd3dCommandList);

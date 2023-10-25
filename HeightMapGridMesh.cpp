@@ -104,7 +104,6 @@ void CHeightMapGridMesh::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandLis
 	m_nLength = nLength;
 	m_xmf3Scale = xmf3Scale;
 
-	//	CTexturedVertex *pVertices = new CTexturedVertex[m_nVertices];
 	std::vector<CDiffused2TexturedVertex> pVertices;
 	pVertices.resize(m_nVertices);
 
