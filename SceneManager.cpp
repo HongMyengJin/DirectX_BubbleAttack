@@ -22,7 +22,10 @@ void CSceneManager::ChangeSceneComponent(SceneType eSceneType, ID3D12Device* pd3
 void CSceneManager::UpdateCurrentScene(float fTimeElapsed)
 {
 	if (m_pCurrentScene)
+	{
+		m_pCurrentScene->AnimateObjects(fTimeElapsed);
 		m_pCurrentScene->UpdateObjects(fTimeElapsed);
+	}
 }
 
 void CSceneManager::PreRenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList)

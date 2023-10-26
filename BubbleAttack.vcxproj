@@ -158,6 +158,7 @@
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="TexturedMeshComponent.h" />
     <ClInclude Include="TextureMesh.h" />
+    <ClInclude Include="TextureObjectTransformComponent.h" />
     <ClInclude Include="TextureRectMeshComponent.h" />
     <ClInclude Include="TextureRectMeshShaderComponent.h" />
     <ClInclude Include="TextureRectObject.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="TexturedMeshComponent.cpp" />
     <ClCompile Include="TextureMesh.cpp" />
+    <ClCompile Include="TextureObjectTransformComponent.cpp" />
     <ClCompile Include="TextureRectMeshComponent.cpp" />
     <ClCompile Include="TextureRectMeshShaderComponent.cpp" />
     <ClCompile Include="TextureRectObject.cpp" />

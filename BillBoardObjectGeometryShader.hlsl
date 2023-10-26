@@ -61,10 +61,10 @@ void GS(point VS_OUT input[1], uint primID : SV_PrimitiveID,  inout TriangleStre
 	for (int i = 0; i < 4; i++)
 	{
 		output.posW = pVertices[i].xyz;
-		//output.posH = float4(mul(mul((pVertices[i]), gmtxView), gmtxProjection));
 		output.posH = mul(pVertices[i], mul(gmtxView, gmtxProjection));
 		output.normalW = vLook;
-		output.uv = pUVs[i];
+		output.uv = mul(float3(pUVs[i], 1.0f), (float3x3)(gmtxGameObject)).xy;
+		//output.uv = pUVs[i];
 		output.primID = primID;
 		outStream.Append(output);
 	}

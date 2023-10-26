@@ -221,6 +221,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 		pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f));
 		pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
 		pTextureRectObject->SetPosition(XMFLOAT3(i * 20.f - 30 * 0.5f * 20.f - 100.f, 0.f, i * 20.f - 30 * 0.5f * 20.f));
+		pTextureRectObject->SetAnimateLifeTime(0.5f + 0.1f * i);
 		m_pTextureRectObjects.push_back(pTextureRectObject);
 	}
 
@@ -234,6 +235,13 @@ bool CStage::ProcessInput()
 
 void CStage::AnimateObjects(float fTimeElapsed)
 {
+	for (int i = 0; i < m_pTextureRectObjects.size(); i++)
+	{
+		if (m_pTextureRectObjects[i])
+		{
+			m_pTextureRectObjects[i]->Animate(fTimeElapsed);
+		}
+	}
 }
 
 void CStage::UpdateObjects(float fTimeElapsed)
