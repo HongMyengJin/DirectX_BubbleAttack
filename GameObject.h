@@ -26,6 +26,8 @@ public:
 	void AddShaderComponent(std::shared_ptr<CComponent> pComponent);
 
 	void SetPosition(XMFLOAT3 xmf3Position);
+	void SetScale(XMFLOAT3 xmf3Scale);
+
 	virtual void Release();
 public:
 	char																												m_pstrFrameName[126];

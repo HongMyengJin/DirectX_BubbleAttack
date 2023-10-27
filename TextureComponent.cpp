@@ -17,6 +17,7 @@ CTextureComponent::CTextureComponent(UINT nTextureN)
 	m_pnResourceTypes.resize(m_nTextureN);
 	m_pdxgiBufferFormats.resize(m_nTextureN);
 	m_pnBufferElements.resize(m_nTextureN);
+	m_pnBufferStrides.resize(m_nTextureN);
 
 }
 
@@ -97,6 +98,15 @@ void CTextureComponent::LoadTextureFromDDSFile(ID3D12Device* pd3dDevice, ID3D12G
 {
 	m_pnResourceTypes[nIndex] = nResourceType;
 	m_ppd3dTextures[nIndex] = ::CreateTextureResourceFromDDSFile(pd3dDevice, pd3dCommandList, pszFileName, m_ppd3dTextureUploadBuffers[nIndex].GetAddressOf(), D3D12_RESOURCE_STATE_GENERIC_READ/*D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE*/);
+}
+
+void CTextureComponent::CreateBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pData, UINT nElements, UINT nStride, DXGI_FORMAT dxgiFormat, D3D12_HEAP_TYPE d3dHeapType, D3D12_RESOURCE_STATES d3dResourceStates, UINT nIndex)
+{
+	m_pnResourceTypes[nIndex] = (UINT)ResourceTextureType::ResourceTexture2D;
+	m_pdxgiBufferFormats[nIndex] = dxgiFormat;
+	m_pnBufferElements[nIndex] = nElements;
+	m_pnBufferStrides[nIndex] = nStride;
+	m_ppd3dTextures[nIndex] = ::CreateBufferResource(pd3dDevice, pd3dCommandList, pData, nElements * nStride, d3dHeapType, d3dResourceStates, &m_ppd3dTextureUploadBuffers[nIndex]);
 }
 
 D3D12_SHADER_RESOURCE_VIEW_DESC CTextureComponent::GetShaderResourceViewDesc(int nIndex)

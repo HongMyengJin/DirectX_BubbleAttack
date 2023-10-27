@@ -86,6 +86,8 @@ extern	Microsoft::WRL::ComPtr<ID3D12Resource> CreateTexture2DResource(ID3D12Devi
 
 extern void SynchronizeResourceTransition(ID3D12GraphicsCommandList* pd3dCommandList, ID3D12Resource* pd3dResource, D3D12_RESOURCE_STATES d3dStateBefore, D3D12_RESOURCE_STATES d3dStateAfter);
 
+extern void SwapResourcePointer(ID3D12Resource** ppd3dResourceA, ID3D12Resource** ppd3dResourceB);
+
 #define RANDOM_COLOR	XMFLOAT4(rand()/ float(RAND_MAX), rand()/ float(RAND_MAX), rand()/ float(RAND_MAX), rand()/ float(RAND_MAX))
 
 #define ROOT_PARAMETER_CAMERA			0

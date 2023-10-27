@@ -173,12 +173,13 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
-	/*m_pGameObject = std::make_unique<CGameObject>();
+	m_pGameObject = std::make_unique<CGameObject>();
 	m_pGameObject->Init();
 
-	m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
+	m_pGameObject->SetPosition(XMFLOAT3(0.f, 5.f, 30.f));
+	m_pGameObject->SetScale(XMFLOAT3(10.f, 10.f, 10.f));
 	m_pGameObject->AddShaderComponent(pObjectShaderComponent);
-	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_PlasmaRain.bin");*/
+	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_Fireballer.bin");
 
 	m_pLightObject = std::make_unique<CLight>();
 	m_pLightObject->Init();
@@ -221,7 +222,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 		pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f));
 		pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
 		pTextureRectObject->SetPosition(XMFLOAT3(i * 20.f - 30 * 0.5f * 20.f - 100.f, 0.f, i * 20.f - 30 * 0.5f * 20.f));
-		pTextureRectObject->SetAnimateLifeTime(0.5f + 0.1f * i);
+		pTextureRectObject->SetAnimateLifeTime(0.2f + 0.1f * i);
 		m_pTextureRectObjects.push_back(pTextureRectObject);
 	}
 
@@ -250,7 +251,6 @@ void CStage::UpdateObjects(float fTimeElapsed)
 		m_pCamera->Update(fTimeElapsed);
 	if (m_pGameObject)
 	{
-		m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 20.f));
 		m_pGameObject->Update(fTimeElapsed, nullptr);
 	}
 }
@@ -275,11 +275,11 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 {
     PrepareRender(pd3dCommandList);
 
-	if (m_pSkyBoxObject)
-		m_pSkyBoxObject->PrepareRender(pd3dCommandList);
+	//if (m_pSkyBoxObject)
+	//	m_pSkyBoxObject->PrepareRender(pd3dCommandList);
 
-	if (m_pSkyBoxObject)
-		m_pSkyBoxObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	//if (m_pSkyBoxObject)
+	//	m_pSkyBoxObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 
 	if (m_pGameObject)
 		m_pGameObject->PrepareRender(pd3dCommandList);

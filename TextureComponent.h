@@ -22,7 +22,7 @@ public:
 	void SetGpuDescriptorHandle(int nIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dSrvGpuDescriptorHandle);
 	void UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList);
 	void LoadTextureFromDDSFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, wchar_t* pszFileName, UINT nResourceType, UINT nIndex);
-
+	void CreateBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pData, UINT nElements, UINT nStride, DXGI_FORMAT dxgiFormat, D3D12_HEAP_TYPE d3dHeapType, D3D12_RESOURCE_STATES d3dResourceStates, UINT nIndex);
 	D3D12_SHADER_RESOURCE_VIEW_DESC GetShaderResourceViewDesc(int nIndex);
 
 	std::vector<std::array<TCHAR, 64>>						m_stTextureName;
@@ -41,6 +41,8 @@ private:
 	std::vector<UINT>										m_pnResourceTypes;
 	std::vector<DXGI_FORMAT>								m_pdxgiBufferFormats;
 	std::vector<int>										m_pnBufferElements;
+
+	std::vector<int>										m_pnBufferStrides;
 
 	int														m_nRootParameters = 0;
 	std::vector<int>										m_pnRootParameterIndices;

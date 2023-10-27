@@ -18,6 +18,9 @@ public:
 	void SetPosition(float x, float y, float z) { m_xmf4x4Transform._41 = x, m_xmf4x4Transform._42 = y, m_xmf4x4Transform._43 = z; }
 	void SetPosition(XMFLOAT3 xmf3Positoin) { SetPosition(xmf3Positoin.x, xmf3Positoin.y, xmf3Positoin.z); }
 
+	void SetScale(float x, float y, float z);
+	void SetScale(XMFLOAT3 xmf3Scale);
+
 	void Rotate(float fPitch, float fYaw, float fRoll);
 
 	XMFLOAT3 GetPosition() { return(XMFLOAT3(m_xmf4x4Transform._41, m_xmf4x4Transform._42, m_xmf4x4Transform._43)); };

@@ -94,6 +94,12 @@ void CMaterialsComponent::LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12Gr
 
 }
 
+void CMaterialsComponent::CreateBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pData, UINT nElements, UINT nStride, DXGI_FORMAT dxgiFormat, D3D12_HEAP_TYPE d3dHeapType, D3D12_RESOURCE_STATES d3dResourceStates, UINT iMaterialIndex, UINT nIndex)
+{
+	m_MaterialDatas[iMaterialIndex]->m_Textures[0]->CreateBuffer(pd3dDevice, pd3dCommandList, pData, nElements, nStride, dxgiFormat, d3dHeapType, d3dResourceStates, nIndex);
+
+}
+
 void CMaterialsComponent::LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, FILE* pInFile)
 {
 
