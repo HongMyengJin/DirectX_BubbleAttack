@@ -3,11 +3,11 @@
 
 class CParticleMeshComponent : public CMeshComponent
 {
+
 public:
 	CParticleMeshComponent() {};
 	~CParticleMeshComponent() {};
-
-	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera = nullptr, void* pContext = nullptr); // UINT nSubset
+public:
 
 	virtual void CreateVertexBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Velocity, float fLifetime, XMFLOAT3 xmf3Acceleration, XMFLOAT3 xmf3Color, XMFLOAT2 xmf2Size);
 	virtual void CreateStreamOutputBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, UINT nMaxParticles);
@@ -33,5 +33,6 @@ protected:
 
 
 	bool										m_bStart = true;
+
 };
 

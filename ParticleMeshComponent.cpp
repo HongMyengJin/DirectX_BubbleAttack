@@ -1,10 +1,6 @@
 #include "ParticleMeshComponent.h"
 #include "ParticleVertex.h"
 
-void CParticleMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, void* pContext)
-{
-}
-
 void CParticleMeshComponent::CreateVertexBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, XMFLOAT3 xmf3Position, XMFLOAT3 xmf3Velocity, float fLifetime, XMFLOAT3 xmf3Acceleration, XMFLOAT3 xmf3Color, XMFLOAT2 xmf2Size)
 {
 	m_nVertices = 1;
@@ -18,8 +14,8 @@ void CParticleMeshComponent::CreateVertexBuffer(ID3D12Device* pd3dDevice, ID3D12
 	pVertices[0].m_fLifetime = fLifetime;
 	pVertices[0].m_nType = 0;
 
-	m_pd3dPositionBuffer = CreateParticleBufferResource(pd3dDevice, pd3dCommandList, pVertices, sizeof(CParticleVertex) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, m_pd3dPositionUploadBuffer.GetAddressOf());
 
+	m_pd3dPositionBuffer = CreateParticleBufferResource(pd3dDevice, pd3dCommandList, pVertices, sizeof(CParticleVertex) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, m_pd3dPositionUploadBuffer.GetAddressOf());
 	m_d3dPositionBufferView.BufferLocation = m_pd3dPositionBuffer->GetGPUVirtualAddress();
 	m_d3dPositionBufferView.StrideInBytes = sizeof(CParticleVertex);
 	m_d3dPositionBufferView.SizeInBytes = sizeof(CParticleVertex) * m_nVertices;
@@ -69,17 +65,12 @@ void CParticleMeshComponent::PreRender(ID3D12GraphicsCommandList* pd3dCommandLis
 		//		*m_pnUploadBufferFilledSize = m_nStride * m_nVertices;
 		*m_pnUploadBufferFilledSize = 0;
 
-		//ID3D12Resource* pd3dDefaultBufferFilledSizeResource = m_pd3dDefaultBufferFilledSize.Get();
-		//ID3D12Resource* pd3dUploadBufferFilledSizeResource = m_pd3dUploadBufferFilledSize.Get();
-
 		::SynchronizeResourceTransition(pd3dCommandList, m_pd3dDefaultBufferFilledSize.Get(), D3D12_RESOURCE_STATE_STREAM_OUT, D3D12_RESOURCE_STATE_COPY_DEST);
 		pd3dCommandList->CopyResource(m_pd3dDefaultBufferFilledSize.Get(), m_pd3dUploadBufferFilledSize.Get());
 		::SynchronizeResourceTransition(pd3dCommandList, m_pd3dDefaultBufferFilledSize.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_STREAM_OUT);
 	}
 	else if (nPipelineState == 1)
 	{
-		//ID3D12Resource* pd3dStreamOutputBuffer = m_pd3dStreamOutputBuffer.Get();
-		//ID3D12Resource* pd3dDrawBuffer = m_pd3dDrawBuffer.Get();
 
 		::SynchronizeResourceTransition(pd3dCommandList, m_pd3dStreamOutputBuffer.Get(), D3D12_RESOURCE_STATE_STREAM_OUT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
 		::SynchronizeResourceTransition(pd3dCommandList, m_pd3dDrawBuffer.Get(), D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_STREAM_OUT);
@@ -104,9 +95,6 @@ void CParticleMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, 
 
 		pd3dCommandList->DrawInstanced(m_nVertices, 1, m_nOffset, 0);
 
-		//ID3D12Resource* pd3dDefaultBufferFilledSizeResource = m_pd3dDefaultBufferFilledSize.Get();
-		//ID3D12Resource* pd3dReadBackBufferFilledSizeResource = m_pd3dReadBackBufferFilledSize.Get();
-
 		::SynchronizeResourceTransition(pd3dCommandList, m_pd3dDefaultBufferFilledSize.Get(), D3D12_RESOURCE_STATE_STREAM_OUT, D3D12_RESOURCE_STATE_COPY_SOURCE);
 		pd3dCommandList->CopyResource(m_pd3dReadBackBufferFilledSize.Get(), m_pd3dDefaultBufferFilledSize.Get());
 		::SynchronizeResourceTransition(pd3dCommandList, m_pd3dDefaultBufferFilledSize.Get(), D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_STREAM_OUT);
@@ -125,6 +113,7 @@ void CParticleMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, 
 void CParticleMeshComponent::PostRender(ID3D12GraphicsCommandList* pd3dCommandList, int nPipelineState)
 {
 }
+
 #define _WITH_DEBUG_STREAM_OUTPUT_VERTICES
 void CParticleMeshComponent::OnPostRender(int nPipelineState)
 {
@@ -150,7 +139,7 @@ void CParticleMeshComponent::OnPostRender(int nPipelineState)
 		_stprintf_s(pstrDebug, 256, _T("Stream Output Vertices = %d\n"), m_nVertices);
 		OutputDebugString(pstrDebug);
 #endif
-		if ((m_nVertices == 0) || (m_nVertices >= MAX_PARTICLES)) 
+		if ((m_nVertices == 0) || (m_nVertices >= MAX_PARTICLES))
 			m_bStart = true;
 	}
 
