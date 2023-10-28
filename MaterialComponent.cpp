@@ -8,12 +8,12 @@
 #define MATERIAL_DETAIL_ALBEDO_MAP	0x20
 #define MATERIAL_DETAIL_NORMAL_MAP	0x40
 
-CMaterialValueComponent::CMaterialValueComponent(int nTextures)
+CMaterialValueComponent::CMaterialValueComponent(int nTextures, ResourceTextureType eTextureType)
 {
 	m_nTexture = 1;
 	m_Textures.resize(1);
 	m_Textures[0] = std::make_shared<CTextureComponent>(nTextures);
-	m_Textures[0]->Init(ResourceTextureType::ResourceTexture2D, 0, 1);
+	m_Textures[0]->Init(eTextureType, 0, 1);
 }
 
 bool CMaterialValueComponent::LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, UINT nType, UINT nRootParameter, UINT iTextureIndex, FILE* pInFile)
@@ -54,13 +54,13 @@ bool CMaterialValueComponent::LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D
 }
 
 
-void CMaterialsComponent::Init(UINT nMaterials, UINT nTextureN)
+void CMaterialsComponent::Init(UINT nMaterials, UINT nTextureN, std::vector<ResourceTextureType> eTextureType)
 {
 	m_nMaterials = nMaterials;
 	m_MaterialDatas.resize(m_nMaterials);
 
 	for(int i = 0; i < m_nMaterials; i++)
-		m_MaterialDatas[i] = std::make_unique<CMaterialValueComponent>(nTextureN);
+		m_MaterialDatas[i] = std::make_unique<CMaterialValueComponent>(nTextureN, eTextureType[i]);
 }
 
 void CMaterialsComponent::Update(float fTimeElapsed, void* pData, void* pData2)
@@ -94,6 +94,12 @@ void CMaterialsComponent::LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12Gr
 
 }
 
+void CMaterialsComponent::CreateBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pData, UINT nElements, UINT nStride, DXGI_FORMAT dxgiFormat, D3D12_HEAP_TYPE d3dHeapType, D3D12_RESOURCE_STATES d3dResourceStates, UINT iMaterialIndex, UINT nIndex)
+{
+	m_MaterialDatas[iMaterialIndex]->m_Textures[0]->CreateBuffer(pd3dDevice, pd3dCommandList, pData, nElements, nStride, dxgiFormat, d3dHeapType, d3dResourceStates, nIndex);
+
+}
+
 void CMaterialsComponent::LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, FILE* pInFile)
 {
 
@@ -119,7 +125,7 @@ void CMaterialsComponent::LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12
 			nReads = (UINT)::fread(&nDatas, sizeof(int), 1, pInFile);
 			iIndex = 0;
 			// 매개변수 넘어가지x
-			m_MaterialDatas[nDatas] = std::make_unique<CMaterialValueComponent>(7); //0:Albedo, 1:Specular, 2:Metallic, 3:Normal, 4:Emission, 5:DetailAlbedo, 6:DetailNormal
+			m_MaterialDatas[nDatas] = std::make_unique<CMaterialValueComponent>(7, ResourceTextureType::ResourceTexture2D); //0:Albedo, 1:Specular, 2:Metallic, 3:Normal, 4:Emission, 5:DetailAlbedo, 6:DetailNormal
 		}
 		else if (strToken == "<AlbedoColor>:")
 		{
@@ -191,16 +197,16 @@ void CMaterialsComponent::LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12
 		}
 		else if (strToken == "</Materials>")
 		{
-			CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 3, iIndex); // 수정 필요
+			CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 3, iIndex, 0); // 수정 필요
 			break;
 		}
 	}
 	
 }
 
-void CMaterialsComponent::CreateShaderResourceView(ID3D12Device* pd3dDevice, CDescriptorHeap* pDescriptorHeap, UINT nDescriptorHeapIndex, UINT nRootParameterStartIndex, UINT nTextureN)
+void CMaterialsComponent::CreateShaderResourceView(ID3D12Device* pd3dDevice, CDescriptorHeap* pDescriptorHeap, UINT nDescriptorHeapIndex, UINT nRootParameterStartIndex, UINT nTextureN, UINT iMaterialIndex)
 {
-	m_MaterialDatas[0]->m_Textures[0]->CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, nRootParameterStartIndex, nTextureN); // 수정 필요
+	m_MaterialDatas[iMaterialIndex]->m_Textures[0]->CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, nRootParameterStartIndex, nTextureN); // 수정 필요
 }
 
 void CMaterialsComponent::UpdateShaderVariable(ID3D12GraphicsCommandList* pd3dCommandList, int iIndex)

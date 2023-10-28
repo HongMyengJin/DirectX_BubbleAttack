@@ -6,7 +6,7 @@
 #include "TextureRectObject.h"
 #include "TextureRectMeshShaderComponent.h"
 #include "Camera.h"
-
+#include "ParticleObjectShaderComponent.h"
 
 CStage::CStage()
 {
@@ -21,7 +21,7 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 {
     // 루트 시그니쳐 생성
 
-	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[1];
+	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[2];
 
 	pd3dDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	pd3dDescriptorRanges[0].NumDescriptors = 7;
@@ -29,7 +29,13 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	pd3dDescriptorRanges[0].RegisterSpace = 0;
 	pd3dDescriptorRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	D3D12_ROOT_PARAMETER pd3dRootParameters[4];
+	pd3dDescriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[1].NumDescriptors = 1;
+	pd3dDescriptorRanges[1].BaseShaderRegister = 13; //t13: Buffer
+	pd3dDescriptorRanges[1].RegisterSpace = 0;
+	pd3dDescriptorRanges[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	D3D12_ROOT_PARAMETER pd3dRootParameters[6];
 
 	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pd3dRootParameters[0].Descriptor.ShaderRegister = 1; //Camera
@@ -51,6 +57,18 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	pd3dRootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
 	pd3dRootParameters[3].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[0]);
 	pd3dRootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pd3dRootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pd3dRootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
+	pd3dRootParameters[4].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[1]);
+	pd3dRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pd3dRootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pd3dRootParameters[5].Descriptor.ShaderRegister = 12; //Framework Info
+	pd3dRootParameters[5].Descriptor.RegisterSpace = 0;
+	pd3dRootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+
 
 	D3D12_STATIC_SAMPLER_DESC pd3dSamplerDescs[2];
 
@@ -80,7 +98,7 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	pd3dSamplerDescs[1].RegisterSpace = 0;
 	pd3dSamplerDescs[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-	D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | D3D12_ROOT_SIGNATURE_FLAG_ALLOW_STREAM_OUTPUT | D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS | D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS;
+	D3D12_ROOT_SIGNATURE_FLAGS d3dRootSignatureFlags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | D3D12_ROOT_SIGNATURE_FLAG_ALLOW_STREAM_OUTPUT;
 	D3D12_ROOT_SIGNATURE_DESC d3dRootSignatureDesc;
 	::ZeroMemory(&d3dRootSignatureDesc, sizeof(D3D12_ROOT_SIGNATURE_DESC));
 	d3dRootSignatureDesc.NumParameters = _countof(pd3dRootParameters);
@@ -173,12 +191,13 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
-	/*m_pGameObject = std::make_unique<CGameObject>();
+	m_pGameObject = std::make_unique<CGameObject>();
 	m_pGameObject->Init();
 
-	m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
+	m_pGameObject->SetPosition(XMFLOAT3(0.f, 5.f, 30.f));
+	m_pGameObject->SetScale(XMFLOAT3(10.f, 10.f, 10.f));
 	m_pGameObject->AddShaderComponent(pObjectShaderComponent);
-	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_PlasmaRain.bin");*/
+	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_Fireballer.bin");
 
 	m_pLightObject = std::make_unique<CLight>();
 	m_pLightObject->Init();
@@ -211,6 +230,13 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pSkyBoxObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get());
 	m_pSkyBoxObject->AddShaderComponent(pSkyBoxShaderComponent);
 
+	std::shared_ptr<CParticleObjectShaderComponent> pParticleObjectShaderComponent = std::make_shared<CParticleObjectShaderComponent>();
+	pParticleObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+
+	m_pParticleObject = std::make_unique<CParticleObject>();
+	m_pParticleObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 65.0f, 0.0f), 0.0f, XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(8.0f, 8.0f), MAX_PARTICLES);
+	m_pParticleObject->AddShaderComponent(pParticleObjectShaderComponent);
+
 	std::shared_ptr<CTextureRectMeshShaderComponent> pTextureRectMeshShaderComponent = std::make_shared<CTextureRectMeshShaderComponent>();
 	pTextureRectMeshShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
 
@@ -221,7 +247,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 		pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f));
 		pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
 		pTextureRectObject->SetPosition(XMFLOAT3(i * 20.f - 30 * 0.5f * 20.f - 100.f, 0.f, i * 20.f - 30 * 0.5f * 20.f));
-		pTextureRectObject->SetAnimateLifeTime(0.5f + 0.1f * i);
+		pTextureRectObject->SetAnimateLifeTime(0.2f + 0.1f * i);
 		m_pTextureRectObjects.push_back(pTextureRectObject);
 	}
 
@@ -250,7 +276,6 @@ void CStage::UpdateObjects(float fTimeElapsed)
 		m_pCamera->Update(fTimeElapsed);
 	if (m_pGameObject)
 	{
-		m_pGameObject->SetPosition(XMFLOAT3(0.f, 0.f, 20.f));
 		m_pGameObject->Update(fTimeElapsed, nullptr);
 	}
 }
@@ -276,8 +301,10 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
     PrepareRender(pd3dCommandList);
 
 	if (m_pSkyBoxObject)
+	{
+		m_pSkyBoxObject->SetPosition(XMFLOAT3(- 0.f, 70.f, -180.f));
 		m_pSkyBoxObject->PrepareRender(pd3dCommandList);
-
+	}
 	if (m_pSkyBoxObject)
 		m_pSkyBoxObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 
@@ -306,7 +333,19 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 			m_pTextureRectObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 		}
 	}
-	
+	RenderParticle(pd3dCommandList);
+}
+
+void CStage::RenderParticle(ID3D12GraphicsCommandList* pd3dCommandList)
+{
+	if (m_pParticleObject)
+		m_pParticleObject->Render(pd3dCommandList, m_pCamera.get(), NULL);
+}
+
+void CStage::OnPostRender(ID3D12GraphicsCommandList* pd3dCommandList)
+{
+	if (m_pParticleObject)
+		m_pParticleObject->OnPostRender();
 }
 
 void CStage::Release()

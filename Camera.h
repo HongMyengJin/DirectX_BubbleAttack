@@ -6,6 +6,7 @@ struct CameraInfo
 {
 	XMFLOAT4X4						m_xmf4x4View;
 	XMFLOAT4X4						m_xmf4x4Projection;
+	XMFLOAT4X4						m_xmf4x4InverseView;
 	XMFLOAT3						m_xmf3Position;
 };
 
@@ -39,7 +40,7 @@ public:
 
 	void Release();
 protected:
-	XMFLOAT3													m_xmf3Position = XMFLOAT3(-0.f, 0.f, 0.f);
+	XMFLOAT3													m_xmf3Position = XMFLOAT3(-0.f, 70.f, -180.f);
 	XMFLOAT3													m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);;
 	XMFLOAT3													m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);;
 	XMFLOAT3													m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);

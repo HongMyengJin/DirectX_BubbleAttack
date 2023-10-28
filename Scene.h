@@ -21,6 +21,7 @@ public:
 
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList) = 0;
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList) = 0;
+	virtual void OnPostRender(ID3D12GraphicsCommandList* pd3dCommandList) = 0;
 
 	virtual void Release();
 protected:

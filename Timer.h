@@ -16,10 +16,11 @@ public:
 	void printFPS(HWND	hWnd);
 
 	float GetTimeElapsed(); // 프레임 평균 경과 시간 반환
-
+	float GetTotalTime();
 private:
 	__int64				m_nCurrentTime; // 현재 시간
 	__int64				m_nLastTime;	// 마지막 프레임의 시간
+	__int64				m_nBaseTime;	// 베이스 프레임의 시간
 
 	float				m_fTimeElapsed; // 마지막 프레임 이후 지나간 시간
 	float				m_fTimeScale;	// Scale Counter의 양

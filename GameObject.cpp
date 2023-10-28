@@ -165,6 +165,12 @@ void CGameObject::SetPosition(XMFLOAT3 xmf3Position)
 	UpdateTransform(NULL);
 }
 
+void CGameObject::SetScale(XMFLOAT3 xmf3Scale)
+{
+	dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->SetScale(xmf3Scale);
+	UpdateTransform(NULL);
+}
+
 void CGameObject::Release()
 {
 	for (int i = 0; i < m_pComponents.size(); i++)

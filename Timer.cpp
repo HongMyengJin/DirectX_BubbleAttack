@@ -13,8 +13,11 @@ void CTimer::init()
 	// 성능 카운터와 성능 주파수를 사용하여 시간 단위 설정
 	if (QueryPerformanceFrequency((LARGE_INTEGER*)&m_nPerformanceFrequency))
 	{
+		::QueryPerformanceCounter((LARGE_INTEGER*)&m_nLastTime);
+
+		m_nBaseTime = m_nLastTime;
 		m_bHardwareHasPerformanceCounter = TRUE;
-		QueryPerformanceCounter((LARGE_INTEGER*)&m_nLastTime);
+
 		m_fTimeScale = 1.0f / m_nPerformanceFrequency;
 	}
 	else  // 성능 카운터 하드웨어를 가지고 있지 않다면
@@ -98,4 +101,9 @@ void CTimer::printFPS(HWND	hWnd)
 float CTimer::GetTimeElapsed()
 {
 	return m_fTimeElapsed;
+}
+
+float CTimer::GetTotalTime()
+{
+	return(float((m_nCurrentTime - m_nBaseTime) * m_fTimeScale));
 }

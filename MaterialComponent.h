@@ -21,7 +21,7 @@ struct MaterialData
 class CMaterialValueComponent : public CComponent
 {
 public:
-	CMaterialValueComponent(int nTextures);
+	CMaterialValueComponent(int nTextures, ResourceTextureType eTextureType);
 	~CMaterialValueComponent() {};
 
 	MaterialData& GetMaterialData() { return m_tMaterialData; };
@@ -40,7 +40,7 @@ public:
 	CMaterialsComponent() {};
 	~CMaterialsComponent() {};
 
-	virtual void Init(UINT nMaterials, UINT nTextureN);
+	virtual void Init(UINT nMaterials, UINT nTextureN, std::vector<ResourceTextureType> eTextureType);
 	virtual void Update(float fTimeElapsed, void* pData, void* pData2);
 
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
@@ -49,7 +49,9 @@ public:
 
 	void LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, ResourceTextureType nType, UINT nRootParameter, UINT iMaterialIndex, UINT iTextureIndex, wchar_t* pszFileName);
 	void LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, FILE* pInFile);
-	virtual void CreateShaderResourceView(ID3D12Device* pd3dDevice, CDescriptorHeap* pDescriptorHeap, UINT nDescriptorHeapIndex, UINT nRootParameterStartIndex, UINT nTextureN);
+	void CreateBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pData, UINT nElements, UINT nStride, DXGI_FORMAT dxgiFormat, D3D12_HEAP_TYPE d3dHeapType, D3D12_RESOURCE_STATES d3dResourceStates, UINT iMaterialIndex, UINT nIndex);
+
+	virtual void CreateShaderResourceView(ID3D12Device* pd3dDevice, CDescriptorHeap* pDescriptorHeap, UINT nDescriptorHeapIndex, UINT nRootParameterStartIndex, UINT nTextureN, UINT iMaterialIndex = 0);
 	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList* pd3dCommandList, int iIndex);
 
 

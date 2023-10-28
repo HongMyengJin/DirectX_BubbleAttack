@@ -36,6 +36,7 @@ void CBubbleAttackGameFrame::CreateFrame(HINSTANCE hInstance, HWND hMainWnd)
 
 	m_pSceneManager = std::make_unique<CSceneManager>();
 	m_pSceneManager->ChangeSceneComponent(SceneType::Stage1Type, m_pd3dDevice.Get(), m_pd3dCommandList.Get());
+	CreateShaderVariables();
 
 	m_pd3dCommandList->Close();
 	// 명령 리스트를 닫힌 상태로 설정
@@ -106,6 +107,9 @@ void CBubbleAttackGameFrame::UpdateFrame()
 	m_pSceneManager->UpdateCurrentScene(m_Timer.GetTimeElapsed());
 	//Rendering
 	m_pSceneManager->PreRenderCurrentScene(m_pd3dCommandList.Get());
+
+	UpdateShaderVariables();
+
 	m_pSceneManager->RenderCurrentScene(m_pd3dCommandList.Get());
 
 	d3dResourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET; 
@@ -116,15 +120,20 @@ void CBubbleAttackGameFrame::UpdateFrame()
 	// GPU가 렌더 타겟(버퍼)을 더 이상 사용하지 않으면 렌더 타겟 상테는 프리젠트 상태(D3D12_RESOURCE_SATE_PRESENT)로 바뀐다.
 
 
+
 	hResult = m_pd3dCommandList->Close();
 	// 명령 리스트를 닫힌 상태로 설정
+
+
 
 	ID3D12CommandList* ppd3dCommandList[] = { m_pd3dCommandList.Get() };
 	m_pd3dCommandQueue->ExecuteCommandLists(1, ppd3dCommandList);
 	// 명령 리스트를 명령 큐에 추가하여 실행
 
+
 	WaitForGpuComplete();
 	//GPU가 모든 명령 리스트를 실행할때까지 대기
+	m_pSceneManager->PostCurrentScene(m_pd3dCommandList.Get());
 
 	DXGI_PRESENT_PARAMETERS	dxgiPresentParameters;
 	dxgiPresentParameters.DirtyRectsCount = 0;
@@ -351,4 +360,29 @@ void CBubbleAttackGameFrame::WaitForGpuComplete()
 		hResult = m_pd3dFence->SetEventOnCompletion(nFenceValue, m_hFenceEvent);
 		::WaitForSingleObject(m_hFenceEvent, INFINITE);
 	}
+}
+
+void CBubbleAttackGameFrame::CreateShaderVariables()
+{
+	UINT ncbElementBytes = ((sizeof(CB_FRAMEWORK_INFO) + 255) & ~255); //256의 배수
+	m_pd3dcbFrameworkInfo = ::CreateBufferResource(m_pd3dDevice.Get(), m_pd3dCommandList.Get(), NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
+
+	m_pd3dcbFrameworkInfo->Map(0, NULL, (void**)&m_pcbMappedFrameworkInfo);
+}
+
+void CBubbleAttackGameFrame::UpdateShaderVariables()
+{
+	m_pcbMappedFrameworkInfo->m_fCurrentTime = m_Timer.GetTotalTime();
+	m_pcbMappedFrameworkInfo->m_fElapsedTime = m_Timer.GetTimeElapsed();
+	m_pcbMappedFrameworkInfo->m_fSecondsPerFirework = 0.4f;
+	m_pcbMappedFrameworkInfo->m_nFlareParticlesToEmit = 100;
+	m_pcbMappedFrameworkInfo->m_xmf3Gravity = XMFLOAT3(0.0f, -9.8f, 0.0f);
+	m_pcbMappedFrameworkInfo->m_nMaxFlareType2Particles = 15 * 1.5f;
+
+	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbFrameworkInfo->GetGPUVirtualAddress();
+	m_pd3dCommandList->SetGraphicsRootConstantBufferView(5, d3dGpuVirtualAddress);
+}
+
+void CBubbleAttackGameFrame::ReleaseShaderVariables()
+{
 }

@@ -37,7 +37,15 @@ void CSceneManager::PreRenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommand
 void CSceneManager::RenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	if (m_pCurrentScene)
+	{
 		m_pCurrentScene->Render(pd3dCommandList);
+	}
+}
+
+void CSceneManager::PostCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList)
+{
+	if (m_pCurrentScene)
+		m_pCurrentScene->OnPostRender(pd3dCommandList);
 }
 
 void CSceneManager::Release()

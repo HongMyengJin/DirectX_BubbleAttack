@@ -39,7 +39,11 @@ void CTerrainObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 		}
 	}
 
-	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->Init(1, 5); 
+	std::vector<ResourceTextureType> m_vTextureType;
+	m_vTextureType.resize(1);
+	m_vTextureType[0] = ResourceTextureType::ResourceTexture2D;
+
+	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->Init(1, 5, m_vTextureType);
 
 	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, ResourceTextureType::ResourceTexture2D, 3, 0, 0, L"Image/Base_Texture.dds");
 	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, ResourceTextureType::ResourceTexture2D, 3, 0, 1, L"Image/Detail_Texture_7.dds");
@@ -66,7 +70,11 @@ void CTerrainWater::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd
 
 	dynamic_cast<CTexturedMeshComponent*>(m_pComponents[UINT(ComponentType::ComponentMesh)].get())->Init(pd3dDevice, pd3dCommandList, fWidth, 0.0f, fLength, 0.0f, 0.0f, 0.0f);
 
-	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->Init(1, 3);
+	std::vector<ResourceTextureType> m_vTextureType;
+	m_vTextureType.resize(1);
+	m_vTextureType[0] = ResourceTextureType::ResourceTexture2D;
+
+	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->Init(1, 3, m_vTextureType);
 
 	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, ResourceTextureType::ResourceTexture2D, 3, 0, 0, L"Image/Water_Base_Texture_0.dds");
 	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, ResourceTextureType::ResourceTexture2D, 3, 0, 1, L"Image/Water_Detail_Texture_0.dds");

@@ -2,6 +2,16 @@
 #include "Timer.h"
 #include "SceneManager.h"
 
+struct CB_FRAMEWORK_INFO
+{
+	float					m_fCurrentTime;
+	float					m_fElapsedTime;
+	float					m_fSecondsPerFirework = 1.0f;
+	int						m_nFlareParticlesToEmit = 300;
+	XMFLOAT3				m_xmf3Gravity = XMFLOAT3(0.0f, -9.8f, 0.0f);
+	int						m_nMaxFlareType2Particles = 150;
+
+};
 class CBubbleAttackGameFrame
 {
 public:
@@ -26,6 +36,11 @@ public:
 	//void ChangeSwapChainState();
 
 	void WaitForGpuComplete();
+
+	void CreateShaderVariables();
+	void UpdateShaderVariables();
+	void ReleaseShaderVariables();
+
 private:
 	HINSTANCE					m_hInstance;
 	HWND						m_hWnd;
@@ -67,4 +82,7 @@ private:
 
 	// Scene ฐüทร
 	std::unique_ptr<CSceneManager>							m_pSceneManager;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource>					m_pd3dcbFrameworkInfo;
+	std::shared_ptr<CB_FRAMEWORK_INFO>						m_pcbMappedFrameworkInfo;
 };
