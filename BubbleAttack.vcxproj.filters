@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -16,249 +8,276 @@
     <Filter Include="쉐이더 파일">
       <UniqueIdentifier>{11706c4a-8f70-4e34-a85e-704a783f11d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{c5192f98-ce8b-4618-bfde-ac5e670396c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{c08d1f2c-cb4d-4122-88e9-e19d99df5d13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{c9533481-516f-434b-a78d-b8640dad2e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Material">
+      <UniqueIdentifier>{6e2fb0f5-2747-47f1-9d3d-f4845a1bb979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Shader">
+      <UniqueIdentifier>{b684e8d5-df86-4b12-ab44-25159c865592}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Transform">
+      <UniqueIdentifier>{c8d07ad7-6579-4ce5-a5a8-7520a75cb163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Mesh">
+      <UniqueIdentifier>{a2ff7f83-08cd-4040-83b2-16b8c2f4640c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Mesh\Vertex">
+      <UniqueIdentifier>{0d8d1481-d890-4f6e-ba14-b44163ba2325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{c1c29ff3-7431-46a5-ba86-5c22cb2543d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="BubbleAttack.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameFrame.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Enum.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DDSTextureLoader12.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="WICTextureLoader12.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="d3dx12.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MaterialComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectShaderComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DescriptorHeap.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HeightMapGridMesh.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainMeshComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainObjectShaderComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TexturedMeshComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureMesh.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainWaterShaderComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyBoxObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyBoxMeshComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyBoxShaderComponent.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="TextureRectObject.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="TextureRectMeshComponent.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="TerrainObject.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="TextureRectMeshShaderComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureObjectTransformComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleMeshComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleVertex.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="SkyBoxObject.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ParticleObject.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialComponent.h">
+      <Filter>Component\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleMeshComponent.h">
+      <Filter>Component\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="ParticleObjectShaderComponent.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBoxMeshComponent.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBoxShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainWaterShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainMeshComponent.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedMeshComponent.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureObjectTransformComponent.h">
+      <Filter>Component\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainObjectShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Component\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRectMeshShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRectMeshComponent.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleAttack.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMesh.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMapGridMesh.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureComponent.h">
+      <Filter>Component\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleVertex.h">
+      <Filter>Component\Mesh\Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="WICTextureLoader12.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSTextureLoader12.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="DescriptorHeap.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFrame.h">
+      <Filter>Global</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BubbleAttack.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameFrame.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Stage.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DDSTextureLoader12.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="WICTextureLoader12.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TransformComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MaterialComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectShaderComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DescriptorHeap.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="HeightMapGridMesh.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainMeshComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainObjectShaderComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TexturedMeshComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureMesh.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainWaterShaderComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyBoxObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyBoxMeshComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyBoxShaderComponent.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="ParticleObject.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="TextureRectObject.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="TextureRectMeshComponent.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="TerrainObject.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="TextureRectMeshShaderComponent.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="SkyBoxObject.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="TextureObjectTransformComponent.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BubbleAttack.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialComponent.cpp">
+      <Filter>Component\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMapGridMesh.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
     </ClCompile>
     <ClCompile Include="ParticleMeshComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleVertex.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleObject.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Component\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="ParticleObjectShaderComponent.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBoxMeshComponent.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBoxShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainWaterShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainMeshComponent.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedMeshComponent.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureObjectTransformComponent.cpp">
+      <Filter>Component\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainObjectShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureComponent.cpp">
+      <Filter>Component\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Component\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureRectMeshShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureRectMeshComponent.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMesh.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="DDSTextureLoader12.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="DescriptorHeap.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFrame.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleVertex.cpp">
+      <Filter>Component\Mesh\Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="WICTextureLoader12.cpp">
+      <Filter>Global</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
