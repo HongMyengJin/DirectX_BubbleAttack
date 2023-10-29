@@ -66,6 +66,14 @@ using Microsoft::WRL::ComPtr;
 #define MAX_LIGHT 2
 
 #define MAX_PARTICLES				900000
+
+#define DIR_FORWARD					0x01
+#define DIR_BACKWARD				0x02
+#define DIR_LEFT					0x04
+#define DIR_RIGHT					0x08
+#define DIR_UP						0x10
+#define DIR_DOWN					0x20
+
 //#define _WITH_CB_GAMEOBJECT_32BIT_CONSTANTS
 //#define _WITH_CB_GAMEOBJECT_ROOT_DESCRIPTOR
 #define _WITH_CB_WORLD_MATRIX_DESCRIPTOR_TABLE
@@ -76,7 +84,7 @@ using Microsoft::WRL::ComPtr;
 #pragma comment(lib, "dxguid.lib")
 
 extern int gnCurrentParticles;
-
+extern POINT m_ptOldCursorPos;
 /*#pragma comment(lib, "DirectXTex.lib")*/
 
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.

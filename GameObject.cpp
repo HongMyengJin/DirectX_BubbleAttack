@@ -25,6 +25,33 @@ void CGameObject::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent)
 		m_pChildObject->m_pComponents[UINT(ComponentType::ComponentTransform)]->Update(fTimeElapsed, &static_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4World, nullptr);
 }
 
+void CGameObject::Move(DWORD dwDirection, float fDistance)
+{
+	XMFLOAT4X4 xmf4x4Transform = dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->m_xmf4x4Transform;
+	
+	XMFLOAT3 xmf3Right, xmf3Up, xmf3Look, xmf3Position;
+
+	memcpy(&xmf3Right.x, &xmf4x4Transform._11, sizeof(XMFLOAT3));
+	memcpy(&xmf3Up.x, &xmf4x4Transform._21, sizeof(XMFLOAT3));
+	memcpy(&xmf3Look.x, &xmf4x4Transform._31, sizeof(XMFLOAT3));
+	memcpy(&xmf3Position.x, &xmf4x4Transform._41, sizeof(XMFLOAT3));
+	
+	if (dwDirection)
+	{
+		XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+		if (dwDirection & DIR_FORWARD) xmf3Shift = Vector3::Add(xmf3Shift, xmf3Look, fDistance);
+		if (dwDirection & DIR_BACKWARD) xmf3Shift = Vector3::Add(xmf3Shift, xmf3Look, -fDistance);
+		if (dwDirection & DIR_RIGHT) xmf3Shift = Vector3::Add(xmf3Shift, xmf3Right, fDistance);
+		if (dwDirection & DIR_LEFT) xmf3Shift = Vector3::Add(xmf3Shift, xmf3Right, -fDistance);
+		if (dwDirection & DIR_UP) xmf3Shift = Vector3::Add(xmf3Shift, xmf3Up, fDistance);
+		if (dwDirection & DIR_DOWN) xmf3Shift = Vector3::Add(xmf3Shift, xmf3Up, -fDistance);
+
+		XMFLOAT3 Position = dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->GetPosition();
+		dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->SetPosition(Vector3::Add(Position, xmf3Shift));
+		UpdateTransform(NULL);
+	}
+}
+
 void CGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	if (m_pComponents[UINT(ComponentType::ComponentShader)])
@@ -169,6 +196,11 @@ void CGameObject::SetScale(XMFLOAT3 xmf3Scale)
 {
 	dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->SetScale(xmf3Scale);
 	UpdateTransform(NULL);
+}
+
+XMFLOAT3 CGameObject::GetPosition()
+{
+	return dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->GetPosition();
 }
 
 void CGameObject::Release()

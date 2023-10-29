@@ -48,6 +48,12 @@ void CSceneManager::PostCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList)
 		m_pCurrentScene->OnPostRender(pd3dCommandList);
 }
 
+void CSceneManager::ProcessInputCurrentScene(HWND hWnd)
+{
+	if (m_pCurrentScene)
+		m_pCurrentScene->ProcessInput(hWnd);
+}
+
 void CSceneManager::Release()
 {
 	if (m_pCurrentScene)

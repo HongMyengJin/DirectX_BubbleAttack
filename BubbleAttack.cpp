@@ -150,6 +150,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_KEYDOWN:
     case WM_KEYUP:
         // 프레임 키 입력
+        gGameFrame.OnProcessingWindowMessage(hWnd, message, wParam, lParam);
         break;
     case WM_COMMAND:
         {

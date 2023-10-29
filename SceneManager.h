@@ -11,6 +11,9 @@ public:
 	void PreRenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList);
 	void RenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList);
 	void PostCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList);
+
+	void ProcessInputCurrentScene(HWND hWnd);
+
 	void Release();
 private:
 	std::unique_ptr<CScene> m_pCurrentScene; // ÇöÀç ¾À ÄÄÆ÷³ÍÆ®

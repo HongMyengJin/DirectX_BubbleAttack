@@ -14,6 +14,8 @@ public:
 	virtual void Animate(float fTimeElapsed);
 	virtual void Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent);
 
+	void Move(DWORD dwDirection, float fDistance); // 방향과 거리
+
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
 
@@ -28,6 +30,7 @@ public:
 	void SetPosition(XMFLOAT3 xmf3Position);
 	void SetScale(XMFLOAT3 xmf3Scale);
 
+	XMFLOAT3 GetPosition();
 	virtual void Release();
 public:
 	char																												m_pstrFrameName[126];

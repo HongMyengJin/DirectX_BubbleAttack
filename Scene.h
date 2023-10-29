@@ -15,7 +15,7 @@ public:
 
 	virtual void BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 
-	virtual bool ProcessInput();
+	virtual bool ProcessInput(HWND hWnd);
 	virtual void AnimateObjects(float fTimeElapsed) = 0;
 	virtual void UpdateObjects(float fTimeElapsed) = 0;
 

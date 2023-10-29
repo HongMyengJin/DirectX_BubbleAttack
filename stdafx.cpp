@@ -2,6 +2,8 @@
 
 int gnCurrentParticles = 0;
 
+POINT m_ptOldCursorPos;
+
 UINT gnRtvDescriptorIncrementSize = 0;
 
 UINT gnCbvSrvDescriptorIncrementSize = 32;

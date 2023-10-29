@@ -10,7 +10,7 @@ struct CameraInfo
 	XMFLOAT3						m_xmf3Position;
 };
 
-class CCamera : public CGameObject
+class CCamera
 {
 public:
 
@@ -37,6 +37,9 @@ public:
 	void SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, float fMinZ = 0.0f, float fMaxZ = 1.0f);
 
 	void SetLookAt(CGameObject* pTargetObject, XMFLOAT3& vLookAt);
+
+
+	void SetPosition(XMFLOAT3 xmf3Position);
 
 	void Release();
 protected:

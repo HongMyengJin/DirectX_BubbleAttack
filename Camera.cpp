@@ -12,7 +12,7 @@ void CCamera::Update(float fTimeElapsed)
 {
 	GenerateProjectionMatrix(1.01f, 5000.0f, (float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT)), 60.f);
 	RegenerateViewMatrix();
-	//RegenerateViewMatrix();
+
 }
 
 void CCamera::Update(CGameObject* pTargetObject, XMFLOAT3& xmf3LookAt, float fTimeElapsed)
@@ -65,6 +65,7 @@ void CCamera::GenerateViewMatrix(XMFLOAT3 xmf3Position, XMFLOAT3 xmf3LookAt, XMF
 
 void CCamera::RegenerateViewMatrix()
 {
+
 	m_xmf3Look = Vector3::Normalize(m_xmf3Look);
 	m_xmf3Right = Vector3::CrossProduct(m_xmf3Up, m_xmf3Look, true);
 	m_xmf3Up = Vector3::CrossProduct(m_xmf3Look, m_xmf3Right, true);
@@ -94,10 +95,17 @@ void CCamera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, f
 
 void CCamera::SetLookAt(CGameObject* pTargetObject, XMFLOAT3& xmf3LookAt)
 {
-	//XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(m_xmf3Position, xmf3LookAt, pTargetObject->GetUpVector());
-	//m_xmf3Right = XMFLOAT3(mtxLookAt._11, mtxLookAt._21, mtxLookAt._31);
-	//m_xmf3Up = XMFLOAT3(mtxLookAt._12, mtxLookAt._22, mtxLookAt._32);
-	//m_xmf3Look = XMFLOAT3(mtxLookAt._13, mtxLookAt._23, mtxLookAt._33);
+	// 카메라의 위치, 쳐다볼 지점, 타겟 오브젝트 업벡터
+
+	XMFLOAT4X4 mtxLookAt = Matrix4x4::LookAtLH(m_xmf3Position, xmf3LookAt, XMFLOAT3(0.f, 1.f, 0.f));
+	m_xmf3Right = XMFLOAT3(mtxLookAt._11, mtxLookAt._21, mtxLookAt._31);
+	m_xmf3Up = XMFLOAT3(mtxLookAt._12, mtxLookAt._22, mtxLookAt._32);
+	m_xmf3Look = XMFLOAT3(mtxLookAt._13, mtxLookAt._23, mtxLookAt._33);
+}
+
+void CCamera::SetPosition(XMFLOAT3 xmf3Position)
+{
+	m_xmf3Position = xmf3Position;
 }
 
 void CCamera::Release()

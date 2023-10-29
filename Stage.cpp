@@ -254,9 +254,47 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	
 }
 
-bool CStage::ProcessInput()
+bool CStage::ProcessInput(HWND hWnd)
 {
-    return false;
+	static UCHAR pKeysBuffer[256];
+	bool bProcessedByScene = false;
+	if (GetKeyboardState(pKeysBuffer))
+	{
+		DWORD dwDirection = 0;
+		if (pKeysBuffer[VK_UP] & 0xF0) dwDirection |= DIR_FORWARD;
+		if (pKeysBuffer[VK_DOWN] & 0xF0) dwDirection |= DIR_BACKWARD;
+		if (pKeysBuffer[VK_LEFT] & 0xF0) dwDirection |= DIR_LEFT;
+		if (pKeysBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT;
+		if (pKeysBuffer[VK_PRIOR] & 0xF0) dwDirection |= DIR_UP;
+		if (pKeysBuffer[VK_NEXT] & 0xF0) dwDirection |= DIR_DOWN;
+
+		float cxDelta = 0.0f, cyDelta = 0.0f;
+		POINT ptCursorPos;
+		if (GetCapture() == hWnd)
+		{
+			SetCursor(NULL);
+			GetCursorPos(&ptCursorPos);
+			cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 3.0f;
+			cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 3.0f;
+			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
+		}
+
+		if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
+		{
+			if (cxDelta || cyDelta)
+			{
+				//if (pKeysBuffer[VK_RBUTTON] & 0xF0)
+				//	m_pGameObject->Rotate(cyDelta, 0.0f, -cxDelta);
+				//else
+				//	m_pGameObject->Rotate(cyDelta, cxDelta, 0.0f);
+			}
+			if (dwDirection) m_pGameObject->Move(dwDirection, 2.5f);
+		}
+		return true;
+	}
+	//m_pPlayer->Update(m_GameTimer.GetTimeElapsed());
+
+	return false;
 }
 
 void CStage::AnimateObjects(float fTimeElapsed)
@@ -311,7 +349,9 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 	if (m_pGameObject)
 		m_pGameObject->PrepareRender(pd3dCommandList);
 	if (m_pGameObject)
+	{
 		m_pGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
 
 	if (m_pTerrain)
 		m_pTerrain->PrepareRender(pd3dCommandList);

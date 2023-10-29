@@ -37,8 +37,8 @@ enum class MaterialType
 
 enum class ComponentType
 {
-	ComponentShader,
 	ComponentTransform,
+	ComponentShader,
 	ComponentMaterial,
 	ComponentMesh,
 	ComponentTypeEnd

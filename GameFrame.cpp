@@ -104,6 +104,8 @@ void CBubbleAttackGameFrame::UpdateFrame()
 	m_pd3dCommandList->OMSetRenderTargets(1, &d3dRtvCPUDescriptorHandle, TRUE, &d3dDsvCPUDescriptorHandle);
 	// ·»´õ Å¸°Ù ºä(¼­¼úÀÚ)¿Í ±íÀÌ-½ºÅÙ½Ç ºä(¼­¼úÀÚ)¸¦ Ãâ·Æ-º´ÇÕ ´Ü°è(OM)¿¡ ¿¬°á
 
+	m_pSceneManager->ProcessInputCurrentScene(m_hWnd); // ÇöÀç ¾ÀÀÇ ProcessInput(ÀÔ·Â)
+
 	m_pSceneManager->UpdateCurrentScene(m_Timer.GetTimeElapsed());
 	//Rendering
 	m_pSceneManager->PreRenderCurrentScene(m_pd3dCommandList.Get());
@@ -385,4 +387,78 @@ void CBubbleAttackGameFrame::UpdateShaderVariables()
 
 void CBubbleAttackGameFrame::ReleaseShaderVariables()
 {
+}
+
+void CBubbleAttackGameFrame::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+{
+	switch (nMessageID)
+	{
+	case WM_LBUTTONDOWN:
+	case WM_RBUTTONDOWN:
+		::SetCapture(hWnd);
+		::GetCursorPos(&m_ptOldCursorPos);
+		break;
+	case WM_LBUTTONUP:
+	case WM_RBUTTONUP:
+		::ReleaseCapture();
+		break;
+	case WM_MOUSEMOVE:
+		break;
+	default:
+		break;
+	}
+}
+
+void CBubbleAttackGameFrame::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+{
+	switch (nMessageID)
+	{
+	case WM_KEYUP:
+		switch (wParam)
+		{
+		case VK_ESCAPE:
+			::PostQuitMessage(0);
+			break;
+		case VK_RETURN:
+			break;
+		case VK_F1:
+		case VK_F2:
+		case VK_F3:
+			break;
+		case VK_F9:
+			break;
+		case VK_F5:
+			break;
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+LRESULT CBubbleAttackGameFrame::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
+{
+	switch (nMessageID)
+	{
+	case WM_ACTIVATE:
+	{
+		break;
+	}
+	case WM_SIZE:
+		break;
+	case WM_LBUTTONDOWN:
+	case WM_RBUTTONDOWN:
+	case WM_LBUTTONUP:
+	case WM_RBUTTONUP:
+	case WM_MOUSEMOVE:
+		OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+		break;
+	case WM_KEYDOWN:
+	case WM_KEYUP:
+		OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
+		break;
+	}
+	return(0);
 }

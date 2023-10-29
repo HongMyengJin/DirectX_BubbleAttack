@@ -16,7 +16,7 @@ void CScene::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 }
 
-bool CScene::ProcessInput()
+bool CScene::ProcessInput(HWND hWnd)
 {
     return false;
 }
