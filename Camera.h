@@ -40,10 +40,11 @@ public:
 
 
 	void SetPosition(XMFLOAT3 xmf3Position);
+	XMFLOAT3 GetPosition();
 
 	void Release();
 protected:
-	XMFLOAT3													m_xmf3Position = XMFLOAT3(-0.f, 70.f, -180.f);
+	XMFLOAT3													m_xmf3Position = XMFLOAT3(0.f, 0.f, 0.f);
 	XMFLOAT3													m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);;
 	XMFLOAT3													m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);;
 	XMFLOAT3													m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
@@ -53,8 +54,8 @@ protected:
 	float           											m_fYaw;
 
 	XMFLOAT3													m_xmf3LookAtWorld;
-	XMFLOAT3													m_xmf3Offset;
-	float           											m_fTimeLag;
+	XMFLOAT3													m_xmf3Offset = XMFLOAT3(0.0f, 15.0f * 0.05f, -30.0f * 0.1f);
+	float           											m_fTimeLag = 0.03f;
 
 	XMFLOAT4X4													m_xmf4x4View = Matrix4x4::Identity();
 	XMFLOAT4X4													m_xmf4x4Projection = Matrix4x4::Identity();

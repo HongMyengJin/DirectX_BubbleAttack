@@ -15,7 +15,7 @@ public:
 	virtual void Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent);
 
 	void Move(DWORD dwDirection, float fDistance); // 방향과 거리
-
+	void Rotate(float x, float y, float z);
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
 
@@ -28,7 +28,12 @@ public:
 	void AddShaderComponent(std::shared_ptr<CComponent> pComponent);
 
 	void SetPosition(XMFLOAT3 xmf3Position);
+
 	void SetScale(XMFLOAT3 xmf3Scale);
+
+	XMFLOAT3 GetLookVector() { return(m_xmf3Look); }
+	XMFLOAT3 GetUpVector() { return(m_xmf3Up); }
+	XMFLOAT3 GetRightVector() { return(m_xmf3Right); }
 
 	XMFLOAT3 GetPosition();
 	virtual void Release();
@@ -40,6 +45,16 @@ public:
 	std::shared_ptr<CGameObject>																						m_pChildObject;
 	std::shared_ptr<CGameObject>																						m_pParentObject;
 	std::shared_ptr<CGameObject>																						m_pSiblingObject;
+
+
+	float           																									m_fPitch = 0.f;
+	float           																									m_fYaw = 0.f;
+	float           																									m_fRoll = 0.f;
+
+	XMFLOAT3																											m_xmf3Right = XMFLOAT3(1.f, 0.f, 0.f);
+	XMFLOAT3																											m_xmf3Up = XMFLOAT3(0.f, 1.f, 0.f);
+	XMFLOAT3																											m_xmf3Look = XMFLOAT3(0.f, 0.f, 1.f);
+	XMFLOAT3																											m_xmf3Position;
 };
 
 

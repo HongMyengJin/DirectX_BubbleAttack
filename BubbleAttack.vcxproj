@@ -166,6 +166,7 @@
     <ClInclude Include="TextureRectMeshComponent.h" />
     <ClInclude Include="TextureRectMeshShaderComponent.h" />
     <ClInclude Include="TextureRectObject.h" />
+    <ClInclude Include="ThirdPersonCamera.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="WICTextureLoader12.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="TextureRectMeshComponent.cpp" />
     <ClCompile Include="TextureRectMeshShaderComponent.cpp" />
     <ClCompile Include="TextureRectObject.cpp" />
+    <ClCompile Include="ThirdPersonCamera.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="WICTextureLoader12.cpp" />

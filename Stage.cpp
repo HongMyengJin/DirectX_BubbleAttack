@@ -186,7 +186,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pd3dDescriptorHeap = std::make_unique<CDescriptorHeap>();
 	m_pd3dDescriptorHeap->CreateCbcSrvDescriptorHeap(pd3dDevice, 0, 100);
 
-	m_pCamera = std::make_unique<CCamera>();
+	m_pCamera = std::make_unique<CThirdPersonCamera>();
 	m_pCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
@@ -283,16 +283,15 @@ bool CStage::ProcessInput(HWND hWnd)
 		{
 			if (cxDelta || cyDelta)
 			{
-				//if (pKeysBuffer[VK_RBUTTON] & 0xF0)
-				//	m_pGameObject->Rotate(cyDelta, 0.0f, -cxDelta);
-				//else
-				//	m_pGameObject->Rotate(cyDelta, cxDelta, 0.0f);
+				if (pKeysBuffer[VK_RBUTTON] & 0xF0)
+					m_pGameObject->Rotate(cyDelta, 0.0f, -cxDelta);
+				else
+					m_pGameObject->Rotate(cyDelta, cxDelta, 0.0f);
 			}
-			if (dwDirection) m_pGameObject->Move(dwDirection, 2.5f);
+			if (dwDirection) m_pGameObject->Move(dwDirection, 0.1f);
 		}
 		return true;
 	}
-	//m_pPlayer->Update(m_GameTimer.GetTimeElapsed());
 
 	return false;
 }
@@ -311,7 +310,7 @@ void CStage::AnimateObjects(float fTimeElapsed)
 void CStage::UpdateObjects(float fTimeElapsed)
 {
 	if (m_pCamera)
-		m_pCamera->Update(fTimeElapsed);
+		m_pCamera->Update(m_pGameObject.get(), m_pGameObject->GetPosition(), fTimeElapsed);
 	if (m_pGameObject)
 	{
 		m_pGameObject->Update(fTimeElapsed, nullptr);
@@ -340,11 +339,13 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 
 	if (m_pSkyBoxObject)
 	{
-		m_pSkyBoxObject->SetPosition(XMFLOAT3(- 0.f, 70.f, -180.f));
+		m_pSkyBoxObject->SetPosition(m_pCamera->GetPosition());
 		m_pSkyBoxObject->PrepareRender(pd3dCommandList);
 	}
 	if (m_pSkyBoxObject)
+	{
 		m_pSkyBoxObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
 
 	if (m_pGameObject)
 		m_pGameObject->PrepareRender(pd3dCommandList);

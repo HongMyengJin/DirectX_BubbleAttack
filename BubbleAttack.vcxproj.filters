@@ -163,6 +163,7 @@
     <ClInclude Include="GameFrame.h">
       <Filter>Global</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdPersonCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ParticleObject.cpp">
@@ -279,6 +280,7 @@
     <ClCompile Include="WICTextureLoader12.cpp">
       <Filter>Global</Filter>
     </ClCompile>
+    <ClCompile Include="ThirdPersonCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BubbleAttack.rc">

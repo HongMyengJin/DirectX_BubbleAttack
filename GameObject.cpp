@@ -52,6 +52,60 @@ void CGameObject::Move(DWORD dwDirection, float fDistance)
 	}
 }
 
+void CGameObject::Rotate(float x, float y, float z)
+{
+	if (x != 0.0f)
+	{
+		m_fPitch += x;
+		if (m_fPitch > +89.0f) { x -= (m_fPitch - 89.0f); m_fPitch = +89.0f; }
+		if (m_fPitch < -89.0f) { x -= (m_fPitch + 89.0f); m_fPitch = -89.0f; }
+	}
+	if (y != 0.0f)
+	{
+		m_fYaw += y;
+		if (m_fYaw > 360.0f) m_fYaw -= 360.0f;
+		if (m_fYaw < 0.0f) m_fYaw += 360.0f;
+	}
+	if (z != 0.0f)
+	{
+		m_fRoll += z;
+		if (m_fRoll > +20.0f) { z -= (m_fRoll - 20.0f); m_fRoll = +20.0f; }
+		if (m_fRoll < -20.0f) { z -= (m_fRoll + 20.0f); m_fRoll = -20.0f; }
+	}
+	//m_pCamera->Rotate(x, y, z);
+	if (y != 0.0f)
+	{
+		XMFLOAT4X4 xmf4x4Transform = dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->m_xmf4x4Transform;
+
+		XMFLOAT3 xmf3Right, xmf3Up, xmf3Look, xmf3Position;
+
+		memcpy(&xmf3Right.x, &xmf4x4Transform._11, sizeof(XMFLOAT3));
+		memcpy(&xmf3Up.x, &xmf4x4Transform._21, sizeof(XMFLOAT3));
+		memcpy(&xmf3Look.x, &xmf4x4Transform._31, sizeof(XMFLOAT3));
+		memcpy(&xmf3Position.x, &xmf4x4Transform._41, sizeof(XMFLOAT3));
+
+		XMMATRIX xmmtxRotate = XMMatrixRotationAxis(XMLoadFloat3(&xmf3Up), XMConvertToRadians(y));
+		xmf3Look = Vector3::TransformNormal(xmf3Look, xmmtxRotate);
+		xmf3Right = Vector3::TransformNormal(xmf3Right, xmmtxRotate);
+
+		m_xmf3Look = Vector3::Normalize(xmf3Look);
+		m_xmf3Right = Vector3::CrossProduct(xmf3Up, xmf3Look, true);
+		m_xmf3Up = Vector3::CrossProduct(xmf3Look, xmf3Right, true);
+
+		m_xmf3Position = xmf3Position;
+
+		memcpy(&xmf4x4Transform._11, &m_xmf3Right.x, sizeof(XMFLOAT3));
+		memcpy(&xmf4x4Transform._21, &m_xmf3Up.x, sizeof(XMFLOAT3));
+		memcpy(&xmf4x4Transform._31, &m_xmf3Look.x, sizeof(XMFLOAT3));
+
+		dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->m_xmf4x4Transform = xmf4x4Transform;
+		UpdateTransform(NULL);
+
+
+
+	}
+}
+
 void CGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 {
 	if (m_pComponents[UINT(ComponentType::ComponentShader)])
