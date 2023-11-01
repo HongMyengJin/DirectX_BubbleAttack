@@ -59,7 +59,7 @@ float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
 	float4 cDetailTexColors[3];
 	cDetailTexColors[0] = gtxtTexture[2].Sample(gssWrap, input.uv1 * 2.0f);
 	cDetailTexColors[1] = gtxtTexture[3].Sample(gssWrap, input.uv1 * 0.125f);
-	cDetailTexColors[2] = gtxtTexture[4].Sample(gssWrap, input.uv1);
+	cDetailTexColors[2] = gtxtTexture[4].Sample(gssWrap, input.uv1 * 10.f);
 
 	float4 cColor = cBaseTexColor * cDetailTexColors[0];
 	cColor += lerp(cDetailTexColors[1] * 0.25f, cDetailTexColors[2], 1.0f - fAlpha);

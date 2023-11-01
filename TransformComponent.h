@@ -19,7 +19,7 @@ public:
 	void SetPosition(XMFLOAT3 xmf3Positoin) { SetPosition(xmf3Positoin.x, xmf3Positoin.y, xmf3Positoin.z); }
 
 	void SetScale(float x, float y, float z);
-	void SetScale(XMFLOAT3 xmf3Scale);
+	void MulScale(XMFLOAT3 xmf3Scale);
 
 	void Rotate(float fPitch, float fYaw, float fRoll);
 
@@ -32,5 +32,6 @@ public:
 public :
 	XMFLOAT4X4	m_xmf4x4Transform = Matrix4x4::Identity();
 	XMFLOAT4X4	m_xmf4x4World = Matrix4x4::Identity();
+	XMFLOAT3	m_xmfScale = XMFLOAT3(1.f, 1.f, 1.f);
 };
 

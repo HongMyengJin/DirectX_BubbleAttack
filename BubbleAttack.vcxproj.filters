@@ -35,6 +35,15 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{c1c29ff3-7431-46a5-ba86-5c22cb2543d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Global\Camera">
+      <UniqueIdentifier>{017f73e3-3936-4ec9-805d-e4d505b72f0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global\TextureLoad">
+      <UniqueIdentifier>{7fd84a27-0747-44b8-ba85-d895e137439c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global\Light">
+      <UniqueIdentifier>{986b9b19-10ca-42bf-b616-1228464ff179}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -73,9 +82,6 @@
     <ClInclude Include="SkyBoxShaderComponent.h">
       <Filter>Component\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainWaterShaderComponent.h">
-      <Filter>Component\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="TerrainMeshComponent.h">
       <Filter>Component\Mesh</Filter>
     </ClInclude>
@@ -84,9 +90,6 @@
     </ClInclude>
     <ClInclude Include="TextureObjectTransformComponent.h">
       <Filter>Component\Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainObjectShaderComponent.h">
-      <Filter>Component\Shader</Filter>
     </ClInclude>
     <ClInclude Include="TransformComponent.h">
       <Filter>Component\Transform</Filter>
@@ -98,9 +101,6 @@
       <Filter>Component\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="BubbleAttack.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
@@ -130,9 +130,6 @@
     <ClInclude Include="ParticleVertex.h">
       <Filter>Component\Mesh\Vertex</Filter>
     </ClInclude>
-    <ClInclude Include="WICTextureLoader12.h">
-      <Filter>Global</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Global</Filter>
     </ClInclude>
@@ -145,13 +142,7 @@
     <ClInclude Include="Timer.h">
       <Filter>Global</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Global</Filter>
-    </ClInclude>
     <ClInclude Include="d3dx12.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="DDSTextureLoader12.h">
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="DescriptorHeap.h">
@@ -163,7 +154,30 @@
     <ClInclude Include="GameFrame.h">
       <Filter>Global</Filter>
     </ClInclude>
-    <ClInclude Include="ThirdPersonCamera.h" />
+    <ClInclude Include="Camera.h">
+      <Filter>Global\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdPersonCamera.h">
+      <Filter>Global\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSTextureLoader12.h">
+      <Filter>Global\TextureLoad</Filter>
+    </ClInclude>
+    <ClInclude Include="WICTextureLoader12.h">
+      <Filter>Global\TextureLoad</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Global\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="RippleWaterObject.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainObjectShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="RippleWaterObjectShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ParticleObject.cpp">
@@ -211,9 +225,6 @@
     <ClCompile Include="SkyBoxShaderComponent.cpp">
       <Filter>Component\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainWaterShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="TerrainMeshComponent.cpp">
       <Filter>Component\Mesh</Filter>
     </ClCompile>
@@ -222,9 +233,6 @@
     </ClCompile>
     <ClCompile Include="TextureObjectTransformComponent.cpp">
       <Filter>Component\Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainObjectShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Component\Mesh</Filter>
@@ -244,16 +252,10 @@
     <ClCompile Include="TextureMesh.cpp">
       <Filter>Component\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
-    <ClCompile Include="DDSTextureLoader12.cpp">
       <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="DescriptorHeap.cpp">
@@ -265,9 +267,6 @@
     <ClCompile Include="ParticleVertex.cpp">
       <Filter>Component\Mesh\Vertex</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -277,10 +276,30 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="WICTextureLoader12.cpp">
-      <Filter>Global</Filter>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Global\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="ThirdPersonCamera.cpp" />
+    <ClCompile Include="ThirdPersonCamera.cpp">
+      <Filter>Global\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="DDSTextureLoader12.cpp">
+      <Filter>Global\TextureLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="WICTextureLoader12.cpp">
+      <Filter>Global\TextureLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Global\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="RippleWaterObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainObjectShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="RippleWaterObjectShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BubbleAttack.rc">

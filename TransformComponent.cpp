@@ -29,11 +29,12 @@ void CTransformComponent::SetScale(float x, float y, float z)
 	m_xmf4x4Transform = Matrix4x4::Multiply(mtxScale, m_xmf4x4Transform);
 }
 
-void CTransformComponent::SetScale(XMFLOAT3 xmf3Scale)
+void CTransformComponent::MulScale(XMFLOAT3 xmf3Scale)
 {
 	XMMATRIX mtxScale = XMMatrixScaling(xmf3Scale.x, xmf3Scale.y, xmf3Scale.z);
 	m_xmf4x4Transform = Matrix4x4::Multiply(mtxScale, m_xmf4x4Transform);
 }
+
 
 void CTransformComponent::Rotate(float fPitch, float fYaw, float fRoll)
 {

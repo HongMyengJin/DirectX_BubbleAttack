@@ -10,10 +10,10 @@ public:
 public:
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera = nullptr, void* pContext = nullptr); // UINT nSubset
 
-	void SetMesh(int nIndex, std::shared_ptr<CHeightMapGridMesh> pMesh);
+	void SetMesh(int nIndex, std::shared_ptr<CGridMeshComponent> pMesh);
 	void ResizeMesh(int nSize);
 
 protected:
-	std::vector<std::shared_ptr<CHeightMapGridMesh>> m_pHeightMapGridMeshs;
+	std::vector<std::shared_ptr<CGridMeshComponent>> m_pHeightMapGridMeshs;
 
 };

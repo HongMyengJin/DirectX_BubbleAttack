@@ -11,7 +11,7 @@ void CTerrainMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, C
 	}
 }
 
-void CTerrainMeshComponent::SetMesh(int nIndex, std::shared_ptr<CHeightMapGridMesh> pMesh)
+void CTerrainMeshComponent::SetMesh(int nIndex, std::shared_ptr<CGridMeshComponent> pMesh)
 {
 	if (!m_pHeightMapGridMeshs.empty())
 	{

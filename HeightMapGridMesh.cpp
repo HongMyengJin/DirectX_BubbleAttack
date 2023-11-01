@@ -92,7 +92,7 @@ float CHeightMapImage::GetHeight(float fx, float fz, bool bReverseQuad)
 	return(fHeight);
 }
 
-void CHeightMapGridMesh::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, void* pContext)
+void CGridMeshComponent::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color, void* pContext)
 {
 	m_nVertices = nWidth * nLength;
 	m_nStride = sizeof(CDiffused2TexturedVertex);
@@ -108,16 +108,21 @@ void CHeightMapGridMesh::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandLis
 	pVertices.resize(m_nVertices);
 
 	CHeightMapImage* pHeightMapImage = (CHeightMapImage*)pContext;
-	int cxHeightMap = pHeightMapImage->GetHeightMapWidth();
-	int czHeightMap = pHeightMapImage->GetHeightMapLength();
 
+	int cxHeightMap = 0;
+	int czHeightMap = 0;
+	if (pContext)
+	{
+		cxHeightMap = pHeightMapImage->GetHeightMapWidth();
+		czHeightMap = pHeightMapImage->GetHeightMapLength();
+	}
 	float fHeight = 0.0f, fMinHeight = +FLT_MAX, fMaxHeight = -FLT_MAX;
 	for (int i = 0, z = zStart; z < (zStart + nLength); z++)
 	{
 		for (int x = xStart; x < (xStart + nWidth); x++, i++)
 		{
 			fHeight = OnGetHeight(x, z, pContext);
-			pVertices[i].m_xmf3Position = XMFLOAT3((x * m_xmf3Scale.x - nWidth), fHeight, (z * m_xmf3Scale.z + nLength));
+			pVertices[i].m_xmf3Position = XMFLOAT3((x * m_xmf3Scale.x/* - nWidth*/), fHeight, (z * m_xmf3Scale.z/* + nLength*/));
 			pVertices[i].m_xmf4Diffuse = Vector4::Add(OnGetColor(x, z, pContext), xmf4Color);
 			pVertices[i].m_xmf2TexCoord0 = XMFLOAT2(float(x) / float(cxHeightMap - 1), float(czHeightMap - 1 - z) / float(czHeightMap - 1));
 			pVertices[i].m_xmf2TexCoord1 = XMFLOAT2(float(x) / float(m_xmf3Scale.x * 0.5f), float(z) / float(m_xmf3Scale.z * 0.5f));
@@ -167,7 +172,7 @@ void CHeightMapGridMesh::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandLis
 	m_pd3dSubSetIndexBufferViews[0].SizeInBytes = sizeof(UINT) * m_nIndice.size();
 }
 
-void CHeightMapGridMesh::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, void* pContext)
+void CGridMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, void* pContext)
 {
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 	pd3dCommandList->IASetVertexBuffers(m_nSlot, 1, &m_d3dPositionBufferView);

@@ -146,6 +146,8 @@
     <ClInclude Include="ParticleObjectShaderComponent.h" />
     <ClInclude Include="ParticleVertex.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="RippleWaterObject.h" />
+    <ClInclude Include="RippleWaterObjectShaderComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShaderComponent.h" />
@@ -158,7 +160,6 @@
     <ClInclude Include="TerrainMeshComponent.h" />
     <ClInclude Include="TerrainObject.h" />
     <ClInclude Include="TerrainObjectShaderComponent.h" />
-    <ClInclude Include="TerrainWaterShaderComponent.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="TexturedMeshComponent.h" />
     <ClInclude Include="TextureMesh.h" />
@@ -188,6 +189,8 @@
     <ClCompile Include="ParticleObject.cpp" />
     <ClCompile Include="ParticleObjectShaderComponent.cpp" />
     <ClCompile Include="ParticleVertex.cpp" />
+    <ClCompile Include="RippleWaterObject.cpp" />
+    <ClCompile Include="RippleWaterObjectShaderComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShaderComponent.cpp" />
@@ -199,7 +202,6 @@
     <ClCompile Include="TerrainMeshComponent.cpp" />
     <ClCompile Include="TerrainObject.cpp" />
     <ClCompile Include="TerrainObjectShaderComponent.cpp" />
-    <ClCompile Include="TerrainWaterShaderComponent.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="TexturedMeshComponent.cpp" />
     <ClCompile Include="TextureMesh.cpp" />
@@ -365,7 +367,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSTerrainWater</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSRippleWater</EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).cso</ObjectFileOutput>
     </FxCompile>
@@ -374,7 +376,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSTerrainWater</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSRippleWater</EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).cso</ObjectFileOutput>
     </FxCompile>

@@ -6,6 +6,7 @@
 #include "SkyBoxObject.h"
 #include "TextureRectObject.h"
 #include "ParticleObject.h"
+#include "RippleWaterObject.h"
 class CStage : public CScene
 {
 public:
@@ -31,7 +32,7 @@ public:
 protected:
 	std::unique_ptr<CThirdPersonCamera>		m_pCamera;
 	std::unique_ptr<CTerrainObject>			m_pTerrain;
-	std::unique_ptr<CTerrainWater>			m_pTerrainWater;
+	std::unique_ptr<CRippleWaterObject>		m_pTerrainWater;
 	std::unique_ptr<CSkyBoxObject>			m_pSkyBoxObject;
 	std::unique_ptr<CParticleObject>		m_pParticleObject;
 	std::vector<std::shared_ptr<CTextureRectObject>> m_pTextureRectObjects;

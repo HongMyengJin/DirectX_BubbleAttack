@@ -41,11 +41,11 @@ public:
 };
 
 
-class CHeightMapGridMesh : public CMeshComponent
+class CGridMeshComponent : public CMeshComponent
 {
 public:
-	CHeightMapGridMesh() : CMeshComponent() {}
-	~CHeightMapGridMesh() {}
+	CGridMeshComponent() : CMeshComponent() {}
+	~CGridMeshComponent() {}
 
 	void Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, int xStart, int zStart, int nWidth, int nLength, XMFLOAT3 xmf3Scale = XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT4 xmf4Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.0f), void* pContext = NULL);
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera = nullptr, void* pContext = nullptr); // UINT nSubset
@@ -53,8 +53,10 @@ public:
 	int GetWidth() { return(m_nWidth); }
 	int GetLength() { return(m_nLength); }
 
-	virtual float OnGetHeight(int x, int z, void* pContext);
-	virtual XMFLOAT4 OnGetColor(int x, int z, void* pContext);
+	virtual float OnGetHeight(int x, int z, void* pContext) { return(0.0f); }
+	virtual XMFLOAT4 OnGetColor(int x, int z, void* pContext) { return(XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)); }
+	//virtual float OnGetHeight(int x, int z, void* pContext);
+	//virtual XMFLOAT4 OnGetColor(int x, int z, void* pContext);
 
 public:
 	//virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera = nullptr, void* pContext = nullptr); // UINT nSubset
@@ -65,4 +67,15 @@ protected:
 	int							m_nLength;
 	XMFLOAT3					m_xmf3Scale;
 	std::vector<UINT>			m_nIndice;
+};
+
+
+class CHeightMapGridMesh : public CGridMeshComponent
+{
+public:
+	CHeightMapGridMesh() : CGridMeshComponent() {}
+	~CHeightMapGridMesh() {}
+
+	virtual float OnGetHeight(int x, int z, void* pContext);
+	virtual XMFLOAT4 OnGetColor(int x, int z, void* pContext);
 };

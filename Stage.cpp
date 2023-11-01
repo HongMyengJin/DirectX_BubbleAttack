@@ -1,12 +1,20 @@
 #include "Stage.h"
-#include "ObjectShaderComponent.h"
-#include "TerrainObjectShaderComponent.h"
-#include "TerrainWaterShaderComponent.h"
-#include "SkyBoxShaderComponent.h"
-#include "TextureRectObject.h"
+#include "RippleWaterObjectShaderComponent.h"
 #include "TextureRectMeshShaderComponent.h"
-#include "Camera.h"
 #include "ParticleObjectShaderComponent.h"
+#include "TerrainObjectShaderComponent.h"
+#include "SkyBoxShaderComponent.h"
+#include "ObjectShaderComponent.h"
+
+#include "TextureRectObject.h"
+
+
+
+
+
+
+#include "Camera.h"
+
 
 CStage::CStage()
 {
@@ -35,7 +43,7 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	pd3dDescriptorRanges[1].RegisterSpace = 0;
 	pd3dDescriptorRanges[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	D3D12_ROOT_PARAMETER pd3dRootParameters[6];
+	D3D12_ROOT_PARAMETER pd3dRootParameters[7];
 
 	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pd3dRootParameters[0].Descriptor.ShaderRegister = 1; //Camera
@@ -68,6 +76,11 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	pd3dRootParameters[5].Descriptor.RegisterSpace = 0;
 	pd3dRootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
+	pd3dRootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	pd3dRootParameters[6].Constants.Num32BitValues = 16; //Texture Animation (4x4) Matrix
+	pd3dRootParameters[6].Constants.ShaderRegister = 5; //
+	pd3dRootParameters[6].Constants.RegisterSpace = 0;
+	pd3dRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 
 	D3D12_STATIC_SAMPLER_DESC pd3dSamplerDescs[2];
@@ -194,10 +207,11 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pGameObject = std::make_unique<CGameObject>();
 	m_pGameObject->Init();
 
-	m_pGameObject->SetPosition(XMFLOAT3(0.f, 5.f, 30.f));
-	m_pGameObject->SetScale(XMFLOAT3(10.f, 10.f, 10.f));
 	m_pGameObject->AddShaderComponent(pObjectShaderComponent);
 	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Weapon_Fireballer.bin");
+	m_pGameObject->SetScale(XMFLOAT3(150.f, 150.f, 150.f));
+	m_pGameObject->SetPosition(XMFLOAT3(200.f, 250.f, 200.f));
+
 
 	m_pLightObject = std::make_unique<CLight>();
 	m_pLightObject->Init();
@@ -210,17 +224,17 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	pTerrainShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
 
 	m_pTerrain = std::make_unique<CTerrainObject>();
-	m_pTerrain->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), _T("Image/HeightMap.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 257, 257, xmf3Scale, xmf4Color);
+	m_pTerrain->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), _T("Image/HeightMap.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 17, 17, xmf3Scale, xmf4Color);
 	m_pTerrain->AddShaderComponent(pTerrainShaderComponent);
-	m_pTerrain->SetPosition(XMFLOAT3(0.f, -250.f, 0.f));
+	//m_pTerrain->SetPosition(XMFLOAT3(0.f, -250.f, 0.f));
 
-	std::shared_ptr<CTerrainWaterShaderComponent> pTerrainWaterShaderComponent = std::make_shared<CTerrainWaterShaderComponent>();
+	std::shared_ptr<CRippleWaterObjectShaderComponent> pTerrainWaterShaderComponent = std::make_shared<CRippleWaterObjectShaderComponent>();
 	pTerrainWaterShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
 
-	m_pTerrainWater = std::make_unique<CTerrainWater>();
-	m_pTerrainWater->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 257 * xmf3Scale.x, 257 * xmf3Scale.z);
+	m_pTerrainWater = std::make_unique<CRippleWaterObject>();
+	m_pTerrainWater->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 257, 257, 17, 17, xmf3Scale, xmf4Color);
 	m_pTerrainWater->AddShaderComponent(pTerrainWaterShaderComponent);
-	m_pTerrainWater->SetPosition(XMFLOAT3(0.f, 155.0f - 250.f, 0.f));
+	m_pTerrainWater->SetPosition(XMFLOAT3(+(257 * 0.5f), 155.0f, +(257 * 0.5f)));
 	//m_pTerrainWater->SetPosition(XMFLOAT3((257 * xmf3Scale.x * 0.5f), 155.0f - 250.f, +(257 * xmf3Scale.z * 0.5f)));
 
 	std::shared_ptr<CSkyBoxShaderComponent> pSkyBoxShaderComponent = std::make_shared<CSkyBoxShaderComponent>();
@@ -233,9 +247,9 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	std::shared_ptr<CParticleObjectShaderComponent> pParticleObjectShaderComponent = std::make_shared<CParticleObjectShaderComponent>();
 	pParticleObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
 
-	m_pParticleObject = std::make_unique<CParticleObject>();
+	/*m_pParticleObject = std::make_unique<CParticleObject>();
 	m_pParticleObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 65.0f, 0.0f), 0.0f, XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(8.0f, 8.0f), MAX_PARTICLES);
-	m_pParticleObject->AddShaderComponent(pParticleObjectShaderComponent);
+	m_pParticleObject->AddShaderComponent(pParticleObjectShaderComponent);*/
 
 	std::shared_ptr<CTextureRectMeshShaderComponent> pTextureRectMeshShaderComponent = std::make_shared<CTextureRectMeshShaderComponent>();
 	pTextureRectMeshShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
@@ -250,6 +264,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 		pTextureRectObject->SetAnimateLifeTime(0.2f + 0.1f * i);
 		m_pTextureRectObjects.push_back(pTextureRectObject);
 	}
+
 
 	
 }
@@ -288,7 +303,7 @@ bool CStage::ProcessInput(HWND hWnd)
 				else
 					m_pGameObject->Rotate(cyDelta, cxDelta, 0.0f);
 			}
-			if (dwDirection) m_pGameObject->Move(dwDirection, 0.1f);
+			if (dwDirection) m_pGameObject->Move(dwDirection, 0.7f);
 		}
 		return true;
 	}
@@ -330,6 +345,8 @@ void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 	if (m_pLightObject)
 		m_pLightObject->UpdateShaderVariables(pd3dCommandList);
 
+	if (m_pTerrainWater)
+		m_pTerrainWater->UpdateShaderVariables(pd3dCommandList);
 
 }
 

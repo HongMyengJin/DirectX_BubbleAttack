@@ -55,6 +55,7 @@ public:
 	XMFLOAT3																											m_xmf3Up = XMFLOAT3(0.f, 1.f, 0.f);
 	XMFLOAT3																											m_xmf3Look = XMFLOAT3(0.f, 0.f, 1.f);
 	XMFLOAT3																											m_xmf3Position;
+	XMFLOAT3																											m_xmf3Scale = XMFLOAT3(1.f, 1.f, 1.f);
 };
 
 

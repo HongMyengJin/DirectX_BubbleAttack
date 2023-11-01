@@ -99,6 +99,8 @@ void CGameObject::Rotate(float x, float y, float z)
 		memcpy(&xmf4x4Transform._31, &m_xmf3Look.x, sizeof(XMFLOAT3));
 
 		dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->m_xmf4x4Transform = xmf4x4Transform;
+		dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->SetScale(13.f, 13.f, 13.f);
+
 		UpdateTransform(NULL);
 
 
@@ -248,7 +250,8 @@ void CGameObject::SetPosition(XMFLOAT3 xmf3Position)
 
 void CGameObject::SetScale(XMFLOAT3 xmf3Scale)
 {
-	dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->SetScale(xmf3Scale);
+	m_xmf3Scale = xmf3Scale;
+	dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->MulScale(xmf3Scale);
 	UpdateTransform(NULL);
 }
 
