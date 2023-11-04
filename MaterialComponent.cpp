@@ -90,7 +90,7 @@ void CMaterialsComponent::PostRender(ID3D12GraphicsCommandList* pd3dCommandList)
 
 void CMaterialsComponent::LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, ResourceTextureType nType, UINT nRootParameter, UINT iMaterialIndex, UINT iTextureIndex, wchar_t* pszFileName)
 {
-	m_MaterialDatas[iMaterialIndex]->m_Textures[0]->LoadTextureFromDDSFile(pd3dDevice, pd3dCommandList, pszFileName, (UINT)ResourceTextureType::ResourceTexture2D, iTextureIndex);
+	m_MaterialDatas[iMaterialIndex]->m_Textures[0]->LoadTextureFromDDSFile(pd3dDevice, pd3dCommandList, pszFileName, (UINT)nType, iTextureIndex);
 
 }
 

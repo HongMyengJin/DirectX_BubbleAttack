@@ -104,8 +104,8 @@ float4 PSRippleWater(VS_RIPPLE_WATER_OUTPUT input) : SV_TARGET
 
 
 	float4 cBaseTexColor = gtxtTexture[0].SampleLevel(gssWrap, uv, 0);
-	float4 cDetail0TexColor = gtxtTexture[1].SampleLevel(gssWrap, uv * 10.0f, 0);
-	float4 cDetail1TexColor = gtxtTexture[2].SampleLevel(gssWrap, uv * 5.0f, 0);
+	float4 cDetail0TexColor = gtxtTexture[1].SampleLevel(gssWrap, uv, 0);
+	float4 cDetail1TexColor = gtxtTexture[2].SampleLevel(gssWrap, uv, 0);
 
 	float4 cColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	cColor = lerp(cBaseTexColor * cDetail0TexColor, cDetail1TexColor.r * 0.5f, 0.35f);

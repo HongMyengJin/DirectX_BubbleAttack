@@ -15,7 +15,7 @@ void CSkyBoxObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd
 
 	std::vector<ResourceTextureType> m_vTextureType;
 	m_vTextureType.resize(1);
-	m_vTextureType[0] = ResourceTextureType::ResourceTexture2D;
+	m_vTextureType[0] = ResourceTextureType::ResourceTextureCUBE;
 
 	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->Init(1, 1, m_vTextureType);
 
