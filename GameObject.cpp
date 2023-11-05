@@ -99,7 +99,7 @@ void CGameObject::Rotate(float x, float y, float z)
 		memcpy(&xmf4x4Transform._31, &m_xmf3Look.x, sizeof(XMFLOAT3));
 
 		dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->m_xmf4x4Transform = xmf4x4Transform;
-		dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->SetScale(1.f, 1.f, 1.f);
+		//dynamic_cast<CTransformComponent*>(m_pComponents[(UINT)ComponentType::ComponentTransform].get())->SetScale(50.f, 50.f, 50.f);
 
 		UpdateTransform(NULL);
 
@@ -214,7 +214,10 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 void CGameObject::UpdateTransform(XMFLOAT4X4* pxmf4x4Parent)
 {
 	XMFLOAT4X4 xmf4x4Transform = static_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4Transform;
-	static_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4World = (pxmf4x4Parent) ? Matrix4x4::Multiply(xmf4x4Transform, *pxmf4x4Parent) : xmf4x4Transform;
+	DirectX::XMMATRIX	mf4x4NewTransform =  DirectX::XMLoadFloat4x4(&xmf4x4Transform) * m_xmRotationMatrix * m_xmTranslationMatrix;
+
+	
+	static_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4World = (pxmf4x4Parent) ? Matrix4x4::Multiply(mf4x4NewTransform, *pxmf4x4Parent) : xmf4x4Transform;
 
 	XMFLOAT4X4 xmf4x4World = static_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4World;
 
@@ -265,23 +268,43 @@ void CGameObject::Release()
 	for (int i = 0; i < m_pComponents.size(); i++)
 		m_pComponents[i]->Release();
 }
-
-void CPlayerGameObject::Init()
+CGameObject* CGameObject::FindFrame(char* pstrFrameName)
 {
+	CGameObject* pObject = this;
+	if (!strncmp(m_pstrFrameName, pstrFrameName, strlen(pstrFrameName))) return(pObject);
+
+	if (m_pSiblingObject) if (pObject = (m_pSiblingObject->FindFrame(pstrFrameName))) return(pObject);
+	if (m_pChildObject) if (pObject = (m_pChildObject->FindFrame(pstrFrameName))) return(pObject);
+
+	return(NULL);
 }
 
-void CPlayerGameObject::Animate(float fTimeElapsed)
+void CPlayerGameObject::LoadPlayerFrameData()
 {
-}
+	pRightLegGameObject[0] = FindFrame("bobomb_Skeleton_8");
+	pRightLegGameObject[1] = FindFrame("bobomb_Skeleton_10");
+	pRightLegGameObject[2] = FindFrame("bobomb_Skeleton_12");
 
-void CPlayerGameObject::Update(float fTimeElapsed)
-{
+	pLeftLegGameObject[0] = FindFrame("bobomb_Skeleton_9");
+	pLeftLegGameObject[1] = FindFrame("bobomb_Skeleton_11");
+	pLeftLegGameObject[2] = FindFrame("bobomb_Skeleton_13");
 }
-
-void CPlayerGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
+void CPlayerGameObject::UpdateFrame(float fTimeElapsed)
 {
-}
+	for (int i = 0; i < 3; i++)
+	{
 
-void CPlayerGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
-{
+		m_xmTranslationMatrix = DirectX::XMMatrixTranslation(0.f, 10.f, m_fRotationAngle * m_fRotationAngle * 40.f);
+		m_fRotationAngle += fTimeElapsed * m_fSpeed;
+		pRightLegGameObject[i]->m_xmRotationMatrix = DirectX::XMMatrixRotationX(m_fRotationAngle) * m_xmTranslationMatrix;
+		pLeftLegGameObject[i]->m_xmRotationMatrix = DirectX::XMMatrixRotationX(-m_fRotationAngle) * m_xmTranslationMatrix;
+		pRightLegGameObject[i]->m_xmTranslationMatrix = DirectX::XMMatrixTranslation(0.f, -13.f, 0.f);
+		pLeftLegGameObject[i]->m_xmTranslationMatrix = DirectX::XMMatrixTranslation(0.f, -13.f, 0.f);
+		if (abs(m_fRotationAngle) > 0.55f)
+		{
+			m_fSpeed *= -1;
+			//m_fRotationAngle = int(m_fRotationAngle);
+		}
+		//pLeftLegGameObject[i]->Rotate(0.f, fTimeElapsed * 0.000000001, 0.f);
+	}
 }

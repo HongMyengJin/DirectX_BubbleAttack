@@ -61,3 +61,11 @@ void CTerrainObject::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent)
 {
 }
 
+float CTerrainObject::GetHeight(float x, float z, bool bReverseQuad)
+{
+	if (m_pHeightMapImage)
+		return(m_pHeightMapImage->GetHeight(x, z, bReverseQuad) * m_xmf3Scale.y);
+	else
+		return 0.f;
+}
+

@@ -37,6 +37,8 @@ public:
 
 	XMFLOAT3 GetPosition();
 	virtual void Release();
+
+	CGameObject* CGameObject::FindFrame(char* pstrFrameName);
 public:
 	char																												m_pstrFrameName[126];
 	std::vector<std::shared_ptr<CComponent>>																			m_pComponents;// 함수에서 접근할때 포인터 접근 필요(shared_ptr)
@@ -56,21 +58,26 @@ public:
 	XMFLOAT3																											m_xmf3Look = XMFLOAT3(0.f, 0.f, 1.f);
 	XMFLOAT3																											m_xmf3Position;
 	XMFLOAT3																											m_xmf3Scale = XMFLOAT3(1.f, 1.f, 1.f);
+
+	DirectX::XMMATRIX																									m_xmRotationMatrix = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX																									m_xmTranslationMatrix = DirectX::XMMatrixIdentity();
+	float																												m_fRotationAngle = 0.f;
+	float																												m_fSpeed = 0.25f;
 };
 
 
-class CPlayerGameObject
+class CPlayerGameObject : public CGameObject
 {
 public:
 	CPlayerGameObject() {};
 	~CPlayerGameObject() {};
 
 public:
-	virtual void Init();
-	virtual void Animate(float fTimeElapsed);
-	virtual void Update(float fTimeElapsed);
+	void LoadPlayerFrameData();
+	void UpdateFrame(float fTimeElapsed);
 
-	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
-	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
+public:
+	CGameObject* pRightLegGameObject[3];
+	CGameObject* pLeftLegGameObject[3];
 
 };

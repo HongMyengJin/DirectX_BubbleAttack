@@ -36,6 +36,8 @@ public:
 	virtual void Animate(float fTimeElapsed);
 	virtual void Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent);
 
+	void SetPosition(UINT Iindex, XMFLOAT3 Position);
+	void SetOffsetPosition(UINT Iindex, XMFLOAT3 Offset);
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
 
@@ -48,6 +50,10 @@ private:
 	std::shared_ptr<LightDatas>							m_pcbMappedLights;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource>				m_pd3dcbLights;
+
+	std::vector<XMFLOAT3>								m_vOffsetPositions;
+;	std::vector<XMFLOAT3>								m_vPositions;
+
 
 };
 

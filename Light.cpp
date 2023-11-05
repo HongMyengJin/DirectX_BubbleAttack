@@ -7,19 +7,19 @@ void LightDatas::Init()
 	m_pLightsDatas[0].m_bEnable = true;
 	m_pLightsDatas[0].m_nType = DIRECTIONAL_LIGHT;
 	m_pLightsDatas[0].m_xmf4Ambient = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	m_pLightsDatas[0].m_xmf4Diffuse = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
+	m_pLightsDatas[0].m_xmf4Diffuse = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
 	m_pLightsDatas[0].m_xmf4Specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 0.0f);
 	m_pLightsDatas[0].m_xmf3Direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
 	m_pLightsDatas[1].m_bEnable = true;
 	m_pLightsDatas[1].m_nType = SPOT_LIGHT;
-	m_pLightsDatas[1].m_fRange = 500.0f;
-	m_pLightsDatas[1].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-	m_pLightsDatas[1].m_xmf4Diffuse = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	m_pLightsDatas[1].m_fRange = 800.0f;
+	m_pLightsDatas[1].m_xmf4Ambient = XMFLOAT4(1.f, 1.f, 1.f, 1.0f);
+	m_pLightsDatas[1].m_xmf4Diffuse = XMFLOAT4(1.f, 1.f, 0.f, 1.0f);
 	m_pLightsDatas[1].m_xmf4Specular = XMFLOAT4(0.3f, 0.3f, 0.3f, 0.0f);
 	m_pLightsDatas[1].m_xmf3Position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
-	m_pLightsDatas[1].m_xmf3Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	m_pLightsDatas[1].m_xmf3Attenuation = XMFLOAT3(1.0f, 0.01f, 0.0001f);
-	m_pLightsDatas[1].m_fFalloff = 8.0f;
+	m_pLightsDatas[1].m_xmf3Direction = XMFLOAT3(0.f, -1.f, 0.f);
+	m_pLightsDatas[1].m_xmf3Attenuation = XMFLOAT3(0.03f, 0.03f, 0.03f);
+	m_pLightsDatas[1].m_fFalloff = 30.0f;
 	m_pLightsDatas[1].m_fPhi = (float)cos(XMConvertToRadians(40.0f));
 	m_pLightsDatas[1].m_fTheta = (float)cos(XMConvertToRadians(20.0f));
 }
@@ -27,6 +27,8 @@ void LightDatas::Init()
 
 void CLight::Init()
 {
+	m_vOffsetPositions.resize(2);
+	m_vPositions.resize(2);
 	m_pLightData = std::make_shared<LightDatas>();
 	m_pLightData->Init();
 
@@ -40,6 +42,21 @@ void CLight::Animate(float fTimeElapsed)
 
 void CLight::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent)
 {
+	
+	
+	for (int i = 0; i < 2; i++)
+		XMStoreFloat3(&m_pLightData->m_pLightsDatas[i].m_xmf3Position, DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&m_vPositions[i]), DirectX::XMLoadFloat3(&m_vOffsetPositions[i])));
+
+}
+
+void CLight::SetPosition(UINT Iindex, XMFLOAT3 Position)
+{
+	m_vPositions[Iindex] = Position;
+}
+
+void CLight::SetOffsetPosition(UINT Iindex, XMFLOAT3 Offset)
+{
+	m_vOffsetPositions[Iindex] = Offset;
 }
 
 void CLight::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -48,6 +65,7 @@ void CLight::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 
 void CLight::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
 {
+
 }
 
 void CLight::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)

@@ -205,15 +205,18 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
-	m_pGameObject = std::make_unique<CGameObject>();
-	m_pGameObject->Init();
+	m_pPlayersGameObject = std::make_unique<CPlayerGameObject>();
+	m_pPlayersGameObject->Init();
 
-	m_pGameObject->AddShaderComponent(pObjectShaderComponent);
-	m_pGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/KingbobombN64Era_.bin");
-	m_pGameObject->SetScale(XMFLOAT3(1.f, 1.f, 1.f));
-	m_pGameObject->SetPosition(XMFLOAT3(200.f, 250.f, 200.f));
+	m_pPlayersGameObject->AddShaderComponent(pObjectShaderComponent);
+	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/ThirdPersonMap.bin");
+	m_pPlayersGameObject->LoadPlayerFrameData();
+	m_pPlayersGameObject->SetScale(XMFLOAT3(1.f, 1.f, 1.f));
+	m_pPlayersGameObject->SetPosition(XMFLOAT3(200.f, 24.f, 200.f));
 
+	//CGameObject* pObject = m_pGameObject->FindFrame("bobomb_Skeleton_8");
 
+	//pObject->SetPosition(XMFLOAT3(0.f, 1000.f, 0.f));
 	m_pLightObject = std::make_unique<CLight>();
 	m_pLightObject->Init();
 	m_pLightObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -301,11 +304,11 @@ bool CStage::ProcessInput(HWND hWnd)
 			if (cxDelta || cyDelta)
 			{
 				if (pKeysBuffer[VK_RBUTTON] & 0xF0)
-					m_pGameObject->Rotate(cyDelta, 0.0f, -cxDelta);
+					m_pPlayersGameObject->Rotate(cyDelta, 0.0f, -cxDelta);
 				else
-					m_pGameObject->Rotate(cyDelta, cxDelta, 0.0f);
+					m_pPlayersGameObject->Rotate(cyDelta, cxDelta, 0.0f);
 			}
-			if (dwDirection) m_pGameObject->Move(dwDirection, 0.7f);
+			if (dwDirection) m_pPlayersGameObject->Move(dwDirection, 0.7f);
 		}
 		return true;
 	}
@@ -327,10 +330,19 @@ void CStage::AnimateObjects(float fTimeElapsed)
 void CStage::UpdateObjects(float fTimeElapsed)
 {
 	if (m_pCamera)
-		m_pCamera->Update(m_pGameObject.get(), m_pGameObject->GetPosition(), fTimeElapsed);
-	if (m_pGameObject)
+		m_pCamera->Update(m_pPlayersGameObject.get(), m_pPlayersGameObject->GetPosition(), fTimeElapsed);
+	
+
+	if (m_pLightObject)
 	{
-		m_pGameObject->Update(fTimeElapsed, nullptr);
+		m_pLightObject->SetPosition(1, m_pPlayersGameObject->GetPosition());
+		m_pLightObject->SetOffsetPosition(1, XMFLOAT3(0.f, 100.f, 0.f));
+		m_pLightObject->Update(fTimeElapsed, NULL);
+	}
+	if (m_pPlayersGameObject)
+	{
+		m_pPlayersGameObject->UpdateFrame(fTimeElapsed);
+		m_pPlayersGameObject->Update(fTimeElapsed, nullptr);
 	}
 }
 
@@ -366,11 +378,14 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 		m_pSkyBoxObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 	}
 
-	if (m_pGameObject)
-		m_pGameObject->PrepareRender(pd3dCommandList);
-	if (m_pGameObject)
+	if (m_pPlayersGameObject)
+		m_pPlayersGameObject->PrepareRender(pd3dCommandList);
+	if (m_pPlayersGameObject)
 	{
-		m_pGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+		float xmfOffsetY = 10.f;
+		XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
+		m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x, xmfPosition.z) - 200.f, xmfPosition.z));
+		m_pPlayersGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 	}
 
 	if (m_pTerrain)

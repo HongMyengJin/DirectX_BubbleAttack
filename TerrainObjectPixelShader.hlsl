@@ -30,6 +30,7 @@ cbuffer cbGameObjectInfo : register(b2)
 #define MATERIAL_DETAIL_ALBEDO_MAP	0x20
 #define MATERIAL_DETAIL_NORMAL_MAP	0x40
 
+#include "Light.hlsl"
 Texture2D gtxtTexture[7] : register(t6); //Base, Alpha, Detail0, Detail1, Detail2
 
 SamplerState gssWrap : register(s0);
@@ -40,14 +41,17 @@ struct VS_TERRAIN_INPUT
 	float4 color : COLOR;
 	float2 uv0 : TEXCOORD0;
 	float2 uv1 : TEXCOORD1;
+	float3 normal : NORMAL;
 };
 
 struct VS_TERRAIN_OUTPUT
 {
 	float4 position : SV_POSITION;
+	float3 positionW : POSITION;
 	float4 color : COLOR;
 	float2 uv0 : TEXCOORD0;
 	float2 uv1 : TEXCOORD1;
+	float3 normalW : NORMAL;
 };
 
 float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
@@ -72,5 +76,7 @@ float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
 		else if (fAlpha > 0.8975f) cColor = cDetailTexColors[0];
 		else cColor = cDetailTexColors[1];
 	*/
-	return(cColor);
+	float3 normalW = normalize(input.normalW);
+	float4 cIllumination = Lighting(input.positionW, normalW);
+	return	(lerp(cColor, cIllumination, 0.4f));
 }

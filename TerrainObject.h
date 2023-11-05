@@ -12,6 +12,8 @@ public:
 	virtual void Animate(float fTimeElapsed);
 	virtual void Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent);
 
+	float GetHeight(float x, float z, bool bReverseQuad = false);
+
 	//virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
 	//virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
 
