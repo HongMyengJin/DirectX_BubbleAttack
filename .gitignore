@@ -43,3 +43,7 @@ x64/
 *.png
 *.fbx
 *.cso
+*.jpg
+*.png
+Executable/
+*.sln

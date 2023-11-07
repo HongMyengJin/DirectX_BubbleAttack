@@ -46,6 +46,13 @@
 #include <locale>
 #include <codecvt>
 
+#include <dwrite.h>
+#include <d2d1.h>
+#include <d2d1_1.h>
+
+#include <d2d1_3.h>
+#include <Windows.h>
+
 // 사용자 정의 헤더
 #include "Enum.h"
 
@@ -82,6 +89,11 @@ using Microsoft::WRL::ComPtr;
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "dwrite.lib")
+
+
+extern ID2D1HwndRenderTarget* pRenderTarget;
 
 extern int gnCurrentParticles;
 extern POINT m_ptOldCursorPos;

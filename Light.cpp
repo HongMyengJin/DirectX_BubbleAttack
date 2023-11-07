@@ -12,14 +12,14 @@ void LightDatas::Init()
 	m_pLightsDatas[0].m_xmf3Direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
 	m_pLightsDatas[1].m_bEnable = true;
 	m_pLightsDatas[1].m_nType = SPOT_LIGHT;
-	m_pLightsDatas[1].m_fRange = 800.0f;
-	m_pLightsDatas[1].m_xmf4Ambient = XMFLOAT4(1.f, 1.f, 1.f, 1.0f);
-	m_pLightsDatas[1].m_xmf4Diffuse = XMFLOAT4(1.f, 1.f, 0.f, 1.0f);
+	m_pLightsDatas[1].m_fRange = 300.f;
+	m_pLightsDatas[1].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.f);
+	m_pLightsDatas[1].m_xmf4Diffuse = XMFLOAT4(0.1f, 0.1f, 0.f, 1.f);
 	m_pLightsDatas[1].m_xmf4Specular = XMFLOAT4(0.3f, 0.3f, 0.3f, 0.0f);
 	m_pLightsDatas[1].m_xmf3Position = XMFLOAT3(-50.0f, 20.0f, -5.0f);
 	m_pLightsDatas[1].m_xmf3Direction = XMFLOAT3(0.f, -1.f, 0.f);
-	m_pLightsDatas[1].m_xmf3Attenuation = XMFLOAT3(0.03f, 0.03f, 0.03f);
-	m_pLightsDatas[1].m_fFalloff = 30.0f;
+	m_pLightsDatas[1].m_xmf3Attenuation = XMFLOAT3(0.00015f, 0.00015f, 0.00015f);
+	m_pLightsDatas[1].m_fFalloff = 10.0f;
 	m_pLightsDatas[1].m_fPhi = (float)cos(XMConvertToRadians(40.0f));
 	m_pLightsDatas[1].m_fTheta = (float)cos(XMConvertToRadians(20.0f));
 }

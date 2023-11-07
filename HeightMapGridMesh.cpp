@@ -54,8 +54,9 @@ void CHeightMapImage::Init(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 
 	}
 }
 
-float CHeightMapImage::GetHeight(float fx, float fz, bool bReverseQuad)
+float CHeightMapImage::GetHeight(float fx, float fz, bool bReverseQuad) // 여기서 왜 터질까..
 {
+
 	fx = fx / m_xmf3Scale.x;
 	fz = fz / m_xmf3Scale.z;
 	if ((fx < 0.0f) || (fz < 0.0f) || (fx >= m_nWidth) || (fz >= m_nLength)) return(0.0f);

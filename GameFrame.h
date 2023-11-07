@@ -90,4 +90,6 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D12Resource>					m_pd3dcbFrameworkInfo;
 	std::shared_ptr<CB_FRAMEWORK_INFO>						m_pcbMappedFrameworkInfo;
+
+
 };

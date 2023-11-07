@@ -55,7 +55,7 @@ protected:
 
 	XMFLOAT3													m_xmf3LookAtWorld;
 	XMFLOAT3													m_xmf3Offset = XMFLOAT3(0.0f, 15.0f * 5.f, -30.0f * 5.f);
-	float           											m_fTimeLag = 0.03f;
+	float           											m_fTimeLag = 0.5f;
 
 	XMFLOAT4X4													m_xmf4x4View = Matrix4x4::Identity();
 	XMFLOAT4X4													m_xmf4x4Projection = Matrix4x4::Identity();

@@ -7,12 +7,7 @@
 #include "ObjectShaderComponent.h"
 
 #include "TextureRectObject.h"
-
-
-
-
-
-
+#include "UIObjectShaderComponent.h"
 #include "Camera.h"
 
 
@@ -206,14 +201,74 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
 	m_pPlayersGameObject = std::make_unique<CPlayerGameObject>();
-	m_pPlayersGameObject->Init();
+	m_pPlayersGameObject->Init(XMFLOAT3(12.f, 10.f, 12.f));
 
 	m_pPlayersGameObject->AddShaderComponent(pObjectShaderComponent);
-	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/ThirdPersonMap.bin");
+	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Player.bin");
 	m_pPlayersGameObject->LoadPlayerFrameData();
-	m_pPlayersGameObject->SetScale(XMFLOAT3(1.f, 1.f, 1.f));
-	m_pPlayersGameObject->SetPosition(XMFLOAT3(200.f, 24.f, 200.f));
+	m_pPlayersGameObject->SetPosition(XMFLOAT3(300.f, 24.f, 300.f));
 
+
+	std::shared_ptr<CTextureRectMeshShaderComponent> pTextureRectMeshShaderComponent = std::make_shared<CTextureRectMeshShaderComponent>();
+	pTextureRectMeshShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+
+	for (int i = 0; i < 3; i++)
+	{
+		std::shared_ptr<CTextureRectObject> pTextureRectObject = std::make_shared<CTextureRectObject>();
+
+		pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(15.f, 15.f), L"Image/Explode_8x8.dds");
+		pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
+		pTextureRectObject->SetAnimateLifeTime(1.f);
+		pTextureRectObject->SetLoop(true);
+		m_pTextureRectObjects.push_back(pTextureRectObject);
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		std::shared_ptr<CTextureRectObject> pTextureRectObject = std::make_shared<CTextureRectObject>();
+
+		pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(80.f, 80.f), L"Image/Explode_8x8.dds");
+		pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
+		pTextureRectObject->SetAnimateLifeTime(1.f);
+		pTextureRectObject->SetLoop(false);
+		pTextureRectObject->SetEnable(false);
+		m_pEffectRectObjects.push_back(pTextureRectObject);
+	}
+
+
+
+
+
+	std::shared_ptr<CBombGameObject> pBombGameObject = std::make_shared<CBombGameObject>();
+	pBombGameObject->Init(XMFLOAT3(20.f, 20.f, 20.f));
+	pBombGameObject->AddShaderComponent(pObjectShaderComponent);
+	pBombGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/PlayerBullet.bin");
+	pBombGameObject->SetSpriteEffect(m_pTextureRectObjects[0], XMFLOAT3(45.f, 8.f, -12.f));
+	m_pPlayersGameObject->LoadPlayerBombObject(pBombGameObject);
+	
+	for (int i = 0; i < 2; i++)
+	{
+		pBombGameObject = std::make_shared<CBombGameObject>();
+		pBombGameObject->Init(XMFLOAT3(20.f, 20.f, 20.f));
+		pBombGameObject->AddShaderComponent(pObjectShaderComponent);
+		pBombGameObject->SetSpriteEffect(m_pTextureRectObjects[1 + i], XMFLOAT3(45.f, 8.f, -12.f));
+		pBombGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/PlayerBullet.bin");
+
+		std::shared_ptr<CMonsterGameObject> pMonsterMesh1 = std::make_shared<CMonsterGameObject>();
+		pMonsterMesh1->Init(XMFLOAT3(0.f, 0.f, 0.f));
+		pMonsterMesh1->AddShaderComponent(pObjectShaderComponent);
+		pMonsterMesh1->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/SlimMonster.bin");
+
+		std::shared_ptr<CMonsterGameObject> pMonsterGameObject = std::make_shared<CMonsterGameObject>();
+		pMonsterGameObject->SetChild(NULL, pMonsterMesh1);
+		pMonsterGameObject->Init(XMFLOAT3(13.f, 13.f, 13.f));
+		pMonsterGameObject->AddShaderComponent(pObjectShaderComponent);
+		pMonsterGameObject->SetPosition(XMFLOAT3(120.f + i * 65.f, 24.f, 200.f));
+		pMonsterGameObject->LoadMonsterBombObject(pBombGameObject);
+		//pMonsterGameObject->Rotate(0.f, -90.f, 0.f);
+		m_pMonsterObjects.push_back(pMonsterGameObject);
+	}
+	
 	//CGameObject* pObject = m_pGameObject->FindFrame("bobomb_Skeleton_8");
 
 	//pObject->SetPosition(XMFLOAT3(0.f, 1000.f, 0.f));
@@ -228,7 +283,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	std::shared_ptr<CTerrainObjectShaderComponent> pTerrainShaderComponent = std::make_shared<CTerrainObjectShaderComponent>();
 	pTerrainShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
 
-	m_pTerrain = std::make_unique<CTerrainObject>();
+	m_pTerrain = std::make_shared<CTerrainObject>();
 	m_pTerrain->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), _T("Image/HeightMap.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 17, 17, xmf3TerrainScale, xmf4Color);
 	m_pTerrain->AddShaderComponent(pTerrainShaderComponent);
 	m_pTerrain->SetPosition(XMFLOAT3(0.f, -200.f, 0.f));
@@ -242,6 +297,33 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pTerrainWater->SetPosition(XMFLOAT3(-120.f + 0.f +(257 * 0.5f), 0.f, -80.f + (257 * 0.5f)));
 	//m_pTerrainWater->SetPosition(XMFLOAT3((257 * xmf3TerrainScale.x * 0.5f), 155.0f - 250.f, +(257 * xmf3TerrainScale.z * 0.5f)));
 
+	for (int i = 0; i < 5; i++)
+	{
+		XMFLOAT3 xmf3Position = XMFLOAT3(50.f + i * 80.f, 0.f, 680.f + -i * i * 40.f);
+		std::shared_ptr<CTextureRectObject> pTextureRectObject = std::make_shared<CTextureRectObject>();
+
+		pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(45.f, 45.f), L"Image/Tree01.dds");
+		pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
+		pTextureRectObject->SetAnimateLifeTime(1.f);
+		pTextureRectObject->SetLoop(true);
+		pTextureRectObject->SetPosition(XMFLOAT3(xmf3Position.x, m_pTerrain->GetHeight(xmf3Position.x, xmf3Position.z) - 200.f + 22.f, xmf3Position.z));
+		m_pTreesRectObjects.push_back(pTextureRectObject);
+	}
+
+
+	for (int i = 0; i < 5; i++)
+	{
+		XMFLOAT3 xmf3Position = XMFLOAT3(1200.f + i * 80.f, 0.f, 680.f + -i * i * 40.f);
+		std::shared_ptr<CTextureRectObject> pTextureRectObject = std::make_shared<CTextureRectObject>();
+
+		pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(45.f, 45.f), L"Image/Tree02.dds");
+		pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
+		pTextureRectObject->SetAnimateLifeTime(1.f);
+		pTextureRectObject->SetLoop(true);
+		pTextureRectObject->SetPosition(XMFLOAT3(xmf3Position.x, m_pTerrain->GetHeight(xmf3Position.x, xmf3Position.z) - 200.f + 22.f, xmf3Position.z));
+		m_pTreesRectObjects.push_back(pTextureRectObject);
+	}
+
 	std::shared_ptr<CSkyBoxShaderComponent> pSkyBoxShaderComponent = std::make_shared<CSkyBoxShaderComponent>();
 	pSkyBoxShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
 
@@ -249,29 +331,57 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pSkyBoxObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get());
 	m_pSkyBoxObject->AddShaderComponent(pSkyBoxShaderComponent);
 
-	std::shared_ptr<CParticleObjectShaderComponent> pParticleObjectShaderComponent = std::make_shared<CParticleObjectShaderComponent>();
-	pParticleObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+	std::shared_ptr<CUIObjectShaderComponent> pUIShaderComponent = std::make_shared<CUIObjectShaderComponent>();
+	pUIShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get());
+
+	for (int i = 0; i < 1; i++)
+	{
+		std::shared_ptr<CUIGameObject> pUIObject = std::make_shared<CUIGameObject>();
+
+		pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/ScoreFrame.dds");
+		pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
+		pUIObject->SetSize(XMFLOAT2(500.f, 100.f));
+		pUIObject->AddShaderComponent(pUIShaderComponent);
+		m_pUIObjects.push_back(pUIObject);
+	}
+	for (int i = 0; i < 2; i++)
+	{
+		std::shared_ptr<CUINumberGameObject> pUIObject = std::make_shared<CUINumberGameObject>();
+
+		pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/NumberUI.dds");
+		pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.42f + FRAME_BUFFER_WIDTH * 0.13f * i, FRAME_BUFFER_HEIGHT * 0.9f));
+		pUIObject->SetSize(XMFLOAT2(50.f, 50.f));
+		pUIObject->AddShaderComponent(pUIShaderComponent);
+		m_pUINumberObjects.push_back(pUIObject);
+	}
+
+	std::shared_ptr<CUIGameObject> pUIObject = std::make_shared<CUIGameObject>();
+
+	pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/Win.dds");
+	pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
+	pUIObject->SetSize(XMFLOAT2(180.f, 180.f));
+	pUIObject->AddShaderComponent(pUIShaderComponent);
+	pUIObject->SetEnable(false);
+	m_pUIObjects.push_back(pUIObject);
+
+	pUIObject = std::make_shared<CUIGameObject>();
+
+	pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/Lose.dds");
+	pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
+	pUIObject->SetSize(XMFLOAT2(180.f, 180.f));
+	pUIObject->AddShaderComponent(pUIShaderComponent);
+	pUIObject->SetEnable(false);
+	m_pUIObjects.push_back(pUIObject);
+
+
+
+
+	//std::shared_ptr<CParticleObjectShaderComponent> pParticleObjectShaderComponent = std::make_shared<CParticleObjectShaderComponent>();
+	//pParticleObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
 
 	//m_pParticleObject = std::make_unique<CParticleObject>();
 	//m_pParticleObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 65.0f, 0.0f), 0.0f, XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(8.0f, 8.0f), MAX_PARTICLES);
 	//m_pParticleObject->AddShaderComponent(pParticleObjectShaderComponent);
-
-	std::shared_ptr<CTextureRectMeshShaderComponent> pTextureRectMeshShaderComponent = std::make_shared<CTextureRectMeshShaderComponent>();
-	pTextureRectMeshShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
-
-	for (int i = 0; i < 10; i++)
-	{
-		std::shared_ptr<CTextureRectObject> pTextureRectObject = std::make_shared<CTextureRectObject>();
-
-		pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f));
-		pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
-		pTextureRectObject->SetPosition(XMFLOAT3(i * 20.f - 30 * 0.5f * 20.f - 100.f, 0.f, i * 20.f - 30 * 0.5f * 20.f));
-		pTextureRectObject->SetAnimateLifeTime(0.2f + 0.1f * i);
-		m_pTextureRectObjects.push_back(pTextureRectObject);
-	}
-
-
-	
 }
 
 bool CStage::ProcessInput(HWND hWnd)
@@ -299,6 +409,11 @@ bool CStage::ProcessInput(HWND hWnd)
 			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
 		}
 
+		if (pKeysBuffer[VK_SPACE] & 0xF0) // 점프
+		{
+			// Terrain 높이 체크
+			m_pPlayersGameObject->MoveBomb(0.001f, m_pPlayersGameObject->GetLookVector());
+		}
 		if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
 		{
 			if (cxDelta || cyDelta)
@@ -308,7 +423,15 @@ bool CStage::ProcessInput(HWND hWnd)
 				else
 					m_pPlayersGameObject->Rotate(cyDelta, cxDelta, 0.0f);
 			}
-			if (dwDirection) m_pPlayersGameObject->Move(dwDirection, 0.7f);
+			if (dwDirection)
+			{
+				m_pPlayersGameObject->Move(dwDirection, 1.5f);
+				m_pPlayersGameObject->SetboolMove(true);
+			}
+			else
+			{
+				m_pPlayersGameObject->SetboolMove(false);
+			}
 		}
 		return true;
 	}
@@ -318,11 +441,15 @@ bool CStage::ProcessInput(HWND hWnd)
 
 void CStage::AnimateObjects(float fTimeElapsed)
 {
-	for (int i = 0; i < m_pTextureRectObjects.size(); i++)
+
+	for (int i = 0; i < m_pMonsterObjects.size(); i++)
 	{
-		if (m_pTextureRectObjects[i])
+		if (m_pMonsterObjects[i])
 		{
-			m_pTextureRectObjects[i]->Animate(fTimeElapsed);
+			float xmfOffsetY = 10.f;
+			XMFLOAT3 xmfPosition = m_pMonsterObjects[i]->GetPosition();
+			m_pMonsterObjects[i]->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x, xmfPosition.z) - 200.f, xmfPosition.z));
+			m_pMonsterObjects[i]->Update(fTimeElapsed, m_pPlayersGameObject->GetPosition(), m_pTerrain);
 		}
 	}
 }
@@ -336,14 +463,29 @@ void CStage::UpdateObjects(float fTimeElapsed)
 	if (m_pLightObject)
 	{
 		m_pLightObject->SetPosition(1, m_pPlayersGameObject->GetPosition());
-		m_pLightObject->SetOffsetPosition(1, XMFLOAT3(0.f, 100.f, 0.f));
+		m_pLightObject->SetOffsetPosition(1, XMFLOAT3(0.f, 150.f, 0.f));
 		m_pLightObject->Update(fTimeElapsed, NULL);
 	}
 	if (m_pPlayersGameObject)
 	{
 		m_pPlayersGameObject->UpdateFrame(fTimeElapsed);
-		m_pPlayersGameObject->Update(fTimeElapsed, nullptr);
+		m_pPlayersGameObject->Update(fTimeElapsed, nullptr, m_pTerrain);
 	}
+	for (int i = 0; i < m_pUINumberObjects.size(); i++)
+	{
+		m_pUINumberObjects[i]->Animate(fTimeElapsed);
+	}
+	
+	for (int i = 0; i < m_pUIObjects.size(); i++)
+	{
+		m_pUIObjects[i]->Animate(fTimeElapsed);
+	}
+
+	for (int i = 0; i < m_pEffectRectObjects.size(); i++)
+	{
+		m_pEffectRectObjects[i]->AnimateUV(fTimeElapsed);
+	}
+	CollisionCheck(); // 충돌 체크
 }
 
 void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -372,14 +514,9 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 	{
 		m_pSkyBoxObject->SetPosition(m_pCamera->GetPosition());
 		m_pSkyBoxObject->PrepareRender(pd3dCommandList);
-	}
-	if (m_pSkyBoxObject)
-	{
 		m_pSkyBoxObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 	}
 
-	if (m_pPlayersGameObject)
-		m_pPlayersGameObject->PrepareRender(pd3dCommandList);
 	if (m_pPlayersGameObject)
 	{
 		float xmfOffsetY = 10.f;
@@ -388,39 +525,174 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 		m_pPlayersGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 	}
 
-	if (m_pTerrain)
-		m_pTerrain->PrepareRender(pd3dCommandList);
 
-	if(m_pTerrain)
-		m_pTerrain->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-
-	if (m_pTerrainWater)
-		m_pTerrainWater->PrepareRender(pd3dCommandList);
-
-	if (m_pTerrainWater)
-		m_pTerrainWater->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-
-	for (int i = 0; i < m_pTextureRectObjects.size(); i++)
+	for (int i = 0; i < m_pMonsterObjects.size(); i++)
 	{
-		if (m_pTextureRectObjects[i])
+		if (m_pMonsterObjects[i])
 		{
-			m_pTextureRectObjects[i]->PrepareRender(pd3dCommandList);
-			m_pTextureRectObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+			m_pMonsterObjects[i]->PrepareRender(pd3dCommandList);
+			m_pMonsterObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 		}
 	}
-	RenderParticle(pd3dCommandList);
+	
+
+	if (m_pTerrain)
+	{
+		m_pTerrain->PrepareRender(pd3dCommandList);
+		m_pTerrain->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
+
+	if (m_pTerrainWater)
+	{
+		m_pTerrainWater->PrepareRender(pd3dCommandList);
+		m_pTerrainWater->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
+
+	for (int i = 0; i < m_pEffectRectObjects.size(); i++)
+	{
+		m_pEffectRectObjects[i]->PrepareRender(pd3dCommandList);
+		m_pEffectRectObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
+
+	for (int i = 0; i < m_pTreesRectObjects.size(); i++)
+	{
+		m_pTreesRectObjects[i]->PrepareRender(pd3dCommandList);
+		m_pTreesRectObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
+
+
+	for (int i = 0; i < m_pUIObjects.size(); i++)
+	{
+		m_pUIObjects[i]->PrepareRender(pd3dCommandList);
+		m_pUIObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
+
+
+	for (int i = 0; i < m_pUINumberObjects.size(); i++)
+	{
+		m_pUINumberObjects[i]->PrepareRender(pd3dCommandList);
+		m_pUINumberObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
+
 }
 
 void CStage::RenderParticle(ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	if (m_pParticleObject)
-		m_pParticleObject->Render(pd3dCommandList, m_pCamera.get(), NULL);
+
 }
 
 void CStage::OnPostRender(ID3D12GraphicsCommandList* pd3dCommandList)
 {
-	if (m_pParticleObject)
-		m_pParticleObject->OnPostRender();
+
+}
+
+void CStage::CollisionCheck()
+{
+	for (int i = 0; i < m_pMonsterObjects.size(); i++)
+	{
+		m_pMonsterObjects[i]->SetCollision(false);
+		m_pMonsterObjects[i]->GetBombGameObject()->SetCollision(false);
+	}
+	m_pPlayersGameObject->SetCollision(false);
+	m_pPlayersGameObject->GetBombGameObject()->SetCollision(false);
+
+
+	if (m_pMonsterObjects[0]->CollisionCheck(m_pMonsterObjects[1])
+		
+		)
+	{
+		if (!(m_pMonsterObjects[0]->GetCollision() || m_pMonsterObjects[1]->GetCollision())) // 둘 다 충돌이 없었음
+		{
+			m_pMonsterObjects[0]->SetCollision(true);
+			m_pMonsterObjects[0]->SetPosition(m_pMonsterObjects[0]->GetPrePosition());
+		}
+
+
+		
+	}
+
+	// Player - Monster
+	for (int i = 0; i < m_pMonsterObjects.size(); i++)
+	{
+		if (m_pPlayersGameObject->CollisionCheck(m_pMonsterObjects[i])) // 충돌
+		{
+			// 플레이어, 몬스터 충돌 처리
+			m_pPlayersGameObject->SetCollision(true);
+			m_pMonsterObjects[i]->SetCollision(true);
+
+			m_pPlayersGameObject->SetPosition(m_pPlayersGameObject->GetPrePosition());
+
+		}
+	}
+
+	// 플레이어 - 불렛 충돌
+	for (int i = 0; i < m_pMonsterObjects.size(); i++)
+	{
+		if (m_pMonsterObjects[i]->GetBombGameObject()->GetBombState() == BombSTATE::BombBurn && 
+			m_pPlayersGameObject->CollisionCheck(m_pMonsterObjects[i]->GetBombGameObject())) // 충돌
+		{
+			// 플레이어 - 불렛 충돌 처리
+			m_pPlayersGameObject->SetCollision(true);
+			m_pMonsterObjects[i]->GetBombGameObject()->SetCollision(true);
+			for (int j = 0; j < m_pEffectRectObjects.size(); j++)
+			{
+				if (!m_pEffectRectObjects[j]->GetEnable())
+				{
+					m_pMonsterObjects[i]->GetBombGameObject()->SetBombState(BombSTATE::BombWait);
+					m_pEffectRectObjects[j]->SetEnable(true);
+					XMFLOAT3 xmf3Positions = m_pPlayersGameObject->GetPosition();
+					xmf3Positions.y += 15.f;
+					m_pEffectRectObjects[j]->SetWorldPosition(xmf3Positions);
+					if(!m_bResult)
+						m_iMonsterAttack++;
+					break;
+				}
+			}
+		}
+	}
+
+	// 몬스터 - 불렛 충돌
+	for (int i = 0; i < m_pMonsterObjects.size(); i++)
+	{
+		if (m_pPlayersGameObject->GetBombGameObject()->GetBombState() == BombSTATE::BombBurn &&
+			m_pMonsterObjects[i]->CollisionCheck(m_pPlayersGameObject->GetBombGameObject())) // 충돌
+		{
+			// 몬스터 - 플레이어 불렛 충돌
+
+			m_pMonsterObjects[i]->SetCollision(true);
+			m_pPlayersGameObject->GetBombGameObject()->SetCollision(true);
+			
+			for (int j = 0; j < m_pEffectRectObjects.size(); j++)
+			{
+				if (!m_pEffectRectObjects[j]->GetEnable())
+				{
+					m_pPlayersGameObject->GetBombGameObject()->SetBombState(BombSTATE::BombWait);
+					m_pEffectRectObjects[j]->SetEnable(true);
+					XMFLOAT3 xmf3Positions = m_pMonsterObjects[i]->GetPosition();
+					xmf3Positions.y += 15.f;
+					m_pEffectRectObjects[j]->SetWorldPosition(xmf3Positions);
+					if (!m_bResult)
+						m_iPlayerAttack++;
+					break;
+				}
+			}
+		}
+	}
+	if (!m_bResult)
+	{
+		if (m_iPlayerAttack >= 10)
+		{
+			m_pUIObjects[1]->SetEnable(true);
+			m_bResult = true;
+		}
+		else if (m_iMonsterAttack >= 10)
+		{
+			m_pUIObjects[2]->SetEnable(true);
+			m_bResult = true;
+		}
+	}
+	m_pUINumberObjects[0]->UpdateNumber(m_iPlayerAttack);
+	m_pUINumberObjects[1]->UpdateNumber(m_iMonsterAttack);
 }
 
 void CStage::Release()

@@ -31,4 +31,5 @@ protected:
 
 	std::unique_ptr<CPlayerGameObject>				m_pPlayersGameObject;
 	std::unique_ptr<CLight>							m_pLightObject;
+
 };

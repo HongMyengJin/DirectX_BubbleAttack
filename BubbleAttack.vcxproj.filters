@@ -178,6 +178,18 @@
     <ClInclude Include="RippleWaterObjectShaderComponent.h">
       <Filter>Component\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="UIObjectShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="UIMesh.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="UIVertex.h">
+      <Filter>Component\Mesh\Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="UIGameObject.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ParticleObject.cpp">
@@ -300,6 +312,18 @@
     <ClCompile Include="RippleWaterObjectShaderComponent.cpp">
       <Filter>Component\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="UIObjectShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="UIMesh.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="UIVertex.cpp">
+      <Filter>Component\Mesh\Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="UIGameObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BubbleAttack.rc">
@@ -364,6 +388,12 @@
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
     <FxCompile Include="ParticleObjectDrawGeometryShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="UIObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="UIObjectPixelShader.hlsl">
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
   </ItemGroup>

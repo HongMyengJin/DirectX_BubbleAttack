@@ -8,6 +8,9 @@ UINT gnRtvDescriptorIncrementSize = 0;
 
 UINT gnCbvSrvDescriptorIncrementSize = 32;
 
+
+ID2D1HwndRenderTarget* pRenderTarget;
+
 #include "DDSTextureLoader12.h"
 #include "WICTextureLoader12.h"
 

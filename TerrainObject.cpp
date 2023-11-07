@@ -64,7 +64,14 @@ void CTerrainObject::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent)
 float CTerrainObject::GetHeight(float x, float z, bool bReverseQuad)
 {
 	if (m_pHeightMapImage)
-		return(m_pHeightMapImage->GetHeight(x, z, bReverseQuad) * m_xmf3Scale.y);
+	{
+		float fyHeight = m_pHeightMapImage->GetHeight(x, z, bReverseQuad) * m_xmf3Scale.y;
+		float aa = GetPosition().y;
+		if (m_fOffSetPositoin > fyHeight) // 특정 오프셋보다 아래에 있을때
+			return m_fOffSetPositoin;
+		else
+			return fyHeight;
+	}
 	else
 		return 0.f;
 }
