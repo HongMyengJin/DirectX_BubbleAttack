@@ -127,8 +127,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BombGameObject.h" />
     <ClInclude Include="BubbleAttack.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CharacterGameObject.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DDSTextureLoader12.h" />
@@ -140,11 +142,14 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="MaterialComponent.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MonsterGameObject.h" />
     <ClInclude Include="ObjectShaderComponent.h" />
     <ClInclude Include="ParticleMeshComponent.h" />
     <ClInclude Include="ParticleObject.h" />
     <ClInclude Include="ParticleObjectShaderComponent.h" />
     <ClInclude Include="ParticleVertex.h" />
+    <ClInclude Include="PlayerGameObject.h" />
+    <ClInclude Include="ProjectileGameObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RippleWaterObject.h" />
     <ClInclude Include="RippleWaterObjectShaderComponent.h" />
@@ -177,8 +182,10 @@
     <ClInclude Include="WICTextureLoader12.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BombGameObject.cpp" />
     <ClCompile Include="BubbleAttack.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CharacterGameObject.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
@@ -188,11 +195,14 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="MaterialComponent.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MonsterGameObject.cpp" />
     <ClCompile Include="ObjectShaderComponent.cpp" />
     <ClCompile Include="ParticleMeshComponent.cpp" />
     <ClCompile Include="ParticleObject.cpp" />
     <ClCompile Include="ParticleObjectShaderComponent.cpp" />
     <ClCompile Include="ParticleVertex.cpp" />
+    <ClCompile Include="PlayerGameObject.cpp" />
+    <ClCompile Include="ProjectileGameObject.cpp" />
     <ClCompile Include="RippleWaterObject.cpp" />
     <ClCompile Include="RippleWaterObjectShaderComponent.cpp" />
     <ClCompile Include="Scene.cpp" />

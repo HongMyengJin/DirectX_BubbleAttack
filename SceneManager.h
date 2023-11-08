@@ -12,7 +12,7 @@ public:
 	void RenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList);
 	void PostCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList);
 
-	void ProcessInputCurrentScene(HWND hWnd);
+	void ProcessInputCurrentScene(HWND hWnd, float fTimeElapsed);
 
 	void Release();
 private:

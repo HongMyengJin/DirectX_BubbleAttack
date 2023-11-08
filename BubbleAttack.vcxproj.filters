@@ -44,18 +44,27 @@
     <Filter Include="Global\Light">
       <UniqueIdentifier>{986b9b19-10ca-42bf-b616-1228464ff179}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Character">
+      <UniqueIdentifier>{5667c6d8-8165-48ae-a5a7-20293bba4944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Projectile">
+      <UniqueIdentifier>{132a16c4-a96e-4da6-837b-3eef03d3fed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\UI">
+      <UniqueIdentifier>{edcb84cb-a24c-4f4d-95b7-30314cd7de43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Terrain">
+      <UniqueIdentifier>{9f2823f6-7609-4e10-8334-9f66497d5b0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\SkyBox">
+      <UniqueIdentifier>{7abb1462-d7f3-42d6-b375-4d31c9434b0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Rect">
+      <UniqueIdentifier>{ead10ffe-dd49-4933-afe5-8bb291a46a25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureRectObject.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainObject.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyBoxObject.h">
       <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ParticleObject.h">
@@ -169,9 +178,6 @@
     <ClInclude Include="Light.h">
       <Filter>Global\Light</Filter>
     </ClInclude>
-    <ClInclude Include="RippleWaterObject.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="TerrainObjectShaderComponent.h">
       <Filter>Component\Shader</Filter>
     </ClInclude>
@@ -187,21 +193,39 @@
     <ClInclude Include="UIVertex.h">
       <Filter>Component\Mesh\Vertex</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterGameObject.h">
+      <Filter>GameObject\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGameObject.h">
+      <Filter>GameObject\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterGameObject.h">
+      <Filter>GameObject\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="BombGameObject.h">
+      <Filter>GameObject\Projectile</Filter>
+    </ClInclude>
     <ClInclude Include="UIGameObject.h">
-      <Filter>GameObject</Filter>
+      <Filter>GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainObject.h">
+      <Filter>GameObject\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="RippleWaterObject.h">
+      <Filter>GameObject\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBoxObject.h">
+      <Filter>GameObject\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRectObject.h">
+      <Filter>GameObject\Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileGameObject.h">
+      <Filter>GameObject\Projectile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ParticleObject.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureRectObject.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainObject.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyBoxObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
@@ -303,9 +327,6 @@
     <ClCompile Include="Light.cpp">
       <Filter>Global\Light</Filter>
     </ClCompile>
-    <ClCompile Include="RippleWaterObject.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="TerrainObjectShaderComponent.cpp">
       <Filter>Component\Shader</Filter>
     </ClCompile>
@@ -321,8 +342,35 @@
     <ClCompile Include="UIVertex.cpp">
       <Filter>Component\Mesh\Vertex</Filter>
     </ClCompile>
+    <ClCompile Include="MonsterGameObject.cpp">
+      <Filter>GameObject\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerGameObject.cpp">
+      <Filter>GameObject\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterGameObject.cpp">
+      <Filter>GameObject\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="BombGameObject.cpp">
+      <Filter>GameObject\Projectile</Filter>
+    </ClCompile>
     <ClCompile Include="UIGameObject.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainObject.cpp">
+      <Filter>GameObject\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="RippleWaterObject.cpp">
+      <Filter>GameObject\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBoxObject.cpp">
+      <Filter>GameObject\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureRectObject.cpp">
+      <Filter>GameObject\Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileGameObject.cpp">
+      <Filter>GameObject\Projectile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

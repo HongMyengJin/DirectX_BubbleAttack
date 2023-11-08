@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Light.h"
 #include "DescriptorHeap.h"
+#include "PlayerGameObject.h"
 class CScene
 {
 public:
@@ -15,7 +16,7 @@ public:
 
 	virtual void BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 
-	virtual bool ProcessInput(HWND hWnd);
+	virtual bool ProcessInput(HWND hWnd, float fTimeElapsed);
 	virtual void AnimateObjects(float fTimeElapsed) = 0;
 	virtual void UpdateObjects(float fTimeElapsed) = 0;
 

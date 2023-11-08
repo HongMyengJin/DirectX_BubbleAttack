@@ -384,7 +384,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	//m_pParticleObject->AddShaderComponent(pParticleObjectShaderComponent);
 }
 
-bool CStage::ProcessInput(HWND hWnd)
+bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 {
 	static UCHAR pKeysBuffer[256];
 	bool bProcessedByScene = false;
@@ -409,10 +409,17 @@ bool CStage::ProcessInput(HWND hWnd)
 			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
 		}
 
-		if (pKeysBuffer[VK_SPACE] & 0xF0) // 점프
+		if (pKeysBuffer[VK_SPACE] & 0xF0) // 불렛 높이 지정
 		{
-			// Terrain 높이 체크
-			m_pPlayersGameObject->MoveBomb(0.001f, m_pPlayersGameObject->GetLookVector());
+			m_pPlayersGameObject->Acceleration(fTimeElapsed);
+		}
+		else
+		{
+			if (pPreKeysBuffer[VK_SPACE] & 0xF0) // 이전에 점프
+			{
+				// Terrain 높이 체크
+				m_pPlayersGameObject->MoveBomb(0.001f, m_pPlayersGameObject->GetLookVector());
+			}
 		}
 		if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
 		{
@@ -433,10 +440,13 @@ bool CStage::ProcessInput(HWND hWnd)
 				m_pPlayersGameObject->SetboolMove(false);
 			}
 		}
-		return true;
+
 	}
 
-	return false;
+
+	memcpy(pPreKeysBuffer, pKeysBuffer, sizeof(UCHAR) * 256);
+
+	return true;
 }
 
 void CStage::AnimateObjects(float fTimeElapsed)

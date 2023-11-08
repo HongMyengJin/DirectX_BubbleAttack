@@ -8,6 +8,7 @@
 #include "ParticleObject.h"
 #include "RippleWaterObject.h"
 #include "UIGameObject.h"
+#include "MonsterGameObject.h"
 
 class CStage : public CScene
 {
@@ -20,7 +21,7 @@ public:
 
 	void BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 
-	virtual bool ProcessInput(HWND hWnd);
+	virtual bool ProcessInput(HWND hWnd, float fTimeElapsed);
 	void AnimateObjects(float fTimeElapsed);
 	void UpdateObjects(float fTimeElapsed);
 
@@ -48,4 +49,6 @@ protected:
 	UINT													m_iPlayerAttack = 0;
 	UINT													m_iMonsterAttack = 0;
 	bool													m_bResult = false;
+
+	UCHAR													pPreKeysBuffer[256];
 };
