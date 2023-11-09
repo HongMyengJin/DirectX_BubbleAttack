@@ -9,6 +9,7 @@
 #include "RippleWaterObject.h"
 #include "UIGameObject.h"
 #include "MonsterGameObject.h"
+#include "VelocityGaugeUIGameObject.h"
 
 class CStage : public CScene
 {
@@ -45,6 +46,7 @@ protected:
 	std::vector<std::shared_ptr<CMonsterGameObject>>		m_pMonsterObjects;
 	std::vector<std::shared_ptr<CUINumberGameObject>>		m_pUINumberObjects;
 	std::vector<std::shared_ptr<CUIGameObject>>				m_pUIObjects;
+
 
 	UINT													m_iPlayerAttack = 0;
 	UINT													m_iMonsterAttack = 0;

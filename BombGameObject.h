@@ -22,6 +22,9 @@ public:
 
 	void SetBombState(BombSTATE eState);
 	BombSTATE GetBombState() {return m_eBombState;}
+
+	void SettingVelocity(XMFLOAT3 xmf3SettingVelocity) { m_xmfSettingVelocity = xmf3SettingVelocity; }
 private:
 	BombSTATE m_eBombState = BombSTATE::BombWait;
+	XMFLOAT3 m_xmfSettingVelocity = XMFLOAT3(0.f, 0.f, 0.f);
 };

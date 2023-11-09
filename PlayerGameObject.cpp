@@ -94,6 +94,7 @@ void CPlayerGameObject::UpdateSpringFrame(float fTimeElapsed)
 void CPlayerGameObject::LoadPlayerBombObject(std::shared_ptr<CBombGameObject> pAttackGameObject)
 {
 	m_pPlayersGameObject = pAttackGameObject;
+	m_pPlayersGameObject->SettingVelocity(XMFLOAT3(0.f, 0.f, 0.f));
 }
 
 void CPlayerGameObject::MoveBomb(float fTimeElapsed, XMFLOAT3 xmf3Direction)

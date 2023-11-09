@@ -15,9 +15,10 @@ public:
 protected:
 	XMFLOAT2 m_xmf2Size = XMFLOAT2(100.f, 100.f);
 	XMFLOAT2 m_xmf2ScreenPosition = XMFLOAT2(0.f, 0.f);
+
+	XMFLOAT2 m_xUV[2] = { XMFLOAT2(0.f, 1.f), XMFLOAT2(0.f, 1.f) };
+	XMFLOAT2 m_xPerspectiveCoords = XMFLOAT2(0.f, 0.f);
 };
-
-
 
 class CUINumberGameObject : public CUIGameObject
 {
@@ -27,7 +28,6 @@ public:
 public:
 	void UpdateNumber(UINT iNumber);
 	void UpdateNumberTexture(UINT Number, UINT Order);
-
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
 
 private:

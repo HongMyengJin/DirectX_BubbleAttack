@@ -11,7 +11,7 @@ void CBombGameObject::SetBombState(BombSTATE eBombState)
 	switch (eBombState) // 설정값 셋팅
 	{
 	case BombSTATE::BombWait:
-		m_xmfVelocity = XMFLOAT3(8.f, 8.f, 8.f);
+		m_xmfVelocity = m_xmfSettingVelocity;
 		break;
 	case BombSTATE::BombBurn:
 		break;

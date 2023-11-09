@@ -62,12 +62,15 @@
     <Filter Include="GameObject\Rect">
       <UniqueIdentifier>{ead10ffe-dd49-4933-afe5-8bb291a46a25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Particle">
+      <UniqueIdentifier>{a9dd5f9d-54f1-4ac3-8a2b-c1e44067ca36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\UI\BarUI">
+      <UniqueIdentifier>{9453c602-01eb-4d2f-b870-73b626c04819}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleObject.h">
       <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="MaterialComponent.h">
@@ -223,11 +226,17 @@
     <ClInclude Include="ProjectileGameObject.h">
       <Filter>GameObject\Projectile</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleObject.h">
+      <Filter>GameObject\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="BarUIGameObject.h">
+      <Filter>GameObject\UI\BarUI</Filter>
+    </ClInclude>
+    <ClInclude Include="VelocityGaugeUIGameObject.h">
+      <Filter>GameObject\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ParticleObject.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
@@ -371,6 +380,15 @@
     </ClCompile>
     <ClCompile Include="ProjectileGameObject.cpp">
       <Filter>GameObject\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleObject.cpp">
+      <Filter>GameObject\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="BarUIGameObject.cpp">
+      <Filter>GameObject\UI\BarUI</Filter>
+    </ClCompile>
+    <ClCompile Include="VelocityGaugeUIGameObject.cpp">
+      <Filter>GameObject\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

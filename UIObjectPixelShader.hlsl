@@ -39,8 +39,8 @@ Texture2D gtxtTexture[7] : register(t6);
 
 float4 PSUIObject(VS_UI_OUTPUT input) : SV_TARGET
 {
-	float2 fU = gmtxGameObject._12_13;// UV값 조절 
-	float2 fV = float2(0.f, 1.f);
+	float2 fU = gmtxGameObject._21_22;// UV값 조절 
+	float2 fV = gmtxGameObject._23_24;
 	input.uv.x = fU.x + (input.uv.x * (fU.y - fU.x));
 	input.uv.y = fV.x + (input.uv.y * (fV.y - fV.x));
 

@@ -29,6 +29,8 @@ public:
 	XMFLOAT3 Acceleration(float fTimeElapsed);
 	void Deceleration(float fTimeElapsed);
 
+	XMFLOAT3 GetVelocity();
+
 protected:
 	XMFLOAT3 xmfOffSetPosition = XMFLOAT3(-43.f, 35.f, 12.f);
 	XMFLOAT3 xmfOffSetSpritePosition = XMFLOAT3(-43.f, 35.f, 12.f);

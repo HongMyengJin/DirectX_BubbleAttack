@@ -24,18 +24,22 @@ void CUIGameObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd
 
 void CUIGameObject::Animate(float fTimeElapsed)
 {
-
+	m_xPerspectiveCoords.x = (m_xmf2ScreenPosition.x / FRAME_BUFFER_WIDTH);
+	m_xPerspectiveCoords.y = (m_xmf2ScreenPosition.y / FRAME_BUFFER_HEIGHT);
 
 	XMFLOAT4X4 xmf4x4World;
 
 	xmf4x4World._11 = m_xmf2Size.x / (FRAME_BUFFER_WIDTH);
-	xmf4x4World._22 = m_xmf2Size.y / (FRAME_BUFFER_HEIGHT);
+	xmf4x4World._12 = m_xmf2Size.y / (FRAME_BUFFER_HEIGHT);
 
-	xmf4x4World._12 = 0.f;
-	xmf4x4World._13 = 1.f;
+	xmf4x4World._21 = m_xUV[0].x;
+	xmf4x4World._22 = m_xUV[0].y;
 
-	xmf4x4World._41 = (m_xmf2ScreenPosition.x / FRAME_BUFFER_WIDTH);
-	xmf4x4World._42 = (m_xmf2ScreenPosition.y / FRAME_BUFFER_HEIGHT);
+	xmf4x4World._23 = m_xUV[1].x;
+	xmf4x4World._24 = m_xUV[1].y;
+
+	xmf4x4World._41 = m_xPerspectiveCoords.x;
+	xmf4x4World._42 = m_xPerspectiveCoords.y;
 
 	dynamic_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4World = xmf4x4World;
 
@@ -61,19 +65,11 @@ void CUINumberGameObject::UpdateNumber(UINT iNumber)
 
 void CUINumberGameObject::UpdateNumberTexture(UINT Number, UINT Order)
 {
-	XMFLOAT4X4 xmf4x4World;
+	m_xUV[0] = XMFLOAT2(Number * 0.1f, Number * 0.1f + 0.1f);
+	m_xUV[1] = XMFLOAT2(0.f, 1.f);
 
-	xmf4x4World._11 = m_xmf2Size.x / (FRAME_BUFFER_WIDTH);
-	xmf4x4World._22 = m_xmf2Size.y / (FRAME_BUFFER_HEIGHT);
-
-
-	xmf4x4World._12 = Number * 0.1f;
-	xmf4x4World._13 = Number * 0.1f + 0.1f;
-
-	xmf4x4World._41 = (m_xmf2ScreenPosition.x / FRAME_BUFFER_WIDTH) + ((m_xmf2Size.x) / (FRAME_BUFFER_WIDTH)*Order);
-	xmf4x4World._42 = (m_xmf2ScreenPosition.y / FRAME_BUFFER_HEIGHT);
-
-	dynamic_cast<CTransformComponent*>(m_pComponents[UINT(ComponentType::ComponentTransform)].get())->m_xmf4x4World = xmf4x4World;
+	m_xPerspectiveCoords.x = (m_xmf2ScreenPosition.x / FRAME_BUFFER_WIDTH) + ((m_xmf2Size.x) / (FRAME_BUFFER_WIDTH)*Order);
+	m_xPerspectiveCoords.y = (m_xmf2ScreenPosition.y / FRAME_BUFFER_HEIGHT);
 }
 
 void CUINumberGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
@@ -81,6 +77,7 @@ void CUINumberGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCa
 	for (int i = 0; i < m_vecNumber.size(); i++)
 	{
 		UpdateNumberTexture(m_vecNumber[m_vecNumber.size() - i - 1], i);
+		CGameObject::Animate(0.f);
 		m_pComponents[UINT(ComponentType::ComponentTransform)]->Render(pd3dCommandList);
 
 		UINT nMaterial = static_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->m_nMaterials;

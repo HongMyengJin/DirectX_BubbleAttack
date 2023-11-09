@@ -33,3 +33,8 @@ void CProjectileGameObject::Deceleration(float fTimeElapsed)
 	float fAccelerationValue = m_fAccelerationSpeed * fTimeElapsed;
 	DirectX::XMStoreFloat3(&m_xmfVelocity, DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&m_xmfVelocity), DirectX::XMLoadFloat3(&XMFLOAT3(-fAccelerationValue, -fAccelerationValue, -fAccelerationValue))));
 }
+
+XMFLOAT3 CProjectileGameObject::GetVelocity()
+{
+	return m_xmfVelocity;
+}

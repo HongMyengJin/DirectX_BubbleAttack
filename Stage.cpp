@@ -373,8 +373,11 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	pUIObject->SetEnable(false);
 	m_pUIObjects.push_back(pUIObject);
 
-
-
+	std::shared_ptr<CVelocityGaugeUIGameObject> pUIVelocityObject = std::make_shared<CVelocityGaugeUIGameObject>();
+	pUIVelocityObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get());
+	pUIVelocityObject->AddShaderComponent(pUIShaderComponent);
+	pUIVelocityObject->SetEnable(true);
+	m_pUIObjects.push_back(pUIVelocityObject);
 
 	//std::shared_ptr<CParticleObjectShaderComponent> pParticleObjectShaderComponent = std::make_shared<CParticleObjectShaderComponent>();
 	//pParticleObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
@@ -412,6 +415,7 @@ bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 		if (pKeysBuffer[VK_SPACE] & 0xF0) // 불렛 높이 지정
 		{
 			m_pPlayersGameObject->Acceleration(fTimeElapsed);
+			dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, m_pPlayersGameObject->GetBombGameObject()->GetVelocity().y);
 		}
 		else
 		{
@@ -419,8 +423,11 @@ bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 			{
 				// Terrain 높이 체크
 				m_pPlayersGameObject->MoveBomb(0.001f, m_pPlayersGameObject->GetLookVector());
+				dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, 0.f);
 			}
 		}
+
+
 		if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
 		{
 			if (cxDelta || cyDelta)

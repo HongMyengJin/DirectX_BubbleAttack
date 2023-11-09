@@ -5,6 +5,7 @@ void CMonsterGameObject::MoveBomb(float fTimeElapsed, XMFLOAT3 xmf3Direction)
 {
 	m_pBombObject->SetDirection(xmf3Direction);
 	m_pBombObject->SetBombState(BombSTATE::BombBurn);
+	m_pBombObject->SettingVelocity(XMFLOAT3(8.f, 8.f, 8.f));
 }
 
 void CMonsterGameObject::LoadMonsterBombObject(std::shared_ptr<CBombGameObject> pAttackGameObject)

@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BarUIGameObject.h" />
     <ClInclude Include="BombGameObject.h" />
     <ClInclude Include="BubbleAttack.h" />
     <ClInclude Include="Camera.h" />
@@ -179,9 +180,11 @@
     <ClInclude Include="UIMesh.h" />
     <ClInclude Include="UIObjectShaderComponent.h" />
     <ClInclude Include="UIVertex.h" />
+    <ClInclude Include="VelocityGaugeUIGameObject.h" />
     <ClInclude Include="WICTextureLoader12.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BarUIGameObject.cpp" />
     <ClCompile Include="BombGameObject.cpp" />
     <ClCompile Include="BubbleAttack.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -230,6 +233,7 @@
     <ClCompile Include="UIMesh.cpp" />
     <ClCompile Include="UIObjectShaderComponent.cpp" />
     <ClCompile Include="UIVertex.cpp" />
+    <ClCompile Include="VelocityGaugeUIGameObject.cpp" />
     <ClCompile Include="WICTextureLoader12.cpp" />
   </ItemGroup>
   <ItemGroup>
