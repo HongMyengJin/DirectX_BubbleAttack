@@ -32,6 +32,9 @@ void CUIGameObject::Animate(float fTimeElapsed)
 	xmf4x4World._11 = m_xmf2Size.x / (FRAME_BUFFER_WIDTH);
 	xmf4x4World._12 = m_xmf2Size.y / (FRAME_BUFFER_HEIGHT);
 
+	xmf4x4World._13 = m_xmf2Alpha.x;
+	xmf4x4World._14 = m_xmf2Alpha.y;
+
 	xmf4x4World._21 = m_xUV[0].x;
 	xmf4x4World._22 = m_xUV[0].y;
 

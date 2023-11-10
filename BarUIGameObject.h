@@ -7,6 +7,7 @@ public:
 	~CBarUIGameObject() {}
 
 public:
+	virtual void Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, XMFLOAT2 fSize, wchar_t* pstrFileName, wchar_t* pstrFileName2);
 	virtual void Animate(float fTimeElapsed);
 	void UpdateBarValue(float fTotalBarValue, float fCurrentBarValue);
 

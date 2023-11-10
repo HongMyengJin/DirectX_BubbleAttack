@@ -18,6 +18,8 @@ protected:
 
 	XMFLOAT2 m_xUV[2] = { XMFLOAT2(0.f, 1.f), XMFLOAT2(0.f, 1.f) };
 	XMFLOAT2 m_xPerspectiveCoords = XMFLOAT2(0.f, 0.f);
+
+	XMFLOAT2 m_xmf2Alpha = XMFLOAT2(0.f, 1.f);
 };
 
 class CUINumberGameObject : public CUIGameObject

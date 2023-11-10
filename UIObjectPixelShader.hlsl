@@ -41,10 +41,14 @@ float4 PSUIObject(VS_UI_OUTPUT input) : SV_TARGET
 {
 	float2 fU = gmtxGameObject._21_22;// UV°ª Á¶Àý 
 	float2 fV = gmtxGameObject._23_24;
+
 	input.uv.x = fU.x + (input.uv.x * (fU.y - fU.x));
 	input.uv.y = fV.x + (input.uv.y * (fV.y - fV.x));
 
     float4 cColor = gtxtTexture[0].Sample(gssWrap, input.uv);
+	float4 cColor2 = gtxtTexture[1].Sample(gssWrap, input.uv);
+	if (!(cColor2.a >= gmtxGameObject._13) || !(cColor2.a <= gmtxGameObject._14))
+		discard;
 
 	return cColor;
 }
