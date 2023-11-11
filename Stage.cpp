@@ -193,7 +193,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
     CreateGraphicsRootSignature(pd3dDevice);
 
 	m_pd3dDescriptorHeap = std::make_unique<CDescriptorHeap>();
-	m_pd3dDescriptorHeap->CreateCbcSrvDescriptorHeap(pd3dDevice, 0, 100);
+	m_pd3dDescriptorHeap->CreateCbcSrvDescriptorHeap(pd3dDevice, 0, 200);
 
 	m_pCamera = std::make_unique<CThirdPersonCamera>();
 	m_pCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -204,8 +204,8 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pPlayersGameObject->Init(XMFLOAT3(12.f, 10.f, 12.f));
 
 	m_pPlayersGameObject->AddShaderComponent(pObjectShaderComponent);
-	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Player.bin");
-	m_pPlayersGameObject->LoadPlayerFrameData();
+	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Penguin.bin");
+	//m_pPlayersGameObject->LoadPlayerFrameData();
 	m_pPlayersGameObject->SetPosition(XMFLOAT3(300.f, 24.f, 300.f));
 
 
@@ -485,7 +485,7 @@ void CStage::UpdateObjects(float fTimeElapsed)
 	}
 	if (m_pPlayersGameObject)
 	{
-		m_pPlayersGameObject->UpdateFrame(fTimeElapsed);
+		//m_pPlayersGameObject->UpdateFrame(fTimeElapsed);
 		m_pPlayersGameObject->Update(fTimeElapsed, nullptr, m_pTerrain);
 	}
 	for (int i = 0; i < m_pUINumberObjects.size(); i++)

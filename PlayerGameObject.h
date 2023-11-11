@@ -13,9 +13,9 @@ public:
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
 public:
-	void LoadPlayerFrameData();
-	void UpdateFrame(float fTimeElapsed);
-	void UpdateLegFrame(float fTimeElapsed);
+	//void LoadPlayerFrameData();
+	//void UpdateFrame(float fTimeElapsed);
+	//void UpdateLegFrame(float fTimeElapsed);
 	void UpdateSpringFrame(float fTimeElapsed);
 	void LoadPlayerBombObject(std::shared_ptr<CBombGameObject> pAttackGameObject);
 
@@ -28,10 +28,10 @@ public:
 
 	void SetboolMove(bool bMove);
 public:
-	CGameObject* pRightLegGameObject[3];
-	CGameObject* pLeftLegGameObject[3];
-	CGameObject* pTopGameObject;
-	CGameObject* pSpringGameObject[2];
+	//CGameObject* pRightLegGameObject[3];
+	//CGameObject* pLeftLegGameObject[3];
+	//CGameObject* pTopGameObject;
+	//CGameObject* pSpringGameObject[2];
 
 	std::shared_ptr<CBombGameObject>		m_pPlayersGameObject;
 	bool									m_bMove = false;

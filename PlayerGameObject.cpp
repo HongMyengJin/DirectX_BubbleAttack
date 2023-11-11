@@ -16,7 +16,7 @@ void CPlayerGameObject::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent, st
 
 	if (m_pPlayersGameObject)
 	{
-		m_pPlayersGameObject->Update(fTimeElapsed, pTopGameObject->GetWorldPosition(), pTerrainObject);
+		m_pPlayersGameObject->Update(fTimeElapsed, GetWorldPosition(), pTerrainObject);
 		m_pPlayersGameObject->UpdateCollisionBox(m_pPlayersGameObject->GetPosition());
 	}
 }
@@ -38,54 +38,54 @@ void CPlayerGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCame
 	}
 }
 
-void CPlayerGameObject::LoadPlayerFrameData()
-{
-	pRightLegGameObject[0] = FindFrame("bobomb_Skeleton_8");
-	pRightLegGameObject[1] = FindFrame("bobomb_Skeleton_10");
-	pRightLegGameObject[2] = FindFrame("bobomb_Skeleton_12");
-
-	pLeftLegGameObject[0] = FindFrame("bobomb_Skeleton_9");
-	pLeftLegGameObject[1] = FindFrame("bobomb_Skeleton_11");
-	pLeftLegGameObject[2] = FindFrame("bobomb_Skeleton_13");
-
-	pTopGameObject = FindFrame("bobomb_Skeleton_2");
-	pSpringGameObject[0] = FindFrame("bobomb_Skeleton_15");
-	pSpringGameObject[1] = FindFrame("bobomb_Skeleton_17");
-}
-void CPlayerGameObject::UpdateFrame(float fTimeElapsed)
-{
-	if(m_bMove)
-		UpdateLegFrame(fTimeElapsed);
-}
-
-void CPlayerGameObject::UpdateLegFrame(float fTimeElapsed)
-{
-	static float angle = 0.f;
-	angle += fTimeElapsed;
-	for (int i = 0; i < 3; i++)
-	{
-
-		// Leg
-		DirectX::XMMATRIX m_xmLegTranslationMatrix1;
-		DirectX::XMMATRIX m_xmLegTranslationMatrix2;
-		m_fRotationAngle += fTimeElapsed * m_fSpeed;
-		pRightLegGameObject[i]->m_xmRotationMatrix = DirectX::XMMatrixRotationX(m_fRotationAngle);
-		pLeftLegGameObject[i]->m_xmRotationMatrix = DirectX::XMMatrixRotationX(-m_fRotationAngle);
-
-		// Spring
-		DirectX::XMMATRIX m_xmSpringTranslationMatrix = DirectX::XMMatrixTranslation(0.f, -15.f, 0.f);
-		DirectX::XMMATRIX m_xmSprinTranslationMatrix2 = DirectX::XMMatrixTranslation(0.f, 15.f, 0.f);
-		pSpringGameObject[0]->m_xmRotationMatrix = m_xmSpringTranslationMatrix * DirectX::XMMatrixRotationZ(angle) * m_xmSprinTranslationMatrix2;/* * m_xmTranslationMatrix*/;
-		pSpringGameObject[1]->m_xmRotationMatrix = m_xmSpringTranslationMatrix * DirectX::XMMatrixRotationZ(angle) * m_xmSprinTranslationMatrix2;/* * m_xmTranslationMatrix*/;
-		if (abs(m_fRotationAngle) > 0.55f)
-		{
-			if (m_fRotationAngle > 0.f) m_fRotationAngle = 0.55f;
-			else m_fRotationAngle = -0.55f;
-
-			m_fSpeed *= -1;
-		}
-	}
-}
+//void CPlayerGameObject::LoadPlayerFrameData()
+//{
+//	pRightLegGameObject[0] = FindFrame("bobomb_Skeleton_8");
+//	pRightLegGameObject[1] = FindFrame("bobomb_Skeleton_10");
+//	pRightLegGameObject[2] = FindFrame("bobomb_Skeleton_12");
+//
+//	pLeftLegGameObject[0] = FindFrame("bobomb_Skeleton_9");
+//	pLeftLegGameObject[1] = FindFrame("bobomb_Skeleton_11");
+//	pLeftLegGameObject[2] = FindFrame("bobomb_Skeleton_13");
+//
+//	pTopGameObject = FindFrame("bobomb_Skeleton_2");
+//	pSpringGameObject[0] = FindFrame("bobomb_Skeleton_15");
+//	pSpringGameObject[1] = FindFrame("bobomb_Skeleton_17");
+//}
+//void CPlayerGameObject::UpdateFrame(float fTimeElapsed)
+//{
+//	if(m_bMove)
+//		UpdateLegFrame(fTimeElapsed);
+//}
+//
+//void CPlayerGameObject::UpdateLegFrame(float fTimeElapsed)
+//{
+//	static float angle = 0.f;
+//	angle += fTimeElapsed;
+//	for (int i = 0; i < 3; i++)
+//	{
+//
+//		// Leg
+//		DirectX::XMMATRIX m_xmLegTranslationMatrix1;
+//		DirectX::XMMATRIX m_xmLegTranslationMatrix2;
+//		m_fRotationAngle += fTimeElapsed * m_fSpeed;
+//		pRightLegGameObject[i]->m_xmRotationMatrix = DirectX::XMMatrixRotationX(m_fRotationAngle);
+//		pLeftLegGameObject[i]->m_xmRotationMatrix = DirectX::XMMatrixRotationX(-m_fRotationAngle);
+//
+//		// Spring
+//		DirectX::XMMATRIX m_xmSpringTranslationMatrix = DirectX::XMMatrixTranslation(0.f, -15.f, 0.f);
+//		DirectX::XMMATRIX m_xmSprinTranslationMatrix2 = DirectX::XMMatrixTranslation(0.f, 15.f, 0.f);
+//		pSpringGameObject[0]->m_xmRotationMatrix = m_xmSpringTranslationMatrix * DirectX::XMMatrixRotationZ(angle) * m_xmSprinTranslationMatrix2;/* * m_xmTranslationMatrix*/;
+//		pSpringGameObject[1]->m_xmRotationMatrix = m_xmSpringTranslationMatrix * DirectX::XMMatrixRotationZ(angle) * m_xmSprinTranslationMatrix2;/* * m_xmTranslationMatrix*/;
+//		if (abs(m_fRotationAngle) > 0.55f)
+//		{
+//			if (m_fRotationAngle > 0.f) m_fRotationAngle = 0.55f;
+//			else m_fRotationAngle = -0.55f;
+//
+//			m_fSpeed *= -1;
+//		}
+//	}
+//}
 
 void CPlayerGameObject::UpdateSpringFrame(float fTimeElapsed)
 {

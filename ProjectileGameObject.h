@@ -3,7 +3,7 @@
 #include "TextureRectObject.h"
 
 #define MIN_VELOCITY 1.f
-#define MAX_VELOCITY 50.f
+#define MAX_VELOCITY 20.f
 class CProjectileGameObject : public CGameObject
 {
 public:
