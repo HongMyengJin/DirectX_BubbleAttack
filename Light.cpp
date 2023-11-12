@@ -6,11 +6,11 @@ void LightDatas::Init()
 
 	m_pLightsDatas[0].m_bEnable = true;
 	m_pLightsDatas[0].m_nType = DIRECTIONAL_LIGHT;
-	m_pLightsDatas[0].m_xmf4Ambient = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	m_pLightsDatas[0].m_xmf4Diffuse = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
-	m_pLightsDatas[0].m_xmf4Specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 0.0f);
-	m_pLightsDatas[0].m_xmf3Direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
-	m_pLightsDatas[1].m_bEnable = true;
+	m_pLightsDatas[0].m_xmf4Ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	m_pLightsDatas[0].m_xmf4Diffuse = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	m_pLightsDatas[0].m_xmf4Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.f);
+	m_pLightsDatas[0].m_xmf3Direction = XMFLOAT3(0.f, -0.9f, 0.0f);
+	m_pLightsDatas[1].m_bEnable = false;
 	m_pLightsDatas[1].m_nType = SPOT_LIGHT;
 	m_pLightsDatas[1].m_fRange = 300.f;
 	m_pLightsDatas[1].m_xmf4Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.f);

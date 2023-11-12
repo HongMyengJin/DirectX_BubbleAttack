@@ -205,7 +205,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	m_pPlayersGameObject->AddShaderComponent(pObjectShaderComponent);
 	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Penguin.bin");
-	//m_pPlayersGameObject->LoadPlayerFrameData();
+	m_pPlayersGameObject->LoadPlayerFrameData();
 	m_pPlayersGameObject->SetPosition(XMFLOAT3(300.f, 24.f, 300.f));
 
 
@@ -433,9 +433,9 @@ bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 			if (cxDelta || cyDelta)
 			{
 				if (pKeysBuffer[VK_RBUTTON] & 0xF0)
-					m_pPlayersGameObject->Rotate(cyDelta, 0.0f, -cxDelta);
+					m_pPlayersGameObject->Rotate(cyDelta * 0.3f, 0.0f, -cxDelta * 0.3f);
 				else
-					m_pPlayersGameObject->Rotate(cyDelta, cxDelta, 0.0f);
+					m_pPlayersGameObject->Rotate(cyDelta * 0.3f, cxDelta * 0.3f, 0.0f);
 			}
 			if (dwDirection)
 			{
@@ -485,7 +485,7 @@ void CStage::UpdateObjects(float fTimeElapsed)
 	}
 	if (m_pPlayersGameObject)
 	{
-		//m_pPlayersGameObject->UpdateFrame(fTimeElapsed);
+		m_pPlayersGameObject->UpdateFrame(fTimeElapsed);
 		m_pPlayersGameObject->Update(fTimeElapsed, nullptr, m_pTerrain);
 	}
 	for (int i = 0; i < m_pUINumberObjects.size(); i++)

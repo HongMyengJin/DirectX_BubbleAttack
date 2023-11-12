@@ -78,5 +78,5 @@ float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
 	*/
 	float3 normalW = normalize(input.normalW);
 	float4 cIllumination = Lighting(input.positionW, normalW);
-	return	(lerp(cColor, cIllumination, 0.4f));
+	return	(lerp(cColor, cIllumination, 0.2f));
 }
