@@ -195,6 +195,8 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pd3dDescriptorHeap = std::make_unique<CDescriptorHeap>();
 	m_pd3dDescriptorHeap->CreateCbcSrvDescriptorHeap(pd3dDevice, 0, 200);
 
+	m_pTextureLoader = std::make_shared<CTextureLoader>();
+
 	m_pCamera = std::make_unique<CThirdPersonCamera>();
 	m_pCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
@@ -204,7 +206,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pPlayersGameObject->Init(XMFLOAT3(12.f, 10.f, 12.f));
 
 	m_pPlayersGameObject->AddShaderComponent(pObjectShaderComponent);
-	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Penguin.bin");
+	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Penguin.bin", m_pTextureLoader);
 	m_pPlayersGameObject->LoadPlayerFrameData();
 	m_pPlayersGameObject->SetPosition(XMFLOAT3(300.f, 24.f, 300.f));
 
@@ -242,7 +244,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	std::shared_ptr<CBombGameObject> pBombGameObject = std::make_shared<CBombGameObject>();
 	pBombGameObject->Init(XMFLOAT3(20.f, 20.f, 20.f));
 	pBombGameObject->AddShaderComponent(pObjectShaderComponent);
-	pBombGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/PlayerBullet.bin");
+	pBombGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/PlayerBullet.bin", m_pTextureLoader);
 	pBombGameObject->SetSpriteEffect(m_pTextureRectObjects[0], XMFLOAT3(45.f, 8.f, -12.f));
 	m_pPlayersGameObject->LoadPlayerBombObject(pBombGameObject);
 	
@@ -252,12 +254,12 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 		pBombGameObject->Init(XMFLOAT3(20.f, 20.f, 20.f));
 		pBombGameObject->AddShaderComponent(pObjectShaderComponent);
 		pBombGameObject->SetSpriteEffect(m_pTextureRectObjects[1 + i], XMFLOAT3(45.f, 8.f, -12.f));
-		pBombGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/PlayerBullet.bin");
+		pBombGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/PlayerBullet.bin", m_pTextureLoader);
 
 		std::shared_ptr<CMonsterGameObject> pMonsterMesh1 = std::make_shared<CMonsterGameObject>();
 		pMonsterMesh1->Init(XMFLOAT3(0.f, 0.f, 0.f));
 		pMonsterMesh1->AddShaderComponent(pObjectShaderComponent);
-		pMonsterMesh1->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/BP_Mega_Ice_Golem.bin");
+		pMonsterMesh1->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/BP_Mega_Ice_Golem.bin", m_pTextureLoader);
 
 		std::shared_ptr<CMonsterGameObject> pMonsterGameObject = std::make_shared<CMonsterGameObject>();
 		pMonsterGameObject->SetChild(NULL, pMonsterMesh1);
@@ -415,7 +417,7 @@ bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 		if (pKeysBuffer[VK_SPACE] & 0xF0) // 불렛 높이 지정
 		{
 			m_pPlayersGameObject->Acceleration(fTimeElapsed);
-			dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, m_pPlayersGameObject->GetBombGameObject()->GetVelocity().y);
+			//dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, m_pPlayersGameObject->GetBombGameObject()->GetVelocity().y);
 		}
 		else
 		{
@@ -423,7 +425,7 @@ bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 			{
 				// Terrain 높이 체크
 				m_pPlayersGameObject->MoveBomb(0.001f, m_pPlayersGameObject->GetLookVector());
-				dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, 0.f);
+				//dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, 0.f);
 			}
 		}
 

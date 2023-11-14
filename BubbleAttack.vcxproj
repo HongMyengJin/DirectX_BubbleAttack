@@ -168,6 +168,7 @@
     <ClInclude Include="TerrainObjectShaderComponent.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="TexturedMeshComponent.h" />
+    <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="TextureMesh.h" />
     <ClInclude Include="TextureObjectTransformComponent.h" />
     <ClInclude Include="TextureRectMeshComponent.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="TerrainObjectShaderComponent.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="TexturedMeshComponent.cpp" />
+    <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="TextureMesh.cpp" />
     <ClCompile Include="TextureObjectTransformComponent.cpp" />
     <ClCompile Include="TextureRectMeshComponent.cpp" />

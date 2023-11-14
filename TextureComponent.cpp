@@ -161,3 +161,19 @@ D3D12_SHADER_RESOURCE_VIEW_DESC CTextureComponent::GetShaderResourceViewDesc(int
 
 	return	d3dShaderResourceViewDesc;
 }
+
+Microsoft::WRL::ComPtr<ID3D12Resource> CTextureComponent::GetTextureResource(UINT iIndex)
+{
+	return m_ppd3dTextures[iIndex];
+}
+
+std::array<TCHAR, 64> CTextureComponent::GetTextureName(UINT iIndex)
+{
+	return m_stTextureName[iIndex];
+}
+
+void CTextureComponent::SetTextureResource(UINT iIndex, Microsoft::WRL::ComPtr<ID3D12Resource> pTextureResource)
+{
+	m_ppd3dTextures[iIndex] = pTextureResource;
+}
+

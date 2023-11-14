@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Component.h"
 #include "TextureComponent.h"
-
+#include "TextureLoader.h"
 struct MaterialData
 {
 	XMFLOAT4															m_xmf4AlbedoColor = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -27,7 +27,7 @@ public:
 	MaterialData& GetMaterialData() { return m_tMaterialData; };
 
 	void SetMaterialData(MaterialData tMaterialData) { m_tMaterialData = tMaterialData;}
-	bool LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, UINT nType, UINT nRootParameter, UINT iTextureIndex, FILE* pInFile);
+	bool LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, UINT nType, UINT nRootParameter, UINT iTextureIndex, FILE* pInFile, std::shared_ptr<CTextureLoader> pTextureLoader);
 public:
 	MaterialData														m_tMaterialData;
 	std::vector<std::shared_ptr<CTextureComponent>>						m_Textures;
@@ -48,7 +48,7 @@ public:
 	virtual void PostRender(ID3D12GraphicsCommandList* pd3dCommandList);
 
 	void LoadTextureFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, ResourceTextureType nType, UINT nRootParameter, UINT iMaterialIndex, UINT iTextureIndex, wchar_t* pszFileName);
-	void LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, FILE* pInFile);
+	void LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, FILE* pInFile, std::shared_ptr<CTextureLoader> pTextureLoader);
 	void CreateBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pData, UINT nElements, UINT nStride, DXGI_FORMAT dxgiFormat, D3D12_HEAP_TYPE d3dHeapType, D3D12_RESOURCE_STATES d3dResourceStates, UINT iMaterialIndex, UINT nIndex);
 
 	virtual void CreateShaderResourceView(ID3D12Device* pd3dDevice, CDescriptorHeap* pDescriptorHeap, UINT nDescriptorHeapIndex, UINT nRootParameterStartIndex, UINT nTextureN, UINT iMaterialIndex = 0);

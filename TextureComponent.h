@@ -25,6 +25,11 @@ public:
 	void CreateBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, void* pData, UINT nElements, UINT nStride, DXGI_FORMAT dxgiFormat, D3D12_HEAP_TYPE d3dHeapType, D3D12_RESOURCE_STATES d3dResourceStates, UINT nIndex);
 	D3D12_SHADER_RESOURCE_VIEW_DESC GetShaderResourceViewDesc(int nIndex);
 
+	Microsoft::WRL::ComPtr<ID3D12Resource>	GetTextureResource(UINT iIndex);
+	std::array<TCHAR, 64>					GetTextureName(UINT iIndex);
+
+	void SetTextureResource(UINT iIndex, Microsoft::WRL::ComPtr<ID3D12Resource> pTextureResource);
+
 	std::vector<std::array<TCHAR, 64>>						m_stTextureName;
 private:
 	UINT													m_nTextureN = 0;

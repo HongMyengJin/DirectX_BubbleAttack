@@ -13,7 +13,6 @@ public:
 
 	void SetBarValue(float fTotalBarValue, float fCurrentBarValue);
 protected:
-	std::shared_ptr<CBarUIGameObject> m_pBarGaugeUI;
-	std::shared_ptr<CUIGameObject> m_pUIGameObject;
+	std::vector<std::shared_ptr<CUIGameObject>> m_pUIGameObjects;
 };
 

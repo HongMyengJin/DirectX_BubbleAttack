@@ -235,6 +235,9 @@
     <ClInclude Include="VelocityGaugeUIGameObject.h">
       <Filter>GameObject\UI</Filter>
     </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>Global\TextureLoad</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -389,6 +392,9 @@
     </ClCompile>
     <ClCompile Include="VelocityGaugeUIGameObject.cpp">
       <Filter>GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>Global\TextureLoad</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 #include "ObjectShaderComponent.h"
 #include "TextureRectObject.h"
 #include "TerrainObject.h"
+#include "TextureLoader.h"
 void CGameObject::Init(XMFLOAT3 xmf3Extent)
 {
 	m_pComponents.resize(4);
@@ -150,16 +151,16 @@ void CGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pC
 	m_xf3PrePosition = GetPosition();
 }
 
-std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, char* pstrFileName)
+std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchyFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, char* pstrFileName, std::shared_ptr<CTextureLoader> pTextureLoader)
 {
 	FILE* pInFile = NULL;
 	::fopen_s(&pInFile, pstrFileName, "rb");
 	::rewind(pInFile);
 
-	return LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pDescriptorHeap, pstrFileName, pInFile);
+	return LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pDescriptorHeap, pstrFileName, pInFile, pTextureLoader);
 }
 
-std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, char* pstrFileName, FILE* pInFile)
+std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, char* pstrFileName, FILE* pInFile, std::shared_ptr<CTextureLoader> pTextureLoader)
 {
 	char pstrName[64] = { '\0' };
 	BYTE nStrLength = 0;
@@ -204,7 +205,7 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 		else if (!strcmp(pstrName, "<Mesh>:"))
 			dynamic_cast<CObjectMeshComponent*>(pGameObject->m_pComponents[UINT(ComponentType::ComponentMesh)].get())->LoadMeshFromFile(pd3dDevice, pd3dCommandList, pInFile);
 		else if (!strcmp(pstrName, "<Materials>:"))
-			dynamic_cast<CMaterialsComponent*>(pGameObject->m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, pInFile);
+			dynamic_cast<CMaterialsComponent*>(pGameObject->m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->LoadMaterialsFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, pInFile, pTextureLoader);
 		else if (!strcmp(pstrName, "<Children>:"))
 		{
 			int nChilds = 0;
@@ -214,7 +215,7 @@ std::shared_ptr<CGameObject> CGameObject::LoadFrameHierarchy(ID3D12Device* pd3dD
 			{
 				for (int i = 0; i < nChilds; i++)
 				{
-					SetChild(pGameObject, CGameObject::LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pDescriptorHeap, pstrFileName, pInFile));
+					SetChild(pGameObject, CGameObject::LoadFrameHierarchy(pd3dDevice, pd3dCommandList, pd3dGraphicsRootSignature, pDescriptorHeap, pstrFileName, pInFile, pTextureLoader));
 				}
 			}
 		}
