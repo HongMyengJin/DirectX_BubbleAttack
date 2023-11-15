@@ -35,7 +35,11 @@ struct VS_UI_OUTPUT
 };
 
 SamplerState gssWrap : register(s0);
-Texture2D gtxtTexture[7] : register(t6);
+Texture2D gtxtTexture0 : register(t6);
+Texture2D gtxtTexture1 : register(t7);
+Texture2D gtxtTexture2 : register(t8);
+Texture2D gtxtTexture3 : register(t9);
+Texture2D gtxtTexture4 : register(t10);
 
 float4 PSUIObject(VS_UI_OUTPUT input) : SV_TARGET
 {
@@ -45,8 +49,8 @@ float4 PSUIObject(VS_UI_OUTPUT input) : SV_TARGET
 	input.uv.x = fU.x + (input.uv.x * (fU.y - fU.x));
 	input.uv.y = fV.x + (input.uv.y * (fV.y - fV.x));
 
-    float4 cColor = gtxtTexture[0].Sample(gssWrap, input.uv);
-	float4 cColor2 = gtxtTexture[1].Sample(gssWrap, input.uv);
+    float4 cColor = gtxtTexture0.Sample(gssWrap, input.uv);
+	float4 cColor2 = gtxtTexture1.Sample(gssWrap, input.uv);
 	if (!(cColor2.a >= gmtxGameObject._13) || !(cColor2.a <= gmtxGameObject._14))
 		discard;
 

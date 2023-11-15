@@ -36,7 +36,11 @@ cbuffer cbGameObjectInfo : register(b2)
 #define MATERIAL_DETAIL_ALBEDO_MAP	0x20
 #define MATERIAL_DETAIL_NORMAL_MAP	0x40
 
-Texture2D gtxtTexture[7] : register(t6);
+Texture2D gtxtTextureAlbedo : register(t6);
+Texture2D gtxtTextureSpecular : register(t7);
+Texture2D gtxtTextureNormal : register(t8);
+Texture2D gtxtTextureMetallic : register(t9);
+Texture2D gtxtTextureEmission : register(t10);
 
 SamplerState gssWrap : register(s0);
 
@@ -63,23 +67,23 @@ float4 PSStandard(VS_STANDARD_OUTPUT input) : SV_TARGET
 {
 	float4 cAlbedoColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	if (gnTexturesMask & MATERIAL_ALBEDO_MAP) 
-		cAlbedoColor = gtxtTexture[0].Sample(gssWrap, input.uv);
+		cAlbedoColor = gtxtTextureAlbedo.Sample(gssWrap, input.uv);
 
 	float4 cSpecularColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	if (gnTexturesMask & MATERIAL_SPECULAR_MAP) 
-		cSpecularColor = gtxtTexture[1].Sample(gssWrap, input.uv);
+		cSpecularColor = gtxtTextureSpecular.Sample(gssWrap, input.uv);
 
 	float4 cNormalColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	if (gnTexturesMask & MATERIAL_NORMAL_MAP) 
-		cNormalColor = gtxtTexture[2].Sample(gssWrap, input.uv);
+		cNormalColor = gtxtTextureNormal.Sample(gssWrap, input.uv);
 
 	float4 cMetallicColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	if (gnTexturesMask & MATERIAL_METALLIC_MAP) 
-		cMetallicColor = gtxtTexture[3].Sample(gssWrap, input.uv);
+		cMetallicColor = gtxtTextureMetallic.Sample(gssWrap, input.uv);
 
 	float4 cEmissionColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	if (gnTexturesMask & MATERIAL_EMISSION_MAP) 
-		cEmissionColor = gtxtTexture[4].Sample(gssWrap, input.uv);
+		cEmissionColor = gtxtTextureEmission.Sample(gssWrap, input.uv);
 
 	//return cNormalColor;
 	float3 normalW;

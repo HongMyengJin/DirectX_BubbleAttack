@@ -6,18 +6,19 @@ void CVelocityGaugeUIGameObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCo
 {
 	m_pComponents.resize(4);
 
-	//std::shared_ptr<CUIGameObject> pUIGameObject = std::make_shared<CUIGameObject>();
-	//pUIGameObject->Init(pd3dDevice, pd3dCommandList, pDescriptorHeap, XMFLOAT2(10.f, 10.f), L"Image/SlideBar.dds");
-	//pUIGameObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.9f, FRAME_BUFFER_HEIGHT * 0.5f));
-	//pUIGameObject->SetSize(XMFLOAT2(70.f, 700.f));
+	std::shared_ptr<CUIGameObject> pUIGameObject = std::make_shared<CUIGameObject>();
+	pUIGameObject->Init(pd3dDevice, pd3dCommandList, pDescriptorHeap, XMFLOAT2(10.f, 10.f), L"Image/SlideBar.dds");
+	pUIGameObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.9f, FRAME_BUFFER_HEIGHT * 0.5f));
+	pUIGameObject->SetSize(XMFLOAT2(70.f, 700.f));
 
-	//m_pUIGameObjects.push_back(pUIGameObject);
+	m_pUIGameObjects.push_back(pUIGameObject);
 
-	//pUIGameObject = std::make_shared<CUIGameObject>();
-	//pUIGameObject->Init(pd3dDevice, pd3dCommandList, pDescriptorHeap, XMFLOAT2(10.f, 10.f), L"Image/SlideBar.dds");
-	//pUIGameObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.9f, FRAME_BUFFER_HEIGHT * 0.5f));
-	//pUIGameObject->SetSize(XMFLOAT2(70.f, 700.f));
+	pUIGameObject = std::make_shared<CUIGameObject>();
+	pUIGameObject->Init(pd3dDevice, pd3dCommandList, pDescriptorHeap, XMFLOAT2(10.f, 10.f), L"Image/Button.dds");
+	pUIGameObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.9f, FRAME_BUFFER_HEIGHT * 0.28f));
+	pUIGameObject->SetSize(XMFLOAT2(100.f, 100.f));
 
+	m_pUIGameObjects.push_back(pUIGameObject);
 	//m_pBarGaugeUI = std::make_shared<CBarUIGameObject>();
 	//m_pBarGaugeUI->Init(pd3dDevice, pd3dCommandList, pDescriptorHeap, XMFLOAT2(10.f, 10.f), L"Image/ValueBar.dds", L"Image/Gradation.dds");
 	//m_pBarGaugeUI->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.9f, FRAME_BUFFER_HEIGHT * 0.5f));
@@ -26,21 +27,26 @@ void CVelocityGaugeUIGameObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCo
 
 void CVelocityGaugeUIGameObject::Animate(float fTimeElapsed)
 {
-	for(int i = 0; i < m_pUIGameObjects.size(); i++)
-	if (m_pUIGameObjects[i])
-		m_pUIGameObjects[i]->Animate(fTimeElapsed);
+	for (int i = 0; i < m_pUIGameObjects.size(); i++)
+	{
+		if (m_pUIGameObjects[i])
+			m_pUIGameObjects[i]->Animate(fTimeElapsed);
+	}
 
 }
 
 void CVelocityGaugeUIGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
 {
 	for (int i = 0; i < m_pUIGameObjects.size(); i++)
+	{
 		if (m_pUIGameObjects[i])
 			m_pUIGameObjects[i]->Render(pd3dCommandList, pCamera, pxmf4x4World);
+	}
 }
 
 
 void CVelocityGaugeUIGameObject::SetBarValue(float fTotalBarValue, float fCurrentBarValue)
 {
-
+	float fValue = fCurrentBarValue / fTotalBarValue;
+	m_pUIGameObjects[1]->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.9f, FRAME_BUFFER_HEIGHT * 0.28f + 500.f * fValue));
 }

@@ -31,7 +31,11 @@ cbuffer cbGameObjectInfo : register(b2)
 #define MATERIAL_DETAIL_NORMAL_MAP	0x40
 
 #include "Light.hlsl"
-Texture2D gtxtTexture[7] : register(t6); //Base, Alpha, Detail0, Detail1, Detail2
+Texture2D gtxtTexture0 : register(t6);
+Texture2D gtxtTexture1 : register(t7);
+Texture2D gtxtTexture2 : register(t8);
+Texture2D gtxtTexture3 : register(t9);
+Texture2D gtxtTexture4 : register(t10);
 
 SamplerState gssWrap : register(s0);
 
@@ -56,14 +60,14 @@ struct VS_TERRAIN_OUTPUT
 
 float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
 {
-	float4 cBaseTexColor = gtxtTexture[0].Sample(gssWrap, input.uv0);
+	float4 cBaseTexColor = gtxtTexture0.Sample(gssWrap, input.uv0);
 	//	float fAlpha = gtxtTerrainAlphaTexture.Sample(gSamplerState, input.uv0);
-	float fAlpha = gtxtTexture[1].Sample(gssWrap, input.uv0).w;
+	float fAlpha = gtxtTexture1.Sample(gssWrap, input.uv0).w;
 
 	float4 cDetailTexColors[3];
-	cDetailTexColors[0] = gtxtTexture[2].Sample(gssWrap, input.uv1 * 2.0f);
-	cDetailTexColors[1] = gtxtTexture[3].Sample(gssWrap, input.uv1 * 0.125f);
-	cDetailTexColors[2] = gtxtTexture[4].Sample(gssWrap, input.uv1 * 10.f);
+	cDetailTexColors[0] = gtxtTexture2.Sample(gssWrap, input.uv1 * 2.0f);
+	cDetailTexColors[1] = gtxtTexture3.Sample(gssWrap, input.uv1 * 0.125f);
+	cDetailTexColors[2] = gtxtTexture4.Sample(gssWrap, input.uv1 * 10.f);
 
 	float4 cColor = cBaseTexColor * cDetailTexColors[0];
 	cColor += lerp(cDetailTexColors[1] * 0.25f, cDetailTexColors[2], 1.0f - fAlpha);

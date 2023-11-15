@@ -171,41 +171,61 @@ void CMaterialsComponent::LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12
 		else if (strToken == "<AlbedoMap>:")
 		{
 			if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_ALBEDO_MAP, 3, iIndex, pInFile, pTextureLoader))
+			{
+				CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 3, 1, 0); // 수정 필요
 				iIndex++;
+			}
 		}
 		else if (strToken == "<SpecularMap>:")
 		{
 			if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_SPECULAR_MAP, 4, iIndex, pInFile, pTextureLoader))
+			{
+				CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 4, 1, 0); // 수정 필요
 				iIndex++;
+			}
 		}
 		else if (strToken == "<NormalMap>:")
 		{
-			if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_NORMAL_MAP, 5, iIndex, pInFile, pTextureLoader))
-				iIndex++;
+			//if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_NORMAL_MAP, 5, iIndex, pInFile, pTextureLoader))
+			//{
+			//	CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 5, 1, 0); // 수정 필요
+			//	iIndex++;
+			//}
 		}
 		else if (strToken == "<MetallicMap>:")
 		{
-			if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_METALLIC_MAP, 6, iIndex, pInFile, pTextureLoader))
-				iIndex++;
+			//if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_METALLIC_MAP, 6, iIndex, pInFile, pTextureLoader))
+			//{
+			//	CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 6, 1, 0); // 수정 필요
+			//	iIndex++;
+			//}
 		}
 		else if (strToken == "<EmissionMap>:")
 		{
-			if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_EMISSION_MAP, 7, iIndex, pInFile, pTextureLoader))
-				iIndex++;
+			//if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_EMISSION_MAP, 7, iIndex, pInFile, pTextureLoader))
+			//{
+			//	CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 7, 1, 0); // 수정 필요
+			//	iIndex++;
+			//}
 		}
 		else if (strToken == "<DetailAlbedoMap>:")
 		{
-			if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_DETAIL_ALBEDO_MAP, 8, iIndex, pInFile, pTextureLoader))
-				iIndex++;
+			//if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_DETAIL_ALBEDO_MAP, 8, iIndex, pInFile, pTextureLoader))
+			//{
+			//	CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 8, 1, 0); // 수정 필요
+			//	iIndex++;
+			//}
 		}
-		else if (strToken == "<DetailNormalMap>:")
-		{
-			if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_DETAIL_NORMAL_MAP, 9, iIndex, pInFile, pTextureLoader))
-				iIndex++;
-		}
+		//else if (strToken == "<DetailNormalMap>:")
+		//{
+		//	if (m_MaterialDatas[nDatas]->LoadTextureFromFile(pd3dDevice, pd3dCommandList, pDescriptorHeap, MATERIAL_DETAIL_NORMAL_MAP, 9, iIndex, pInFile, pTextureLoader))
+		//	{
+		//		CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 3, 1, 0); // 수정 필요
+		//		iIndex++;
+		//	}
+		//}
 		else if (strToken == "</Materials>")
 		{
-			CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 3, iIndex, 0); // 수정 필요
 			break;
 		}
 	}

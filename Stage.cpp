@@ -24,22 +24,46 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 {
     // 루트 시그니쳐 생성
 
-	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[2];
+	D3D12_DESCRIPTOR_RANGE pd3dDescriptorRanges[6];
 
 	pd3dDescriptorRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	pd3dDescriptorRanges[0].NumDescriptors = 7;
+	pd3dDescriptorRanges[0].NumDescriptors = 1;
 	pd3dDescriptorRanges[0].BaseShaderRegister = 6; //t6: gtxtAlbedoTexture
 	pd3dDescriptorRanges[0].RegisterSpace = 0;
 	pd3dDescriptorRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	pd3dDescriptorRanges[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	pd3dDescriptorRanges[1].NumDescriptors = 1;
-	pd3dDescriptorRanges[1].BaseShaderRegister = 13; //t13: Buffer
+	pd3dDescriptorRanges[1].BaseShaderRegister = 7; //t7: gtxtAlbedoTexture
 	pd3dDescriptorRanges[1].RegisterSpace = 0;
 	pd3dDescriptorRanges[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+	pd3dDescriptorRanges[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[2].NumDescriptors = 1;
+	pd3dDescriptorRanges[2].BaseShaderRegister = 8; //t8: gtxtAlbedoTexture
+	pd3dDescriptorRanges[2].RegisterSpace = 0;
+	pd3dDescriptorRanges[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	D3D12_ROOT_PARAMETER pd3dRootParameters[7];
+	pd3dDescriptorRanges[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[3].NumDescriptors = 1;
+	pd3dDescriptorRanges[3].BaseShaderRegister = 9; //t9: gtxtAlbedoTexture
+	pd3dDescriptorRanges[3].RegisterSpace = 0;
+	pd3dDescriptorRanges[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	pd3dDescriptorRanges[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[4].NumDescriptors = 1;
+	pd3dDescriptorRanges[4].BaseShaderRegister = 10; //t10: gtxtAlbedoTexture
+	pd3dDescriptorRanges[4].RegisterSpace = 0;
+	pd3dDescriptorRanges[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	pd3dDescriptorRanges[5].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	pd3dDescriptorRanges[5].NumDescriptors = 1;
+	pd3dDescriptorRanges[5].BaseShaderRegister = 13; //t13: Buffer
+	pd3dDescriptorRanges[5].RegisterSpace = 0;
+	pd3dDescriptorRanges[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+
+	D3D12_ROOT_PARAMETER pd3dRootParameters[11];
 
 	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	pd3dRootParameters[0].Descriptor.ShaderRegister = 1; //Camera
@@ -67,16 +91,36 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 	pd3dRootParameters[4].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[1]);
 	pd3dRootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-	pd3dRootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	pd3dRootParameters[5].Descriptor.ShaderRegister = 12; //Framework Info
-	pd3dRootParameters[5].Descriptor.RegisterSpace = 0;
+	pd3dRootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pd3dRootParameters[5].DescriptorTable.NumDescriptorRanges = 1;
+	pd3dRootParameters[5].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[2]);
 	pd3dRootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-	pd3dRootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	pd3dRootParameters[6].Constants.Num32BitValues = 16; //Texture Animation (4x4) Matrix
-	pd3dRootParameters[6].Constants.ShaderRegister = 5; //
-	pd3dRootParameters[6].Constants.RegisterSpace = 0;
+	pd3dRootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pd3dRootParameters[6].DescriptorTable.NumDescriptorRanges = 1;
+	pd3dRootParameters[6].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[3]);
 	pd3dRootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pd3dRootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pd3dRootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
+	pd3dRootParameters[7].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[4]);
+	pd3dRootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pd3dRootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	pd3dRootParameters[8].DescriptorTable.NumDescriptorRanges = 1;
+	pd3dRootParameters[8].DescriptorTable.pDescriptorRanges = &(pd3dDescriptorRanges[5]);
+	pd3dRootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pd3dRootParameters[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	pd3dRootParameters[9].Descriptor.ShaderRegister = 12; //Framework Info
+	pd3dRootParameters[9].Descriptor.RegisterSpace = 0;
+	pd3dRootParameters[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	pd3dRootParameters[10].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	pd3dRootParameters[10].Constants.Num32BitValues = 16; //Texture Animation (4x4) Matrix
+	pd3dRootParameters[10].Constants.ShaderRegister = 5; //
+	pd3dRootParameters[10].Constants.RegisterSpace = 0;
+	pd3dRootParameters[10].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 
 	D3D12_STATIC_SAMPLER_DESC pd3dSamplerDescs[2];
@@ -193,7 +237,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
     CreateGraphicsRootSignature(pd3dDevice);
 
 	m_pd3dDescriptorHeap = std::make_unique<CDescriptorHeap>();
-	m_pd3dDescriptorHeap->CreateCbcSrvDescriptorHeap(pd3dDevice, 0, 200);
+	m_pd3dDescriptorHeap->CreateCbcSrvDescriptorHeap(pd3dDevice, 0, 300);
 
 	m_pTextureLoader = std::make_shared<CTextureLoader>();
 
@@ -340,9 +384,9 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	{
 		std::shared_ptr<CUIGameObject> pUIObject = std::make_shared<CUIGameObject>();
 
-		pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/ScoreFrame.dds");
+		pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/IceScoreFrame2.dds");
 		pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
-		pUIObject->SetSize(XMFLOAT2(500.f, 100.f));
+		pUIObject->SetSize(XMFLOAT2(500.f, 180.f));
 		pUIObject->AddShaderComponent(pUIShaderComponent);
 		m_pUIObjects.push_back(pUIObject);
 	}
@@ -374,6 +418,15 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	pUIObject->AddShaderComponent(pUIShaderComponent);
 	pUIObject->SetEnable(false);
 	m_pUIObjects.push_back(pUIObject);
+
+
+	//pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/SlideBar.dds");
+	//pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
+	//pUIObject->SetSize(XMFLOAT2(180.f, 180.f));
+	//pUIObject->AddShaderComponent(pUIShaderComponent);
+	//pUIObject->SetEnable(true);
+	//m_pUIObjects.push_back(pUIObject);
+
 
 	std::shared_ptr<CVelocityGaugeUIGameObject> pUIVelocityObject = std::make_shared<CVelocityGaugeUIGameObject>();
 	pUIVelocityObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get());
@@ -417,7 +470,7 @@ bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 		if (pKeysBuffer[VK_SPACE] & 0xF0) // 불렛 높이 지정
 		{
 			m_pPlayersGameObject->Acceleration(fTimeElapsed);
-			//dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, m_pPlayersGameObject->GetBombGameObject()->GetVelocity().y);
+			dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, m_pPlayersGameObject->GetBombGameObject()->GetVelocity().y);
 		}
 		else
 		{
@@ -425,7 +478,7 @@ bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 			{
 				// Terrain 높이 체크
 				m_pPlayersGameObject->MoveBomb(0.001f, m_pPlayersGameObject->GetLookVector());
-				//dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, 0.f);
+				dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, 0.f);
 			}
 		}
 

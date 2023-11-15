@@ -36,7 +36,11 @@ cbuffer cbGameObjectInfo : register(b2)
 #define MATERIAL_DETAIL_ALBEDO_MAP	0x20
 #define MATERIAL_DETAIL_NORMAL_MAP	0x40
 
-Texture2D gtxtTexture[7] : register(t6);
+Texture2D gtxtTextureAlbedo : register(t6);
+Texture2D gtxtTextureSpecular : register(t7);
+Texture2D gtxtTextureNormal : register(t8);
+Texture2D gtxtTextureMetallic : register(t9);
+Texture2D gtxtTextureEmission : register(t10);
 
 SamplerState gssWrap : register(s0);
 
