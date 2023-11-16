@@ -80,7 +80,8 @@ float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
 		else if (fAlpha > 0.8975f) cColor = cDetailTexColors[0];
 		else cColor = cDetailTexColors[1];
 	*/
+	float4 uvs[MAX_LIGHTS];
 	float3 normalW = normalize(input.normalW);
-	float4 cIllumination = Lighting(input.positionW, normalW);
+	float4 cIllumination = Lighting(input.positionW, normalW, false, uvs);
 	return	(lerp(cColor, cIllumination, 0.2f));
 }

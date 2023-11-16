@@ -61,6 +61,8 @@ using namespace DirectX::PackedVector;
 
 using Microsoft::WRL::ComPtr;
 
+#define _WITH_RASTERIZER_DEPTH_BIAS
+
 #define FRAME_BUFFER_WIDTH		1920
 #define FRAME_BUFFER_HEIGHT		1080
 
@@ -71,6 +73,8 @@ using Microsoft::WRL::ComPtr;
 #define DIRECTIONAL_LIGHT	3
 
 #define MAX_LIGHT 2
+
+#define MAX_DEPTH_TEXTURES		MAX_LIGHT
 
 #define MAX_PARTICLES				900000
 

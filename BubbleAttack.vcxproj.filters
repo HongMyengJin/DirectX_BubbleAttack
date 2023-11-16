@@ -238,6 +238,12 @@
     <ClInclude Include="TextureLoader.h">
       <Filter>Global\TextureLoad</Filter>
     </ClInclude>
+    <ClInclude Include="DepthRenderShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapShaderComponent.h">
+      <Filter>Component\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -396,6 +402,12 @@
     <ClCompile Include="TextureLoader.cpp">
       <Filter>Global\TextureLoad</Filter>
     </ClCompile>
+    <ClCompile Include="DepthRenderShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapShaderComponent.cpp">
+      <Filter>Component\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BubbleAttack.rc">
@@ -466,6 +478,15 @@
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
     <FxCompile Include="UIObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowMapObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowMapObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="DepthWritePixelShader.hlsl">
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
   </ItemGroup>

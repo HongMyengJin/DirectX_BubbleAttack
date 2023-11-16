@@ -44,7 +44,8 @@ struct GS_OUT
 
 float4 PS(GS_OUT input) : SV_Target
 {
-	float4 cIllumination = Lighting(input.posW, input.normalW);
+	float4 uvs[MAX_LIGHTS];
+	float4 cIllumination = Lighting(input.posW, input.normalW, false, uvs);
 	float3 uvw = float3(input.uv, input.primID % 4); //
 	float4 cTexture = gtxtTextureAlbedo.Sample(gssWrap, uvw.xy);
 	float4 cColor = cIllumination * cTexture;
