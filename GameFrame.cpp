@@ -11,6 +11,7 @@ CBubbleAttackGameFrame::~CBubbleAttackGameFrame()
 void CBubbleAttackGameFrame::Init(HINSTANCE hInstance, HWND hMainWnd)
 {
 	CreateFrame(hInstance, hMainWnd);
+	m_bStart = true;
 	//m_pCurrentScene = std::make_unique<CScene>();
 	//m_pCurrentScene->BuildObjects(m_pd3dDevice.Get());
 }
@@ -65,11 +66,15 @@ void CBubbleAttackGameFrame::DestroyFrame()
 
 void CBubbleAttackGameFrame::UpdateFrame()
 {
+
 	m_Timer.Tick();
 
 	HRESULT hResult = m_pd3dCommandAllocator->Reset();
 	hResult = m_pd3dCommandList->Reset(m_pd3dCommandAllocator.Get(), nullptr);
 	// 명령 할당자, 리스트 리셋
+
+	//Rendering
+	m_pSceneManager->PreRenderCurrentScene(m_pd3dCommandList.Get());
 
 	D3D12_RESOURCE_BARRIER d3dResourceBarrier;
 	::ZeroMemory(&d3dResourceBarrier, sizeof(D3D12_RESOURCE_BARRIER));
@@ -107,8 +112,7 @@ void CBubbleAttackGameFrame::UpdateFrame()
 	m_pSceneManager->ProcessInputCurrentScene(m_hWnd, m_Timer.GetTimeElapsed()); // 현재 씬의 ProcessInput(입력)
 
 	m_pSceneManager->UpdateCurrentScene(m_Timer.GetTimeElapsed());
-	//Rendering
-	m_pSceneManager->PreRenderCurrentScene(m_pd3dCommandList.Get());
+
 
 	UpdateShaderVariables();
 
@@ -382,7 +386,7 @@ void CBubbleAttackGameFrame::UpdateShaderVariables()
 	m_pcbMappedFrameworkInfo->m_nMaxFlareType2Particles = 15 * 1.5f;
 
 	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbFrameworkInfo->GetGPUVirtualAddress();
-	m_pd3dCommandList->SetGraphicsRootConstantBufferView(9, d3dGpuVirtualAddress);
+	m_pd3dCommandList->SetGraphicsRootConstantBufferView(10, d3dGpuVirtualAddress);
 }
 
 void CBubbleAttackGameFrame::ReleaseShaderVariables()

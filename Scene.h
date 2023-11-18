@@ -30,7 +30,7 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12RootSignature>		m_pd3dGraphicsRootsignature; // 루트 시그니쳐의 인터페이스 포인터
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>		m_pd3dPipelineState; // 파이프라인 상태를 나타내는 인터페이스 포인터
 
-	std::unique_ptr<CPlayerGameObject>				m_pPlayersGameObject;
-	std::unique_ptr<CLight>							m_pLightObject;
+	std::shared_ptr<CPlayerGameObject>				m_pPlayersGameObject;
+	std::shared_ptr<CLight>							m_pLightObject;
 
 };

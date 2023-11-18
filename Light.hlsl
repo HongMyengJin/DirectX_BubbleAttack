@@ -12,8 +12,9 @@
 
 #define MAX_DEPTH_TEXTURES		MAX_LIGHTS
 
-Texture2D<float> gtxtDepthTextures[MAX_DEPTH_TEXTURES] : register(t12);
+Texture2D<float> gtxtDepthTextures[MAX_DEPTH_TEXTURES] : register(t17);
 SamplerComparisonState gssComparisonPCFShadow : register(s2);
+
 
 struct LIGHT
 {
@@ -146,23 +147,23 @@ float4 Lighting(float3 vPosition, float3 vNormal, bool bShadow, float4 uvs[MAX_L
 	{
 		if (gLights[i].m_bEnable)
 		{
-			float fShadowFactor = 1.0f;
-#ifdef _WITH_PCF_FILTERING
-			if (bShadow) fShadowFactor = Compute3x3ShadowFactor(uvs[i].xy / uvs[i].ww, uvs[i].z / uvs[i].w, i);
-#else
+			float fShadowFactor = 0.f;
+//#ifdef _WITH_PCF_FILTERING
+//			if (bShadow) fShadowFactor = Compute3x3ShadowFactor(uvs[i].xy / uvs[i].ww, uvs[i].z / uvs[i].w, i);
+//#else
 			if (bShadow) fShadowFactor = gtxtDepthTextures[i].SampleCmpLevelZero(gssComparisonPCFShadow, uvs[i].xy / uvs[i].ww, uvs[i].z / uvs[i].w).r;
-#endif
+
 			if (gLights[i].m_nType == DIRECTIONAL_LIGHT)
 			{
-				cColor += DirectionalLight(i, vNormal, vToCamera);
+				cColor += DirectionalLight(i, vNormal, vToCamera) * fShadowFactor;
 			}
 			else if (gLights[i].m_nType == POINT_LIGHT)
 			{
-				cColor += PointLight(i, vPosition, vNormal, vToCamera);
+				cColor += PointLight(i, vPosition, vNormal, vToCamera) * fShadowFactor;
 			}
 			else if (gLights[i].m_nType == SPOT_LIGHT)
 			{
-				cColor += SpotLight(i, vPosition, vNormal, vToCamera);
+				cColor += SpotLight(i, vPosition, vNormal, vToCamera) * fShadowFactor;
 			}
 		}
 	}

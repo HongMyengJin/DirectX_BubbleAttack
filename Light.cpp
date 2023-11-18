@@ -2,14 +2,20 @@
 
 void LightDatas::Init()
 {
-	m_xmf4GlobalAmbient = XMFLOAT4(0.15f, 0.15f, 0.15f, 1.0f);
+	m_xmf4GlobalAmbient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
 
 	m_pLightsDatas[0].m_bEnable = true;
 	m_pLightsDatas[0].m_nType = DIRECTIONAL_LIGHT;
-	m_pLightsDatas[0].m_xmf4Ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	m_pLightsDatas[0].m_xmf4Diffuse = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	m_pLightsDatas[0].m_xmf4Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.f);
-	m_pLightsDatas[0].m_xmf3Direction = XMFLOAT3(0.f, -0.9f, 0.0f);
+	//m_pLightsDatas[0].m_xmf4Ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	//m_pLightsDatas[0].m_xmf4Diffuse = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	//m_pLightsDatas[0].m_xmf4Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.f);
+	//m_pLightsDatas[0].m_xmf3Direction = XMFLOAT3(0.f, -0.9f, 0.0f);
+	m_pLightsDatas[0].m_fRange = 2000.f;
+	m_pLightsDatas[0].m_xmf4Ambient = XMFLOAT4(0.f, 0.f, 0.f, 1.0f);
+	m_pLightsDatas[0].m_xmf4Diffuse = XMFLOAT4(0.73f, 0.73f, 0.73f, 1.0f);
+	m_pLightsDatas[0].m_xmf4Specular = XMFLOAT4(0.3f, 0.3f, 0.3f, 0.f);
+	m_pLightsDatas[0].m_xmf3Direction = XMFLOAT3(0.f,-1.f, 0.0f);
+	m_pLightsDatas[0].m_xmf3Position = XMFLOAT3(-(_PLANE_WIDTH * 0.5f), 512.f, 0.f);
 	m_pLightsDatas[1].m_bEnable = false;
 	m_pLightsDatas[1].m_nType = SPOT_LIGHT;
 	m_pLightsDatas[1].m_fRange = 300.f;

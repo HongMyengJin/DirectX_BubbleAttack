@@ -73,5 +73,5 @@ void CRippleWaterObject::UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCo
 {
 	XMFLOAT4X4 xmf4x4WaterAnimation;
 	XMStoreFloat4x4(&xmf4x4WaterAnimation, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4WaterAnimation)));
-	pd3dCommandList->SetGraphicsRoot32BitConstants(10, 16, &xmf4x4WaterAnimation, 0);
+	pd3dCommandList->SetGraphicsRoot32BitConstants(11, 16, &xmf4x4WaterAnimation, 0);
 }

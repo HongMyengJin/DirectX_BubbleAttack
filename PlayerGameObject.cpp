@@ -28,14 +28,14 @@ void CPlayerGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList
 
 void CPlayerGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
 {
-	CGameObject::PrepareRender(pd3dCommandList);
+	//CGameObject::PrepareRender(pd3dCommandList);
 	CGameObject::Render(pd3dCommandList, pCamera, pxmf4x4World);
 
-	if (m_pPlayerBombGameObject)
-	{
-		m_pPlayerBombGameObject->PrepareRender(pd3dCommandList);
-		m_pPlayerBombGameObject->Render(pd3dCommandList, pCamera, NULL);
-	}
+	//if (m_pPlayerBombGameObject)
+	//{
+	//	m_pPlayerBombGameObject->PrepareRender(pd3dCommandList);
+	//	m_pPlayerBombGameObject->Render(pd3dCommandList, pCamera, NULL);
+	//}
 }
 
 void CPlayerGameObject::LoadPlayerFrameData()

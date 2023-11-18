@@ -11,6 +11,8 @@
 #include "MonsterGameObject.h"
 #include "VelocityGaugeUIGameObject.h"
 #include "TextureLoader.h"
+#include "ShadowMapShaderComponent.h"
+#include "DepthRenderShaderComponent.h"
 
 class CStage : public CScene
 {
@@ -48,6 +50,9 @@ protected:
 	std::vector<std::shared_ptr<CUINumberGameObject>>		m_pUINumberObjects;
 	std::vector<std::shared_ptr<CUIGameObject>>				m_pUIObjects;
 	std::shared_ptr<CTextureLoader>							m_pTextureLoader;
+
+	std::shared_ptr<CShadowMapShaderComponent>				m_pShadowShader;
+	std::shared_ptr<CDepthRenderShaderComponent>			m_pDepthRenderShader;
 
 	UINT													m_iPlayerAttack = 0;
 	UINT													m_iMonsterAttack = 0;

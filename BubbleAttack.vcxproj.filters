@@ -68,6 +68,30 @@
     <Filter Include="GameObject\UI\BarUI">
       <UniqueIdentifier>{9453c602-01eb-4d2f-b870-73b626c04819}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Shader\ObjectShader">
+      <UniqueIdentifier>{8c9af0eb-7306-4a71-b0c2-d01a0e2144d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Shader\ObjectShader\TerrainShader">
+      <UniqueIdentifier>{9c0d939c-7773-4a14-a555-c873f3756f27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Shader\ObjectShader\ShadowShader">
+      <UniqueIdentifier>{aa650cfb-6f64-4bca-b4ae-bc0badf169ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Shader\ObjectShader\UIShader">
+      <UniqueIdentifier>{35805ca7-92d8-4ea7-b60c-685b3e1ed4e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Shader\ObjectShader\ParticleShader">
+      <UniqueIdentifier>{1aeef64b-62d1-43fe-8165-da90e071a728}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Shader\ObjectShader\TextureRectShader">
+      <UniqueIdentifier>{066ce9e1-056e-481e-97b0-7ebbbcbb0a55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Shader\ObjectShader\SkyBoxShader">
+      <UniqueIdentifier>{e4d16a43-8b94-4a55-b8c6-29f3406bca9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Shader\ObjectShader\CubeMappingShader">
+      <UniqueIdentifier>{bab71d04-51f9-4a62-890d-ba42abb411a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -76,23 +100,14 @@
     <ClInclude Include="MaterialComponent.h">
       <Filter>Component\Material</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectShaderComponent.h">
-      <Filter>Component\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleMeshComponent.h">
       <Filter>Component\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleObjectShaderComponent.h">
-      <Filter>Component\Shader</Filter>
     </ClInclude>
     <ClInclude Include="ShaderComponent.h">
       <Filter>Component\Shader</Filter>
     </ClInclude>
     <ClInclude Include="SkyBoxMeshComponent.h">
       <Filter>Component\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyBoxShaderComponent.h">
-      <Filter>Component\Shader</Filter>
     </ClInclude>
     <ClInclude Include="TerrainMeshComponent.h">
       <Filter>Component\Mesh</Filter>
@@ -105,9 +120,6 @@
     </ClInclude>
     <ClInclude Include="TransformComponent.h">
       <Filter>Component\Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureRectMeshShaderComponent.h">
-      <Filter>Component\Shader</Filter>
     </ClInclude>
     <ClInclude Include="TextureRectMeshComponent.h">
       <Filter>Component\Mesh</Filter>
@@ -181,15 +193,6 @@
     <ClInclude Include="Light.h">
       <Filter>Global\Light</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainObjectShaderComponent.h">
-      <Filter>Component\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="RippleWaterObjectShaderComponent.h">
-      <Filter>Component\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="UIObjectShaderComponent.h">
-      <Filter>Component\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="UIMesh.h">
       <Filter>Component\Mesh</Filter>
     </ClInclude>
@@ -238,11 +241,32 @@
     <ClInclude Include="TextureLoader.h">
       <Filter>Global\TextureLoad</Filter>
     </ClInclude>
+    <ClInclude Include="RippleWaterObjectShaderComponent.h">
+      <Filter>Component\Shader\ObjectShader\TerrainShader</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainObjectShaderComponent.h">
+      <Filter>Component\Shader\ObjectShader\TerrainShader</Filter>
+    </ClInclude>
     <ClInclude Include="DepthRenderShaderComponent.h">
-      <Filter>Component\Shader</Filter>
+      <Filter>Component\Shader\ObjectShader\ShadowShader</Filter>
     </ClInclude>
     <ClInclude Include="ShadowMapShaderComponent.h">
-      <Filter>Component\Shader</Filter>
+      <Filter>Component\Shader\ObjectShader\ShadowShader</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObjectShaderComponent.h">
+      <Filter>Component\Shader\ObjectShader\UIShader</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectShaderComponent.h">
+      <Filter>Component\Shader\ObjectShader</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleObjectShaderComponent.h">
+      <Filter>Component\Shader\ObjectShader\ParticleShader</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRectMeshShaderComponent.h">
+      <Filter>Component\Shader\ObjectShader\TextureRectShader</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBoxShaderComponent.h">
+      <Filter>Component\Shader\ObjectShader\SkyBoxShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -261,23 +285,14 @@
     <ClCompile Include="HeightMapGridMesh.cpp">
       <Filter>Component\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="ParticleMeshComponent.cpp">
       <Filter>Component\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleObjectShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
     </ClCompile>
     <ClCompile Include="ShaderComponent.cpp">
       <Filter>Component\Shader</Filter>
     </ClCompile>
     <ClCompile Include="SkyBoxMeshComponent.cpp">
       <Filter>Component\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyBoxShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
     </ClCompile>
     <ClCompile Include="TerrainMeshComponent.cpp">
       <Filter>Component\Mesh</Filter>
@@ -296,9 +311,6 @@
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Component\Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureRectMeshShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
     </ClCompile>
     <ClCompile Include="TextureRectMeshComponent.cpp">
       <Filter>Component\Mesh</Filter>
@@ -344,15 +356,6 @@
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Global\Light</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainObjectShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="RippleWaterObjectShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="UIObjectShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
     </ClCompile>
     <ClCompile Include="UIMesh.cpp">
       <Filter>Component\Mesh</Filter>
@@ -402,11 +405,32 @@
     <ClCompile Include="TextureLoader.cpp">
       <Filter>Global\TextureLoad</Filter>
     </ClCompile>
+    <ClCompile Include="RippleWaterObjectShaderComponent.cpp">
+      <Filter>Component\Shader\ObjectShader\TerrainShader</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainObjectShaderComponent.cpp">
+      <Filter>Component\Shader\ObjectShader\TerrainShader</Filter>
+    </ClCompile>
     <ClCompile Include="DepthRenderShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
+      <Filter>Component\Shader\ObjectShader\ShadowShader</Filter>
     </ClCompile>
     <ClCompile Include="ShadowMapShaderComponent.cpp">
-      <Filter>Component\Shader</Filter>
+      <Filter>Component\Shader\ObjectShader\ShadowShader</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObjectShaderComponent.cpp">
+      <Filter>Component\Shader\ObjectShader\UIShader</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectShaderComponent.cpp">
+      <Filter>Component\Shader\ObjectShader</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleObjectShaderComponent.cpp">
+      <Filter>Component\Shader\ObjectShader\ParticleShader</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureRectMeshShaderComponent.cpp">
+      <Filter>Component\Shader\ObjectShader\TextureRectShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBoxShaderComponent.cpp">
+      <Filter>Component\Shader\ObjectShader\SkyBoxShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -487,6 +511,12 @@
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
     <FxCompile Include="DepthWritePixelShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="CubeMappingObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="CubeMappingObjectVertexShader.hlsl">
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
   </ItemGroup>

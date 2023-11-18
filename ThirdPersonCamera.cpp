@@ -28,7 +28,7 @@ void CThirdPersonCamera::Update(CGameObject* pObject, XMFLOAT3& xmf3LookAt, floa
 		}
 	}
 
-	GenerateProjectionMatrix(1.01f, 5000.0f, (float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT)), 60.f);
+	GenerateProjectionMatrix(1.01f, 5000.0f, (float(FRAME_BUFFER_WIDTH) / float(FRAME_BUFFER_HEIGHT)), 100.f);
 	RegenerateViewMatrix();
 }
 

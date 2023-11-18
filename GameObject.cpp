@@ -134,7 +134,7 @@ void CGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pC
 {
 	if (!m_bEnable)
 		return;
-	m_pComponents[UINT(ComponentType::ComponentTransform)]->Render(pd3dCommandList);
+		m_pComponents[UINT(ComponentType::ComponentTransform)]->Render(pd3dCommandList);
 
 	UINT nMaterial = static_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->m_nMaterials;
 	for (int i = 0; i < nMaterial; i++)

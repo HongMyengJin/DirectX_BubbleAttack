@@ -30,7 +30,7 @@ struct CB_TOOBJECTSPACE
 	float4		f4Position;
 };
 
-cbuffer cbToLightSpace : register(b6)
+cbuffer cbToLightSpace : register(b3)
 {
 	CB_TOOBJECTSPACE gcbToLightSpaces[MAX_LIGHTS];
 };

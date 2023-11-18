@@ -44,6 +44,7 @@ public:
 	virtual void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList);
 
+	LightData GetLightData(int Iindex) { return m_pLightData->m_pLightsDatas[Iindex]; }
 	virtual void Release();
 private:
 	std::shared_ptr<LightDatas>							m_pLightData;

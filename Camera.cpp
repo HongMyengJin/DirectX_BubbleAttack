@@ -93,6 +93,14 @@ void CCamera::SetViewport(int xTopLeft, int yTopLeft, int nWidth, int nHeight, f
 	m_d3dViewport.MaxDepth = fMaxZ;
 }
 
+void CCamera::SetScissorRect(LONG xLeft, LONG yTop, LONG xRight, LONG yBottom)
+{
+	m_d3dScissorRect.left = xLeft;
+	m_d3dScissorRect.top = yTop;
+	m_d3dScissorRect.right = xRight;
+	m_d3dScissorRect.bottom = yBottom;
+}
+
 void CCamera::SetLookAt(CGameObject* pTargetObject, XMFLOAT3& xmf3LookAt)
 {
 	// 카메라의 위치, 쳐다볼 지점, 타겟 오브젝트 업벡터
@@ -101,6 +109,12 @@ void CCamera::SetLookAt(CGameObject* pTargetObject, XMFLOAT3& xmf3LookAt)
 	m_xmf3Right = XMFLOAT3(mtxLookAt._11, mtxLookAt._21, mtxLookAt._31);
 	m_xmf3Up = XMFLOAT3(mtxLookAt._12, mtxLookAt._22, mtxLookAt._32);
 	m_xmf3Look = XMFLOAT3(mtxLookAt._13, mtxLookAt._23, mtxLookAt._33);
+}
+
+void CCamera::SetViewportsAndScissorRects(ID3D12GraphicsCommandList* pd3dCommandList)
+{
+	pd3dCommandList->RSSetViewports(1, &m_d3dViewport);
+	pd3dCommandList->RSSetScissorRects(1, &m_d3dScissorRect);
 }
 
 void CCamera::SetPosition(XMFLOAT3 xmf3Position)
