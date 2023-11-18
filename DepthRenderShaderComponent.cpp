@@ -140,8 +140,8 @@ void CDepthRenderShaderComponent::PreRender(ID3D12GraphicsCommandList* pd3dComma
             }
 
             m_pDepthRenderCameras[j]->SetPosition(xmf3Position);
-            XMStoreFloat4x4(&m_pDepthRenderCameras[j]->Getxmf4x4View(), xmmtxLightView);
-            XMStoreFloat4x4(&m_pDepthRenderCameras[j]->Getxmf4x4Projection(), xmmtxProjection);
+            XMStoreFloat4x4(&m_pDepthRenderCameras[j]->m_xmf4x4View, xmmtxLightView);
+            XMStoreFloat4x4(&m_pDepthRenderCameras[j]->m_xmf4x4Projection, xmmtxProjection);
 
             XMMATRIX xmmtxToTexture = XMMatrixTranspose(xmmtxLightView * xmmtxProjection * m_xmProjectionToTexture);
             XMStoreFloat4x4(&m_pToLightSpaces->m_pToLightSpaces[j].m_xmf4x4ToTexture, xmmtxToTexture);
@@ -155,7 +155,7 @@ void CDepthRenderShaderComponent::PreRender(ID3D12GraphicsCommandList* pd3dComma
             pd3dCommandList->ClearRenderTargetView(m_pd3dRtvCPUDescriptorHandles[j], pfClearColor, 0, NULL);
             pd3dCommandList->ClearDepthStencilView(m_d3dDsvDescriptorCPUHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, NULL);
             pd3dCommandList->OMSetRenderTargets(1, &m_pd3dRtvCPUDescriptorHandles[j], TRUE, &m_d3dDsvDescriptorCPUHandle);
-
+            m_pDepthRenderCameras[j]->RegenerateViewMatrix();
             Render(pd3dCommandList, m_pDepthRenderCameras[j].get());
 
             ::SynchronizeResourceTransition(pd3dCommandList, pd3dTextureResource, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COMMON);
@@ -251,9 +251,9 @@ D3D12_RASTERIZER_DESC CDepthRenderShaderComponent::CreateRasterizerState()
     d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
     d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
     d3dRasterizerDesc.FrontCounterClockwise = FALSE;
-//#ifdef _WITH_RASTERIZER_DEPTH_BIAS
-//    d3dRasterizerDesc.DepthBias = 250000;
-//#endif
+#ifdef _WITH_RASTERIZER_DEPTH_BIAS
+    d3dRasterizerDesc.DepthBias = 250000;
+#endif
     d3dRasterizerDesc.DepthBiasClamp = 0.0f;
     d3dRasterizerDesc.SlopeScaledDepthBias = 1.0f;
     d3dRasterizerDesc.DepthClipEnable = TRUE;

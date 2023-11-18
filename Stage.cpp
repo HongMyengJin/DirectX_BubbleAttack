@@ -580,6 +580,7 @@ void CStage::AnimateObjects(float fTimeElapsed)
 
 void CStage::UpdateObjects(float fTimeElapsed)
 {
+
 	if (m_pCamera)
 		m_pCamera->Update(m_pPlayersGameObject.get(), m_pPlayersGameObject->GetPosition(), fTimeElapsed);
 	
@@ -634,9 +635,6 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 		m_pCamera->UpdateShaderVariables(pd3dCommandList);
 	}
 
-	if (m_pTerrainWater)
-		m_pTerrainWater->UpdateShaderVariables(pd3dCommandList);
-
 	if (m_pSkyBoxObject)
 	{
 		m_pSkyBoxObject->SetPosition(m_pCamera->GetPosition());
@@ -644,37 +642,39 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 		m_pSkyBoxObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 	}
 
-	if (m_pPlayersGameObject)
-	{
-		float xmfOffsetY = 10.f;
-		XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
-		m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x, xmfPosition.z) - 200.f, xmfPosition.z));
-		m_pPlayersGameObject->CGameObject::PrepareRender(pd3dCommandList);
-		m_pPlayersGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	}
+	//if (m_pPlayersGameObject)
+	//{
+	//	float xmfOffsetY = 10.f;
+	//	XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
+	//	m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x, xmfPosition.z) - 200.f, xmfPosition.z));
+	//	m_pPlayersGameObject->CGameObject::PrepareRender(pd3dCommandList);
+	//	m_pPlayersGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	//}
 
 
-	for (int i = 0; i < m_pMonsterObjects.size(); i++)
-	{
-		if (m_pMonsterObjects[i])
-		{
-			m_pMonsterObjects[i]->PrepareRender(pd3dCommandList);
-			m_pMonsterObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-		}
-	}
-	
+	//for (int i = 0; i < m_pMonsterObjects.size(); i++)
+	//{
+	//	if (m_pMonsterObjects[i])
+	//	{
+	//		m_pMonsterObjects[i]->PrepareRender(pd3dCommandList);
+	//		m_pMonsterObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	//	}
+	//}
+	//
+	//if (m_pTerrainWater)
+	//{
+	//	m_pTerrainWater->PrepareRender(pd3dCommandList);
+	//	m_pTerrainWater->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	//}
+
 
 	if (m_pTerrain)
 	{
 		m_pTerrain->PrepareRender(pd3dCommandList);
 		m_pTerrain->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 	}
+	
 
-	if (m_pTerrainWater)
-	{
-		m_pTerrainWater->PrepareRender(pd3dCommandList);
-		m_pTerrainWater->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	}
 
 	for (int i = 0; i < m_pEffectRectObjects.size(); i++)
 	{

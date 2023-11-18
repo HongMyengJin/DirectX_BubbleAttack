@@ -43,12 +43,12 @@ public:
 	void SetPosition(XMFLOAT3 xmf3Position);
 	XMFLOAT3 GetPosition();
 
-	XMFLOAT4X4	Getxmf4x4View() { return m_xmf4x4View;}
-	XMFLOAT4X4	Getxmf4x4Projection() { return m_xmf4x4Projection;}
+	XMFLOAT4X4&	Getxmf4x4View() { return m_xmf4x4View;}
+	XMFLOAT4X4&	Getxmf4x4Projection() { return m_xmf4x4Projection;}
 
 	void Release();
 
-protected:
+public:
 	XMFLOAT3													m_xmf3Position = XMFLOAT3(0.f, 0.f, 0.f);
 	XMFLOAT3													m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);;
 	XMFLOAT3													m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);;
