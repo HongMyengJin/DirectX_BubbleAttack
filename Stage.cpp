@@ -505,9 +505,9 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pShadowShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pDepthRenderShader->GetDepthFromLightMaterialComponent(), m_pd3dDescriptorHeap.get());
 
 
-	m_pShadowShader->AddGameObject(m_pPlayersGameObject);
-	m_pShadowShader->AddGameObject(m_pMonsterObjects[0]);
-	m_pShadowShader->AddGameObject(m_pGameObjects);
+	//m_pShadowShader->AddGameObject(m_pPlayersGameObject);
+	//m_pShadowShader->AddGameObject(m_pMonsterObjects[0]);
+	//m_pShadowShader->AddGameObject(m_pGameObjects);
 	m_pShadowShader->AddGameObject(m_pTerrain);
 }
 
