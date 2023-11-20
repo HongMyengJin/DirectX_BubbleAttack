@@ -31,7 +31,7 @@ void CRippleWaterObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandLis
 			xStart = x * (nBlockWidth - 1);
 			zStart = z * (nBlockLength - 1);
 			std::shared_ptr<CGridMeshComponent> pHeightMapGridMesh = std::make_shared<CGridMeshComponent>();
-			pHeightMapGridMesh->Init(pd3dDevice, pd3dCommandList, xStart, zStart, nBlockWidth, nBlockLength, xmf3Scale, xmf4Color, NULL);
+			pHeightMapGridMesh->Init(pd3dDevice, pd3dCommandList, xStart, zStart, nBlockWidth, nBlockLength, xmf3Scale, xmf4Color);
 			dynamic_cast<CTerrainMeshComponent*>(m_pComponents[UINT(ComponentType::ComponentMesh)].get())->SetMesh(x + (z * cxBlocks), pHeightMapGridMesh);
 		}
 	}

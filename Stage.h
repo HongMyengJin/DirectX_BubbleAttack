@@ -54,9 +54,11 @@ protected:
 	std::shared_ptr<CShadowMapShaderComponent>				m_pShadowShader;
 	std::shared_ptr<CDepthRenderShaderComponent>			m_pDepthRenderShader;
 
+	std::shared_ptr<CGameObject>							m_pGameObjects;
 	UINT													m_iPlayerAttack = 0;
 	UINT													m_iMonsterAttack = 0;
 	bool													m_bResult = false;
 
 	UCHAR													pPreKeysBuffer[256];
 };
+

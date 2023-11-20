@@ -26,6 +26,7 @@ void CTerrainObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	dynamic_cast<CTerrainMeshComponent*>(m_pComponents[UINT(ComponentType::ComponentMesh)].get())->ResizeMesh(cxBlocks * czBlocks);
 
+	int iIndex = 0;
 	CHeightMapGridMesh* pHeightMapGridMesh = NULL;
 	for (int z = 0, zStart = 0; z < czBlocks; z++)
 	{
@@ -35,7 +36,7 @@ void CTerrainObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 			zStart = z * (nBlockLength - 1);
 			std::shared_ptr<CHeightMapGridMesh> pHeightMapGridMesh = std::make_shared<CHeightMapGridMesh>();
 			pHeightMapGridMesh->Init(pd3dDevice, pd3dCommandList, xStart, zStart, nBlockWidth, nBlockLength, xmf3Scale, xmf4Color, m_pHeightMapImage.get());
-			dynamic_cast<CTerrainMeshComponent*>(m_pComponents[UINT(ComponentType::ComponentMesh)].get())->SetMesh(x + (z * cxBlocks), pHeightMapGridMesh);
+			dynamic_cast<CTerrainMeshComponent*>(m_pComponents[UINT(ComponentType::ComponentMesh)].get())->SetMesh(iIndex++, pHeightMapGridMesh);
 		}
 	}
 

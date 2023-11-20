@@ -125,7 +125,7 @@ void CDepthRenderShaderComponent::PreRender(ID3D12GraphicsCommandList* pd3dComma
             if (stLightData.m_nType == DIRECTIONAL_LIGHT)
             {
                 float fWidth = _PLANE_WIDTH, fHeight = _PLANE_HEIGHT;
-                fNearPlaneDistance = 0.0f, fFarPlaneDistance = 1500.0f;
+                fNearPlaneDistance = 0.f, fFarPlaneDistance = 1500.0f;
                 xmmtxProjection = XMMatrixOrthographicLH(fWidth, fHeight, fNearPlaneDistance, fFarPlaneDistance);
             }
             else if (stLightData.m_nType == SPOT_LIGHT)
@@ -155,7 +155,7 @@ void CDepthRenderShaderComponent::PreRender(ID3D12GraphicsCommandList* pd3dComma
             pd3dCommandList->ClearRenderTargetView(m_pd3dRtvCPUDescriptorHandles[j], pfClearColor, 0, NULL);
             pd3dCommandList->ClearDepthStencilView(m_d3dDsvDescriptorCPUHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, NULL);
             pd3dCommandList->OMSetRenderTargets(1, &m_pd3dRtvCPUDescriptorHandles[j], TRUE, &m_d3dDsvDescriptorCPUHandle);
-            m_pDepthRenderCameras[j]->RegenerateViewMatrix();
+            //m_pDepthRenderCameras[j]->RegenerateViewMatrix();
             Render(pd3dCommandList, m_pDepthRenderCameras[j].get());
 
             ::SynchronizeResourceTransition(pd3dCommandList, pd3dTextureResource, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COMMON);
@@ -179,7 +179,7 @@ void CDepthRenderShaderComponent::Render(ID3D12GraphicsCommandList* pd3dCommandL
     pCamera->UpdateShaderVariables(pd3dCommandList);
 
     UpdateShaderVariable(pd3dCommandList);
-    for (int i = 0; i < m_vGameObjects.size(); i++)
+     for (int i = 0; i < m_vGameObjects.size(); i++)
     {
         m_vGameObjects[i]->Render(pd3dCommandList, pCamera, NULL);
     }
@@ -252,10 +252,10 @@ D3D12_RASTERIZER_DESC CDepthRenderShaderComponent::CreateRasterizerState()
     d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
     d3dRasterizerDesc.FrontCounterClockwise = FALSE;
 #ifdef _WITH_RASTERIZER_DEPTH_BIAS
-    d3dRasterizerDesc.DepthBias = 250000;
+    d3dRasterizerDesc.DepthBias = 100000;
 #endif
-    d3dRasterizerDesc.DepthBiasClamp = 0.0f;
-    d3dRasterizerDesc.SlopeScaledDepthBias = 1.0f;
+    d3dRasterizerDesc.DepthBiasClamp = 0.f;
+    d3dRasterizerDesc.SlopeScaledDepthBias = 1.f;
     d3dRasterizerDesc.DepthClipEnable = TRUE;
     d3dRasterizerDesc.MultisampleEnable = FALSE;
     d3dRasterizerDesc.AntialiasedLineEnable = FALSE;
@@ -271,7 +271,7 @@ D3D12_DEPTH_STENCIL_DESC CDepthRenderShaderComponent::CreateDepthStencilState()
     ::ZeroMemory(&d3dDepthStencilDesc, sizeof(D3D12_DEPTH_STENCIL_DESC));
     d3dDepthStencilDesc.DepthEnable = TRUE;
     d3dDepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-    d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS; //D3D12_COMPARISON_FUNC_LESS_EQUAL
+    d3dDepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL; //D3D12_COMPARISON_FUNC_LESS_EQUAL
     d3dDepthStencilDesc.StencilEnable = FALSE;
     d3dDepthStencilDesc.StencilReadMask = 0x00;
     d3dDepthStencilDesc.StencilWriteMask = 0x00;

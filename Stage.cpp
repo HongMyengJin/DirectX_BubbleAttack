@@ -279,12 +279,12 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
 	m_pPlayersGameObject = std::make_shared<CPlayerGameObject>();
-	m_pPlayersGameObject->Init(XMFLOAT3(12.f, 10.f, 12.f));
+	m_pPlayersGameObject->Init(XMFLOAT3(0.f, 0.f, 0.f));
 
 	m_pPlayersGameObject->AddShaderComponent(pObjectShaderComponent);
 	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Penguin.bin", m_pTextureLoader);
 	m_pPlayersGameObject->LoadPlayerFrameData();
-	m_pPlayersGameObject->SetPosition(XMFLOAT3(300.f, 24.f, 300.f));
+	m_pPlayersGameObject->SetPosition(XMFLOAT3(0.f, 5.f, 0.f));
 
 
 	std::shared_ptr<CTextureRectMeshShaderComponent> pTextureRectMeshShaderComponent = std::make_shared<CTextureRectMeshShaderComponent>();
@@ -346,7 +346,20 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 		//pMonsterGameObject->Rotate(0.f, -90.f, 0.f);
 		m_pMonsterObjects.push_back(pMonsterGameObject);
 	}
+
+	std::shared_ptr<CGameObject> pMesh1 = std::make_shared<CGameObject>();
+	pMesh1->Init(XMFLOAT3(0.f, 0.f, 0.f));
+	pMesh1->SetScale(XMFLOAT3(50.f, 1.f, 50.f));
+	pMesh1->AddShaderComponent(pObjectShaderComponent);
+	pMesh1->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Plane.bin", m_pTextureLoader);
+
 	
+	m_pGameObjects = std::make_shared<CGameObject>();
+	m_pGameObjects->SetChild(NULL, pMesh1);
+	m_pGameObjects->Init(XMFLOAT3(0.f, 0.f, 0.f));
+	m_pGameObjects->AddShaderComponent(pObjectShaderComponent);
+	m_pGameObjects->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
+
 	//CGameObject* pObject = m_pGameObject->FindFrame("bobomb_Skeleton_8");
 
 	//pObject->SetPosition(XMFLOAT3(0.f, 1000.f, 0.f));
@@ -354,7 +367,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pLightObject->Init();
 	m_pLightObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	XMFLOAT3 xmf3TerrainScale(8.0f, 2.0f, 8.0f);
+	XMFLOAT3 xmf3TerrainScale(4.0f, 1.5f, 4.0f);
 	XMFLOAT3 xmf3WaterTerrainScale(10.f, 2.0f, 10.f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 
@@ -364,7 +377,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pTerrain = std::make_shared<CTerrainObject>();
 	m_pTerrain->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), _T("Image/HeightMap.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 17, 17, xmf3TerrainScale, xmf4Color);
 	m_pTerrain->AddShaderComponent(pTerrainShaderComponent);
-	m_pTerrain->SetPosition(XMFLOAT3(0.f, -200.f, 0.f));
+	m_pTerrain->SetPosition(XMFLOAT3(-400.f, 0.f, -400.f));
 
 	std::shared_ptr<CRippleWaterObjectShaderComponent> pTerrainWaterShaderComponent = std::make_shared<CRippleWaterObjectShaderComponent>();
 	pTerrainWaterShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
@@ -480,18 +493,22 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pDepthRenderShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_D32_FLOAT);
 	m_pDepthRenderShader->BuildObjects(pd3dDevice, pd3dCommandList, NULL);
 
-	//m_pDepthRenderShader->AddGameObject(m_pTerrain);
+
 	m_pDepthRenderShader->AddGameObject(m_pPlayersGameObject);
 	m_pDepthRenderShader->AddGameObject(m_pMonsterObjects[0]);
+	m_pDepthRenderShader->AddGameObject(m_pGameObjects);
+	m_pDepthRenderShader->AddGameObject(m_pTerrain);
 
 	m_pShadowShader = std::make_shared<CShadowMapShaderComponent>();
 	m_pShadowShader->Init();
 	m_pShadowShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
 	m_pShadowShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pDepthRenderShader->GetDepthFromLightMaterialComponent(), m_pd3dDescriptorHeap.get());
 
-	//m_pShadowShader->AddGameObject(m_pTerrain);
+
 	m_pShadowShader->AddGameObject(m_pPlayersGameObject);
 	m_pShadowShader->AddGameObject(m_pMonsterObjects[0]);
+	m_pShadowShader->AddGameObject(m_pGameObjects);
+	m_pShadowShader->AddGameObject(m_pTerrain);
 }
 
 bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
@@ -570,11 +587,16 @@ void CStage::AnimateObjects(float fTimeElapsed)
 	{
 		if (m_pMonsterObjects[i])
 		{
-			float xmfOffsetY = 10.f;
+			float xmfOffsetY = 0.f;
 			XMFLOAT3 xmfPosition = m_pMonsterObjects[i]->GetPosition();
-			m_pMonsterObjects[i]->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x, xmfPosition.z) - 200.f, xmfPosition.z));
+			m_pMonsterObjects[i]->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x + 400.f, xmfPosition.z + 400.f) + xmfOffsetY, xmfPosition.z));
 			m_pMonsterObjects[i]->Update(fTimeElapsed, m_pPlayersGameObject->GetPosition(), m_pTerrain);
 		}
+	}
+
+	if (m_pGameObjects)
+	{
+		m_pGameObjects->Update(fTimeElapsed, NULL);
 	}
 }
 
@@ -587,8 +609,8 @@ void CStage::UpdateObjects(float fTimeElapsed)
 
 	if (m_pLightObject)
 	{
-		m_pLightObject->SetPosition(1, m_pPlayersGameObject->GetPosition());
-		m_pLightObject->SetOffsetPosition(1, XMFLOAT3(0.f, 150.f, 0.f));
+		//m_pLightObject->SetPosition(1, m_pPlayersGameObject->GetPosition());
+		//m_pLightObject->SetOffsetPosition(1, XMFLOAT3(0.f, 500.f, 0.f));
 		m_pLightObject->Update(fTimeElapsed, NULL);
 	}
 	if (m_pPlayersGameObject)
@@ -610,7 +632,7 @@ void CStage::UpdateObjects(float fTimeElapsed)
 	{
 		m_pEffectRectObjects[i]->AnimateUV(fTimeElapsed);
 	}
-	CollisionCheck(); // 面倒 眉农
+	//CollisionCheck(); // 面倒 眉农
 }
 
 void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -642,25 +664,25 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 		m_pSkyBoxObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 	}
 
-	//if (m_pPlayersGameObject)
-	//{
-	//	float xmfOffsetY = 10.f;
-	//	XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
-	//	m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x, xmfPosition.z) - 200.f, xmfPosition.z));
-	//	m_pPlayersGameObject->CGameObject::PrepareRender(pd3dCommandList);
-	//	m_pPlayersGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	//}
+	if (m_pPlayersGameObject)
+	{
+		float xmfOffsetY = 0.f;
+		XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
+		m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x + 400.f, xmfPosition.z + 400.f) + xmfOffsetY, xmfPosition.z));
+		m_pPlayersGameObject->CGameObject::PrepareRender(pd3dCommandList);
+		m_pPlayersGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
 
 
-	//for (int i = 0; i < m_pMonsterObjects.size(); i++)
-	//{
-	//	if (m_pMonsterObjects[i])
-	//	{
-	//		m_pMonsterObjects[i]->PrepareRender(pd3dCommandList);
-	//		m_pMonsterObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	//	}
-	//}
-	//
+	for (int i = 0; i < m_pMonsterObjects.size(); i++)
+	{
+		if (m_pMonsterObjects[i])
+		{
+			m_pMonsterObjects[i]->PrepareRender(pd3dCommandList);
+			m_pMonsterObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+		}
+	}
+	
 	//if (m_pTerrainWater)
 	//{
 	//	m_pTerrainWater->PrepareRender(pd3dCommandList);
@@ -668,13 +690,18 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 	//}
 
 
-	if (m_pTerrain)
-	{
-		m_pTerrain->PrepareRender(pd3dCommandList);
-		m_pTerrain->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	}
+	//if (m_pTerrain)
+	//{
+	//	m_pTerrain->PrepareRender(pd3dCommandList);
+	//	m_pTerrain->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	//}
 	
 
+	//if (m_pGameObjects)
+	//{
+	//	m_pGameObjects->PrepareRender(pd3dCommandList);
+	//	m_pGameObjects->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	//}
 
 	for (int i = 0; i < m_pEffectRectObjects.size(); i++)
 	{

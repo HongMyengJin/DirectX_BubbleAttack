@@ -56,12 +56,12 @@ void CPlayerGameObject::UpdateFrame(float fTimeElapsed)
 
 void CPlayerGameObject::UpdateLegFrame(float fTimeElapsed)
 {
-	static float angle = 0.f;
-	angle += fTimeElapsed;
-	for (int i = 0; i < 7; i++)
-	{
-		pGameObject[i]->m_xmTranslationMatrix = DirectX::XMMatrixTranslation(0.f, 10.f, 0.f);
-	}
+	//static float angle = 0.f;
+	//angle += fTimeElapsed;
+	//for (int i = 0; i < 7; i++)
+	//{
+	//	pGameObject[i]->m_xmTranslationMatrix = DirectX::XMMatrixTranslation(0.f, 10.f, 0.f);
+	//}
 }
 	//for (int i = 0; i < 3; i++)
 	//{
