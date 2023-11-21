@@ -34,7 +34,7 @@ void CDepthRenderShaderComponent::BuildObjects(ID3D12Device* pd3dDevice, ID3D12G
 
     D3D12_CLEAR_VALUE d3dClearValue = { DXGI_FORMAT_R32_FLOAT, { 1.0f, 1.0f, 1.0f, 1.0f } };
     for (UINT i = 0; i < MAX_DEPTH_TEXTURES; i++) 
-        m_pDepthFromLightMaterialComponent->CreateTexture(pd3dDevice, _DEPTH_BUFFER_WIDTH, _DEPTH_BUFFER_HEIGHT, DXGI_FORMAT_R32_FLOAT, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET, D3D12_RESOURCE_STATE_COMMON, &d3dClearValue, (UINT)ResourceTextureType::ResourceTexture2D, 0, i);
+        m_pDepthFromLightMaterialComponent->CreateTexture(pd3dDevice, _DEPTH_BUFFER_WIDTH, _DEPTH_BUFFER_HEIGHT, 1, 0, DXGI_FORMAT_R32_FLOAT, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET, D3D12_RESOURCE_STATE_COMMON, &d3dClearValue, (UINT)ResourceTextureType::ResourceTexture2D, 0, i);
 
     D3D12_RENDER_TARGET_VIEW_DESC d3dRenderTargetViewDesc;
     d3dRenderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;

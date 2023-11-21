@@ -92,6 +92,9 @@
     <Filter Include="Component\Shader\ObjectShader\CubeMappingShader">
       <UniqueIdentifier>{bab71d04-51f9-4a62-890d-ba42abb411a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\CubeMapping">
+      <UniqueIdentifier>{455b0ef6-67b4-4144-b1cc-9103ab287ae8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -268,6 +271,12 @@
     <ClInclude Include="SkyBoxShaderComponent.h">
       <Filter>Component\Shader\ObjectShader\SkyBoxShader</Filter>
     </ClInclude>
+    <ClInclude Include="DynamicCubeMappingShaderComponent.h">
+      <Filter>Component\Shader\ObjectShader\CubeMappingShader</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicCubeMappingGameObject.h">
+      <Filter>GameObject\CubeMapping</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -431,6 +440,12 @@
     </ClCompile>
     <ClCompile Include="SkyBoxShaderComponent.cpp">
       <Filter>Component\Shader\ObjectShader\SkyBoxShader</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicCubeMappingShaderComponent.cpp">
+      <Filter>Component\Shader\ObjectShader\CubeMappingShader</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicCubeMappingGameObject.cpp">
+      <Filter>GameObject\CubeMapping</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

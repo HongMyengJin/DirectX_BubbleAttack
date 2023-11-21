@@ -137,6 +137,8 @@
     <ClInclude Include="DDSTextureLoader12.h" />
     <ClInclude Include="DepthRenderShaderComponent.h" />
     <ClInclude Include="DescriptorHeap.h" />
+    <ClInclude Include="DynamicCubeMappingGameObject.h" />
+    <ClInclude Include="DynamicCubeMappingShaderComponent.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="GameFrame.h" />
     <ClInclude Include="GameObject.h" />
@@ -196,6 +198,8 @@
     <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="DepthRenderShaderComponent.cpp" />
     <ClCompile Include="DescriptorHeap.cpp" />
+    <ClCompile Include="DynamicCubeMappingGameObject.cpp" />
+    <ClCompile Include="DynamicCubeMappingShaderComponent.cpp" />
     <ClCompile Include="GameFrame.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="HeightMapGridMesh.cpp" />

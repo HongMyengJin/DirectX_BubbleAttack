@@ -39,7 +39,7 @@ struct VS_LIGHTING_OUTPUT
 };
 
 SamplerState gssWrap : register(s0);
-TextureCube gtxtCubeMap : register(t14);
+TextureCube gtxtCubeMap : register(t6);
 
 float4 PSCubeMapping(VS_LIGHTING_OUTPUT input) : SV_Target
 {

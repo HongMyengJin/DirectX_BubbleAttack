@@ -108,10 +108,11 @@ void CMaterialsComponent::CreateBuffer(ID3D12Device* pd3dDevice, ID3D12GraphicsC
 
 }
 
-void CMaterialsComponent::CreateTexture(ID3D12Device* pd3dDevice, UINT nWidth, UINT nHeight, DXGI_FORMAT dxgiFormat, D3D12_RESOURCE_FLAGS d3dResourceFlags, D3D12_RESOURCE_STATES d3dResourceStates, D3D12_CLEAR_VALUE* pd3dClearValue, UINT nResourceType, UINT iMaterialIndex, UINT nIndex)
+void CMaterialsComponent::CreateTexture(ID3D12Device* pd3dDevice, UINT nWidth, UINT nHeight, UINT nElements, UINT nMipLevels, DXGI_FORMAT dxgiFormat, D3D12_RESOURCE_FLAGS d3dResourceFlags, D3D12_RESOURCE_STATES d3dResourceStates, D3D12_CLEAR_VALUE* pd3dClearValue, UINT nResourceType, UINT iMaterialIndex, UINT nIndex)
 {
-	m_MaterialDatas[iMaterialIndex]->m_Textures[0]->CreateTexture(pd3dDevice, nWidth, nHeight, dxgiFormat, d3dResourceFlags, d3dResourceStates, pd3dClearValue, nResourceType, nIndex);
+	m_MaterialDatas[iMaterialIndex]->m_Textures[0]->CreateTexture(pd3dDevice, nWidth, nHeight, nElements, nMipLevels, dxgiFormat, d3dResourceFlags, d3dResourceStates, pd3dClearValue, nResourceType, nIndex);
 }
+
 
 void CMaterialsComponent::LoadMaterialsFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, CDescriptorHeap* pDescriptorHeap, FILE* pInFile, std::shared_ptr<CTextureLoader> pTextureLoader)
 {
