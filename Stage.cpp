@@ -367,7 +367,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pLightObject->Init();
 	m_pLightObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	XMFLOAT3 xmf3TerrainScale(4.0f, 1.5f, 4.0f);
+	XMFLOAT3 xmf3TerrainScale(4.0f, 0.4f, 4.0f);
 	XMFLOAT3 xmf3WaterTerrainScale(10.f, 2.0f, 10.f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 
@@ -683,51 +683,12 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 		}
 	}
 	
-	//if (m_pTerrainWater)
-	//{
-	//	m_pTerrainWater->PrepareRender(pd3dCommandList);
-	//	m_pTerrainWater->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	//}
-
-
-	//if (m_pTerrain)
-	//{
-	//	m_pTerrain->PrepareRender(pd3dCommandList);
-	//	m_pTerrain->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	//}
-	
-
-	//if (m_pGameObjects)
-	//{
-	//	m_pGameObjects->PrepareRender(pd3dCommandList);
-	//	m_pGameObjects->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	//}
-
 	for (int i = 0; i < m_pEffectRectObjects.size(); i++)
 	{
 		m_pEffectRectObjects[i]->PrepareRender(pd3dCommandList);
 		m_pEffectRectObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 	}
 
-	for (int i = 0; i < m_pTreesRectObjects.size(); i++)
-	{
-		m_pTreesRectObjects[i]->PrepareRender(pd3dCommandList);
-		m_pTreesRectObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	}
-
-
-	for (int i = 0; i < m_pUIObjects.size(); i++)
-	{
-		m_pUIObjects[i]->PrepareRender(pd3dCommandList);
-		m_pUIObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	}
-
-
-	for (int i = 0; i < m_pUINumberObjects.size(); i++)
-	{
-		m_pUINumberObjects[i]->PrepareRender(pd3dCommandList);
-		m_pUINumberObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	}
 	
 	if (m_pCamera)
 	{
@@ -742,6 +703,20 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 	{
 		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 		m_pCamera->UpdateShaderVariables(pd3dCommandList);
+	}
+
+
+	for (int i = 0; i < m_pUIObjects.size(); i++)
+	{
+		m_pUIObjects[i]->PrepareRender(pd3dCommandList);
+		m_pUIObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
+
+
+	for (int i = 0; i < m_pUINumberObjects.size(); i++)
+	{
+		m_pUINumberObjects[i]->PrepareRender(pd3dCommandList);
+		m_pUINumberObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 	}
 
 }

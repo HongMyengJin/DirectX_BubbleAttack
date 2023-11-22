@@ -24,6 +24,6 @@ private:
 	int								m_nLength;
 
 	XMFLOAT3						m_xmf3Scale;
-	float							m_fOffSetPositoin = 165.f;
+	float							m_fOffSetPositoin = 0.f;
 };
 
