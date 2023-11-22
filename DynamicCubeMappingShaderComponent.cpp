@@ -36,18 +36,21 @@ D3D12_SHADER_BYTECODE CDynamicCubeMappingShaderComponent::CreatePixelShader()
 
 D3D12_INPUT_LAYOUT_DESC CDynamicCubeMappingShaderComponent::CreateInputLayout()
 {
-    UINT nInputElementDescs = 2;
+	UINT nInputElementDescs = 5;
 
-    m_d3dPdInputElementDescs.resize(nInputElementDescs);
+	m_d3dPdInputElementDescs.resize(nInputElementDescs);
 
-    m_d3dPdInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-    m_d3dPdInputElementDescs[1] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	m_d3dPdInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	m_d3dPdInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	m_d3dPdInputElementDescs[2] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 2, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	m_d3dPdInputElementDescs[3] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 3, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+	m_d3dPdInputElementDescs[4] = { "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 4, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
 
-    D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
-    d3dInputLayoutDesc.pInputElementDescs = &m_d3dPdInputElementDescs[0];
-    d3dInputLayoutDesc.NumElements = nInputElementDescs;
+	D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
+	d3dInputLayoutDesc.pInputElementDescs = &m_d3dPdInputElementDescs[0];
+	d3dInputLayoutDesc.NumElements = nInputElementDescs;
 
-    return(d3dInputLayoutDesc);
+	return(d3dInputLayoutDesc);
 }
 
 void CDynamicCubeMappingShaderComponent::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)

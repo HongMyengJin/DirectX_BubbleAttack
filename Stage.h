@@ -13,6 +13,8 @@
 #include "TextureLoader.h"
 #include "ShadowMapShaderComponent.h"
 #include "DepthRenderShaderComponent.h"
+#include "DynamicCubeMappingGameObject.h"
+#include "DynamicCubeMappingShaderComponent.h"
 
 class CStage : public CScene
 {
@@ -30,7 +32,7 @@ public:
 	void UpdateObjects(float fTimeElapsed);
 
 	void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
-	void Render(ID3D12GraphicsCommandList* pd3dCommandList);
+	void Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera = NULL);
 
 	void RenderParticle(ID3D12GraphicsCommandList* pd3dCommandList);
 	void OnPostRender(ID3D12GraphicsCommandList* pd3dCommandList);
@@ -54,6 +56,7 @@ protected:
 	std::shared_ptr<CShadowMapShaderComponent>				m_pShadowShader;
 	std::shared_ptr<CDepthRenderShaderComponent>			m_pDepthRenderShader;
 
+	std::shared_ptr<CDynamicCubeMappingGameObject>			m_pDynamicCubeMappingGameObject;
 	std::shared_ptr<CGameObject>							m_pGameObjects;
 	UINT													m_iPlayerAttack = 0;
 	UINT													m_iMonsterAttack = 0;

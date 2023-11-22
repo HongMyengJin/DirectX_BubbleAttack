@@ -22,26 +22,35 @@ cbuffer cbGameObjectInfo : register(b2)
 	uint		gnTexturesMask : packoffset(c8);
 };
 
-struct VS_LIGHTING_INPUT
+struct VS_STANDARD_INPUT
 {
-	float3	position    : POSITION;
-	float3	normal		: NORMAL;
+	float3 position : POSITION;
+	float2 uv : TEXCOORD;
+	float3 normal : NORMAL;
+	float3 tangent : TANGENT;
+	float3 bitangent : BITANGENT;
 };
 
-struct VS_LIGHTING_OUTPUT
+struct VS_STANDARD_OUTPUT
 {
-	float4	position    : SV_POSITION;
-	float3	positionW   : POSITION;
-	float3	normalW		: NORMAL;
+	float4 position : SV_POSITION;
+	float3 positionW : POSITION;
+	float3 normalW : NORMAL;
+	float3 tangentW : TANGENT;
+	float3 bitangentW : BITANGENT;
+	float2 uv : TEXCOORD;
 };
 
-VS_LIGHTING_OUTPUT VSCubeMapping(VS_LIGHTING_INPUT input)
+VS_STANDARD_OUTPUT VSCubeMapping(VS_STANDARD_INPUT input)
 {
-	VS_LIGHTING_OUTPUT output;
+	VS_STANDARD_OUTPUT output;
 
-	output.positionW = mul(float4(input.position, 1.0f), gmtxGameObject).xyz;
-	output.normalW = mul(float4(input.normal, 0.0f), gmtxGameObject).xyz;
+	output.positionW = (float3)mul(float4(input.position, 1.0f), gmtxGameObject);
+	output.normalW = mul(input.normal, (float3x3)gmtxGameObject);
+	output.tangentW = (float3)mul(float4(input.tangent, 1.0f), gmtxGameObject);
+	output.bitangentW = (float3)mul(float4(input.bitangent, 1.0f), gmtxGameObject);
 	output.position = mul(mul(float4(output.positionW, 1.0f), gmtxView), gmtxProjection);
+	output.uv = input.uv;
 
 	return(output);
 }

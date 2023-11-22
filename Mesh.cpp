@@ -10,6 +10,8 @@
 
 void CMeshComponent::Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, void* pContext)
 {
+	if (m_nVertices <= 0)
+		return;
 	UINT nSubSet = 0;
 	pd3dCommandList->IASetPrimitiveTopology(m_d3dPrimitiveTopology);
 

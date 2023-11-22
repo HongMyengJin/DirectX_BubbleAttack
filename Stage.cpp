@@ -64,7 +64,7 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 
 	pd3dDescriptorRanges[6].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	pd3dDescriptorRanges[6].NumDescriptors = MAX_DEPTH_TEXTURES;
-	pd3dDescriptorRanges[6].BaseShaderRegister = 17; //t11: gtxtDepthTexture
+	pd3dDescriptorRanges[6].BaseShaderRegister = 17; //t17: gtxtDepthTexture
 	pd3dDescriptorRanges[6].RegisterSpace = 0;
 	pd3dDescriptorRanges[6].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
@@ -496,7 +496,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	m_pDepthRenderShader->AddGameObject(m_pPlayersGameObject);
 	m_pDepthRenderShader->AddGameObject(m_pMonsterObjects[0]);
-	m_pDepthRenderShader->AddGameObject(m_pGameObjects);
+	m_pDepthRenderShader->AddGameObject(m_pGameObjects); 
 	m_pDepthRenderShader->AddGameObject(m_pTerrain);
 
 	m_pShadowShader = std::make_shared<CShadowMapShaderComponent>();
@@ -509,6 +509,18 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	//m_pShadowShader->AddGameObject(m_pMonsterObjects[0]);
 	//m_pShadowShader->AddGameObject(m_pGameObjects);
 	m_pShadowShader->AddGameObject(m_pTerrain);
+
+
+
+	std::shared_ptr<CDynamicCubeMappingShaderComponent> pDynamicCubeMappingShaderComponent = std::make_shared<CDynamicCubeMappingShaderComponent>();
+	pDynamicCubeMappingShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
+
+	m_pDynamicCubeMappingGameObject = std::make_shared<CDynamicCubeMappingGameObject>();
+	m_pDynamicCubeMappingGameObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 256);
+	m_pDynamicCubeMappingGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Penguin.bin", m_pTextureLoader);
+	m_pDynamicCubeMappingGameObject->SetScale(XMFLOAT3(5.f, 5.f, 5.f));
+	m_pDynamicCubeMappingGameObject->AddShaderComponent(pDynamicCubeMappingShaderComponent);
+
 }
 
 bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
@@ -645,23 +657,30 @@ void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 		m_pLightObject->UpdateShaderVariables(pd3dCommandList);
 
 	m_pDepthRenderShader->PreRender(pd3dCommandList);
+
+	if(m_pDynamicCubeMappingGameObject)
+		m_pDynamicCubeMappingGameObject->OnPreRender(pd3dCommandList, this);
+
+
 }
 
-void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
+void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera)
 {
-
-
-	if (m_pCamera)
+	CCamera* pCameraData = pCamera;
+	if (!pCameraData)
+		pCameraData = m_pCamera.get();
+	if (pCameraData)
 	{
-		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
-		m_pCamera->UpdateShaderVariables(pd3dCommandList);
+		pCameraData->SetViewportsAndScissorRects(pd3dCommandList);
+		pCameraData->UpdateShaderVariables(pd3dCommandList);
 	}
+
 
 	if (m_pSkyBoxObject)
 	{
-		m_pSkyBoxObject->SetPosition(m_pCamera->GetPosition());
+		m_pSkyBoxObject->SetPosition(pCameraData->GetPosition());
 		m_pSkyBoxObject->PrepareRender(pd3dCommandList);
-		m_pSkyBoxObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+		m_pSkyBoxObject->Render(pd3dCommandList, pCameraData, nullptr);
 	}
 
 	if (m_pPlayersGameObject)
@@ -670,7 +689,7 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 		XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
 		m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x + 400.f, xmfPosition.z + 400.f) + xmfOffsetY, xmfPosition.z));
 		m_pPlayersGameObject->CGameObject::PrepareRender(pd3dCommandList);
-		m_pPlayersGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+		m_pPlayersGameObject->Render(pd3dCommandList, pCameraData, nullptr);
 	}
 
 
@@ -679,46 +698,58 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 		if (m_pMonsterObjects[i])
 		{
 			m_pMonsterObjects[i]->PrepareRender(pd3dCommandList);
-			m_pMonsterObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+			m_pMonsterObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
 		}
 	}
 	
 	for (int i = 0; i < m_pEffectRectObjects.size(); i++)
 	{
 		m_pEffectRectObjects[i]->PrepareRender(pd3dCommandList);
-		m_pEffectRectObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+		m_pEffectRectObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
 	}
 
 	
-	if (m_pCamera)
-	{
-		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
-		m_pCamera->UpdateShaderVariables(pd3dCommandList);
-	}
+
+
+
+	//for (int i = 0; i < m_pUIObjects.size(); i++)
+	//{
+	//	m_pUIObjects[i]->PrepareRender(pd3dCommandList);
+	//	m_pUIObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
+	//}
+
+
+	//for (int i = 0; i < m_pUINumberObjects.size(); i++)
+	//{
+	//	m_pUINumberObjects[i]->PrepareRender(pd3dCommandList);
+	//	m_pUINumberObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
+	//}
 
 	m_pDepthRenderShader->UpdateShaderVariable(pd3dCommandList);
-	m_pShadowShader->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	m_pShadowShader->Render(pd3dCommandList, pCameraData, nullptr);
 
-	if (m_pCamera)
+	if (m_pDynamicCubeMappingGameObject)
 	{
-		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
-		m_pCamera->UpdateShaderVariables(pd3dCommandList);
+		m_pDynamicCubeMappingGameObject->PrepareRender(pd3dCommandList);
+		m_pDynamicCubeMappingGameObject->Render(pd3dCommandList, pCameraData, nullptr);
 	}
-
-
-	for (int i = 0; i < m_pUIObjects.size(); i++)
+	if (!pCamera)
 	{
-		m_pUIObjects[i]->PrepareRender(pd3dCommandList);
-		m_pUIObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+		if (m_pCamera)
+		{
+			m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
+			m_pCamera->UpdateShaderVariables(pd3dCommandList);
+		}
+
+		m_pDepthRenderShader->UpdateShaderVariable(pd3dCommandList);
+		m_pShadowShader->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+
+		if (m_pCamera)
+		{
+			m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
+			m_pCamera->UpdateShaderVariables(pd3dCommandList);
+		}
 	}
-
-
-	for (int i = 0; i < m_pUINumberObjects.size(); i++)
-	{
-		m_pUINumberObjects[i]->PrepareRender(pd3dCommandList);
-		m_pUINumberObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
-	}
-
 }
 
 void CStage::RenderParticle(ID3D12GraphicsCommandList* pd3dCommandList)

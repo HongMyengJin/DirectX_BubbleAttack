@@ -5,6 +5,7 @@
 #include "Light.h"
 #include "DescriptorHeap.h"
 #include "PlayerGameObject.h"
+#include "Camera.h"
 class CScene
 {
 public:
@@ -21,7 +22,7 @@ public:
 	virtual void UpdateObjects(float fTimeElapsed) = 0;
 
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList) = 0;
-	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList) = 0;
+	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera = NULL) = 0;
 	virtual void OnPostRender(ID3D12GraphicsCommandList* pd3dCommandList) = 0;
 
 	virtual void Release();
