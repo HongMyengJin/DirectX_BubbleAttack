@@ -517,8 +517,9 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	m_pDynamicCubeMappingGameObject = std::make_shared<CDynamicCubeMappingGameObject>();
 	m_pDynamicCubeMappingGameObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 256);
-	m_pDynamicCubeMappingGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Penguin.bin", m_pTextureLoader);
-	m_pDynamicCubeMappingGameObject->SetScale(XMFLOAT3(5.f, 5.f, 5.f));
+	m_pDynamicCubeMappingGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/BP_Mini_Ice_Bear_C.bin", m_pTextureLoader);
+	m_pDynamicCubeMappingGameObject->SetScale(XMFLOAT3(15.f, 15.f, 15.f));
+	m_pDynamicCubeMappingGameObject->SetPosition(XMFLOAT3(0.f, 15.f, 0.f));
 	m_pDynamicCubeMappingGameObject->AddShaderComponent(pDynamicCubeMappingShaderComponent);
 
 }
