@@ -371,23 +371,23 @@ void CBubbleAttackGameFrame::WaitForGpuComplete()
 
 void CBubbleAttackGameFrame::CreateShaderVariables()
 {
-	UINT ncbElementBytes = ((sizeof(CB_FRAMEWORK_INFO) + 255) & ~255); //256의 배수
-	m_pd3dcbFrameworkInfo = ::CreateBufferResource(m_pd3dDevice.Get(), m_pd3dCommandList.Get(), NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
+	//UINT ncbElementBytes = ((sizeof(CB_FRAMEWORK_INFO) + 255) & ~255); //256의 배수
+	//m_pd3dcbFrameworkInfo = ::CreateBufferResource(m_pd3dDevice.Get(), m_pd3dCommandList.Get(), NULL, ncbElementBytes, D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_GENERIC_READ, NULL);
 
-	m_pd3dcbFrameworkInfo->Map(0, NULL, (void**)&m_pcbMappedFrameworkInfo);
+	//m_pd3dcbFrameworkInfo->Map(0, NULL, (void**)&m_pcbMappedFrameworkInfo);
 }
 
 void CBubbleAttackGameFrame::UpdateShaderVariables()
 {
-	m_pcbMappedFrameworkInfo->m_fCurrentTime = m_Timer.GetTotalTime();
-	m_pcbMappedFrameworkInfo->m_fElapsedTime = m_Timer.GetTimeElapsed();
-	m_pcbMappedFrameworkInfo->m_fSecondsPerFirework = 0.4f;
-	m_pcbMappedFrameworkInfo->m_nFlareParticlesToEmit = 100;
-	m_pcbMappedFrameworkInfo->m_xmf3Gravity = XMFLOAT3(0.0f, -9.8f, 0.0f);
-	m_pcbMappedFrameworkInfo->m_nMaxFlareType2Particles = 15 * 1.5f;
+	//m_pcbMappedFrameworkInfo->m_fCurrentTime = m_Timer.GetTotalTime();
+	//m_pcbMappedFrameworkInfo->m_fElapsedTime = m_Timer.GetTimeElapsed();
+	//m_pcbMappedFrameworkInfo->m_fSecondsPerFirework = 0.4f;
+	//m_pcbMappedFrameworkInfo->m_nFlareParticlesToEmit = 100;
+	//m_pcbMappedFrameworkInfo->m_xmf3Gravity = XMFLOAT3(0.0f, -9.8f, 0.0f);
+	//m_pcbMappedFrameworkInfo->m_nMaxFlareType2Particles = 15 * 1.5f;
 
-	D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbFrameworkInfo->GetGPUVirtualAddress();
-	m_pd3dCommandList->SetGraphicsRootConstantBufferView(10, d3dGpuVirtualAddress);
+	//D3D12_GPU_VIRTUAL_ADDRESS d3dGpuVirtualAddress = m_pd3dcbFrameworkInfo->GetGPUVirtualAddress();
+	//m_pd3dCommandList->SetGraphicsRootConstantBufferView(10, d3dGpuVirtualAddress);
 }
 
 void CBubbleAttackGameFrame::ReleaseShaderVariables()
