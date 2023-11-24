@@ -1,8 +1,9 @@
 #include "DynamicCubeMappingGameObject.h"
 #include "MaterialComponent.h"
 #include "TransformComponent.h"
-void CDynamicCubeMappingGameObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, UINT nCubeMapSize)
+void CDynamicCubeMappingGameObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, UINT nCubeMapSize, XMFLOAT3 xmf3Extent)
 {
+	m_xmf3AABBBox.Extents = xmf3Extent;
 
 	m_pComponents.resize(4);
 

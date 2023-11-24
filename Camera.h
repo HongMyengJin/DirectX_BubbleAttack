@@ -68,7 +68,7 @@ public:
 	D3D12_VIEWPORT												m_d3dViewport = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT, 0.0f, 1.0f };
 	D3D12_RECT													m_d3dScissorRect = { 0, 0, FRAME_BUFFER_WIDTH , FRAME_BUFFER_HEIGHT };
 	
-	std::unique_ptr<CameraInfo>									m_pCameraInfo;
+	std::shared_ptr<CameraInfo>									m_pCameraInfo;
 	Microsoft::WRL::ComPtr<ID3D12Resource>						m_pd3dcbCamera;
 	Microsoft::WRL::ComPtr<ID3D12Resource>						m_pd3dCameraUploadBuffers;
 

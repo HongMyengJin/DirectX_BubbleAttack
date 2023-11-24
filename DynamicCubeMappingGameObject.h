@@ -9,7 +9,7 @@ class CDynamicCubeMappingGameObject : public CGameObject
 public:
 	CDynamicCubeMappingGameObject() {};
 	~CDynamicCubeMappingGameObject() {};
-	virtual void Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, UINT nCubeMapSize);
+	virtual void Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap, UINT nCubeMapSize, XMFLOAT3 xmf3Extent);
 	void OnScenePreRender(ID3D12GraphicsCommandList* pd3dCommandList,  CScene* pStage);
 	virtual void OnPreRender(ID3D12GraphicsCommandList* pd3dCommandList, CScene* pStage);
 private:

@@ -10,18 +10,9 @@ enum class SceneComponentType
 enum class SceneType
 {
 	Stage1Type,
+	MirrorStageType,
 	SceneTypeEnd
 };
-//enum class VertexType
-//{
-//	VertexPosition = 1,
-//	VertexColor,
-//	VertexNormal,
-//	VertexTangent,
-//	VertexTextureCoord0,
-//	VertexTextureCoord1,
-//	VertexTypeEnd
-//};
 
 enum class MaterialType
 {

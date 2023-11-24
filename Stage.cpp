@@ -198,71 +198,6 @@ void CStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 
 }
 
-
-void CStage::CreateGraphicsPipelineState(ID3D12Device* pd3dDevice)
-{
-    // 정점 쉐이더, 픽셀 쉐이더 생성
-    Microsoft::WRL::ComPtr<ID3DBlob> pd3dVertexShaderBlob;
-    Microsoft::WRL::ComPtr<ID3DBlob> pd3dPixelShaderBlob;
-
-    D3DReadFileToBlob(L"VertexShader.cso", pd3dVertexShaderBlob.GetAddressOf());
-    D3DReadFileToBlob(L"PixelShader.cso", pd3dPixelShaderBlob.GetAddressOf());
-
-    // 레스터라이저 상태 설정
-    D3D12_RASTERIZER_DESC d3dRasterizerDesc;
-    ZeroMemory(&d3dRasterizerDesc, sizeof(D3D12_RASTERIZER_DESC));
-    d3dRasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
-    d3dRasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
-    d3dRasterizerDesc.FrontCounterClockwise = FALSE;
-    d3dRasterizerDesc.DepthBias = 0;
-    d3dRasterizerDesc.DepthBiasClamp = 0.f;
-    d3dRasterizerDesc.SlopeScaledDepthBias = 0.f;
-    d3dRasterizerDesc.DepthClipEnable = TRUE;
-    d3dRasterizerDesc.MultisampleEnable = FALSE;
-    d3dRasterizerDesc.AntialiasedLineEnable = FALSE;
-    d3dRasterizerDesc.ForcedSampleCount = 0;
-    d3dRasterizerDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
-
-    // 블렌드 상태 설정
-    D3D12_BLEND_DESC d3dBlendDesc;
-    ZeroMemory(&d3dBlendDesc, sizeof(D3D12_BLEND_DESC));
-    d3dBlendDesc.AlphaToCoverageEnable = FALSE;
-    d3dBlendDesc.IndependentBlendEnable = FALSE;
-    d3dBlendDesc.RenderTarget[0].BlendEnable = FALSE;
-    d3dBlendDesc.RenderTarget[0].LogicOpEnable = FALSE;
-    d3dBlendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
-    d3dBlendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ZERO;
-    d3dBlendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-    d3dBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-    d3dBlendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-    d3dBlendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-    d3dBlendDesc.RenderTarget[0].LogicOp = D3D12_LOGIC_OP_NOOP;
-    d3dBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-
-    // 그래픽 파이프라인 상태 설정
-    D3D12_GRAPHICS_PIPELINE_STATE_DESC d3dPipelineStateDesc;
-    ZeroMemory(&d3dPipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
-    d3dPipelineStateDesc.pRootSignature = m_pd3dGraphicsRootsignature.Get();
-    d3dPipelineStateDesc.VS.pShaderBytecode = pd3dVertexShaderBlob->GetBufferPointer();
-    d3dPipelineStateDesc.VS.BytecodeLength = pd3dVertexShaderBlob->GetBufferSize();
-    d3dPipelineStateDesc.PS.pShaderBytecode = pd3dPixelShaderBlob->GetBufferPointer();
-    d3dPipelineStateDesc.PS.BytecodeLength = pd3dPixelShaderBlob->GetBufferSize();
-    d3dPipelineStateDesc.RasterizerState = d3dRasterizerDesc;
-    d3dPipelineStateDesc.BlendState = d3dBlendDesc;
-    d3dPipelineStateDesc.DepthStencilState.DepthEnable = FALSE;
-    d3dPipelineStateDesc.DepthStencilState.StencilEnable = FALSE;
-    d3dPipelineStateDesc.InputLayout.pInputElementDescs = NULL;
-    d3dPipelineStateDesc.InputLayout.NumElements = 0;
-    d3dPipelineStateDesc.SampleMask = UINT_MAX;
-    d3dPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-    d3dPipelineStateDesc.NumRenderTargets = 1;
-    d3dPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-    d3dPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    d3dPipelineStateDesc.SampleDesc.Count = 1;
-    d3dPipelineStateDesc.SampleDesc.Quality = 0;
-    pd3dDevice->CreateGraphicsPipelineState(&d3dPipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)m_pd3dPipelineState.GetAddressOf());
-}
-
 void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
     CreateGraphicsRootSignature(pd3dDevice);
@@ -274,8 +209,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	m_pCamera = std::make_unique<CThirdPersonCamera>();
 	m_pCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	//m_d3dPipelineStateDesc.RTVFormats[0] = pdxgiRtvFormats;//DXGI_FORMAT_R8G8B8A8_UNORM;
-	//m_d3dPipelineStateDesc.DSVFormat = dxgiDsvFormat;//DXGI_FORMAT_D24_UNORM_S8_UINT;
+
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
 	m_pPlayersGameObject = std::make_shared<CPlayerGameObject>();
@@ -284,7 +218,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pPlayersGameObject->AddShaderComponent(pObjectShaderComponent);
 	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Penguin.bin", m_pTextureLoader);
 	m_pPlayersGameObject->LoadPlayerFrameData();
-	m_pPlayersGameObject->SetPosition(XMFLOAT3(0.f, 5.f, 0.f));
+	m_pPlayersGameObject->SetPosition(XMFLOAT3(0.f, 5.f, 130.f));
 
 
 	std::shared_ptr<CTextureRectMeshShaderComponent> pTextureRectMeshShaderComponent = std::make_shared<CTextureRectMeshShaderComponent>();
@@ -347,18 +281,6 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 		m_pMonsterObjects.push_back(pMonsterGameObject);
 	}
 
-	std::shared_ptr<CGameObject> pMesh1 = std::make_shared<CGameObject>();
-	pMesh1->Init(XMFLOAT3(0.f, 0.f, 0.f));
-	pMesh1->SetScale(XMFLOAT3(50.f, 1.f, 50.f));
-	pMesh1->AddShaderComponent(pObjectShaderComponent);
-	pMesh1->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Plane.bin", m_pTextureLoader);
-
-	
-	m_pGameObjects = std::make_shared<CGameObject>();
-	m_pGameObjects->SetChild(NULL, pMesh1);
-	m_pGameObjects->Init(XMFLOAT3(0.f, 0.f, 0.f));
-	m_pGameObjects->AddShaderComponent(pObjectShaderComponent);
-	m_pGameObjects->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
 
 	//CGameObject* pObject = m_pGameObject->FindFrame("bobomb_Skeleton_8");
 
@@ -496,7 +418,6 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	m_pDepthRenderShader->AddGameObject(m_pPlayersGameObject);
 	m_pDepthRenderShader->AddGameObject(m_pMonsterObjects[0]);
-	m_pDepthRenderShader->AddGameObject(m_pGameObjects); 
 	m_pDepthRenderShader->AddGameObject(m_pTerrain);
 
 	m_pShadowShader = std::make_shared<CShadowMapShaderComponent>();
@@ -506,7 +427,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 
 	//m_pShadowShader->AddGameObject(m_pPlayersGameObject);
-	//m_pShadowShader->AddGameObject(m_pMonsterObjects[0]);
+	//m_pShadowShader->AddGameObject(m_pMonsterObjects[0]);c
 	//m_pShadowShader->AddGameObject(m_pGameObjects);
 	m_pShadowShader->AddGameObject(m_pTerrain);
 
@@ -516,12 +437,11 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	pDynamicCubeMappingShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
 
 	m_pDynamicCubeMappingGameObject = std::make_shared<CDynamicCubeMappingGameObject>();
-	m_pDynamicCubeMappingGameObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 256);
+	m_pDynamicCubeMappingGameObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 256, XMFLOAT3(XMFLOAT3(45.f, 45.f, 45.f)));
 	m_pDynamicCubeMappingGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/BP_Mini_Ice_Bear_C.bin", m_pTextureLoader);
 	m_pDynamicCubeMappingGameObject->SetScale(XMFLOAT3(15.f, 15.f, 15.f));
 	m_pDynamicCubeMappingGameObject->SetPosition(XMFLOAT3(0.f, 15.f, 0.f));
 	m_pDynamicCubeMappingGameObject->AddShaderComponent(pDynamicCubeMappingShaderComponent);
-
 }
 
 bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
@@ -606,11 +526,6 @@ void CStage::AnimateObjects(float fTimeElapsed)
 			m_pMonsterObjects[i]->Update(fTimeElapsed, m_pPlayersGameObject->GetPosition(), m_pTerrain);
 		}
 	}
-
-	if (m_pGameObjects)
-	{
-		m_pGameObjects->Update(fTimeElapsed, NULL);
-	}
 }
 
 void CStage::UpdateObjects(float fTimeElapsed)
@@ -619,13 +534,12 @@ void CStage::UpdateObjects(float fTimeElapsed)
 	if (m_pCamera)
 		m_pCamera->Update(m_pPlayersGameObject.get(), m_pPlayersGameObject->GetPosition(), fTimeElapsed);
 	
+	if(m_pDynamicCubeMappingGameObject)
+		m_pDynamicCubeMappingGameObject->Update(fTimeElapsed, NULL);
 
 	if (m_pLightObject)
-	{
-		//m_pLightObject->SetPosition(1, m_pPlayersGameObject->GetPosition());
-		//m_pLightObject->SetOffsetPosition(1, XMFLOAT3(0.f, 500.f, 0.f));
 		m_pLightObject->Update(fTimeElapsed, NULL);
-	}
+
 	if (m_pPlayersGameObject)
 	{
 		m_pPlayersGameObject->UpdateFrame(fTimeElapsed);
@@ -645,7 +559,7 @@ void CStage::UpdateObjects(float fTimeElapsed)
 	{
 		m_pEffectRectObjects[i]->AnimateUV(fTimeElapsed);
 	}
-	//CollisionCheck(); // 충돌 체크
+	CollisionCheck(); // 충돌 체크
 }
 
 void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -787,6 +701,12 @@ void CStage::CollisionCheck()
 
 	//	
 	//}
+
+	if (m_pPlayersGameObject->CollisionCheck(m_pDynamicCubeMappingGameObject)) // 충돌
+	{
+		// 씬 전환
+		m_bChangeScene = true;
+	}
 
 	// Player - Monster
 	for (int i = 0; i < m_pMonsterObjects.size(); i++)

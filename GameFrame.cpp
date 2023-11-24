@@ -36,7 +36,8 @@ void CBubbleAttackGameFrame::CreateFrame(HINSTANCE hInstance, HWND hMainWnd)
 	m_pd3dCommandList->Reset(m_pd3dCommandAllocator.Get(), NULL);
 
 	m_pSceneManager = std::make_unique<CSceneManager>();
-	m_pSceneManager->ChangeSceneComponent(SceneType::Stage1Type, m_pd3dDevice.Get(), m_pd3dCommandList.Get());
+	m_pSceneManager->MakeScenes(m_pd3dDevice.Get(), m_pd3dCommandList.Get());
+	m_pSceneManager->ChangeSceneComponent(SceneType::Stage1Type);
 	CreateShaderVariables();
 
 	m_pd3dCommandList->Close();

@@ -277,6 +277,9 @@
     <ClInclude Include="DynamicCubeMappingGameObject.h">
       <Filter>GameObject\CubeMapping</Filter>
     </ClInclude>
+    <ClInclude Include="MirrorStage.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -446,6 +449,9 @@
     </ClCompile>
     <ClCompile Include="DynamicCubeMappingGameObject.cpp">
       <Filter>GameObject\CubeMapping</Filter>
+    </ClCompile>
+    <ClCompile Include="MirrorStage.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

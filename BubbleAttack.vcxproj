@@ -146,6 +146,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="MaterialComponent.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MirrorStage.h" />
     <ClInclude Include="MonsterGameObject.h" />
     <ClInclude Include="ObjectShaderComponent.h" />
     <ClInclude Include="ParticleMeshComponent.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="MaterialComponent.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MirrorStage.cpp" />
     <ClCompile Include="MonsterGameObject.cpp" />
     <ClCompile Include="ObjectShaderComponent.cpp" />
     <ClCompile Include="ParticleMeshComponent.cpp" />

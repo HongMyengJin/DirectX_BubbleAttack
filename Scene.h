@@ -13,7 +13,6 @@ public:
 	~CScene();
 
 	virtual void CreateGraphicsRootSignature(ID3D12Device* pd3dDevice) = 0;
-	virtual void CreateGraphicsPipelineState(ID3D12Device* pd3dDevice) = 0;
 
 	virtual void BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 
@@ -26,6 +25,8 @@ public:
 	virtual void OnPostRender(ID3D12GraphicsCommandList* pd3dCommandList) = 0;
 
 	virtual void Release();
+	void SetChangeScene(bool bChangeScene);
+	bool GetChangeScene();
 protected:
 	std::unique_ptr<CDescriptorHeap>				m_pd3dDescriptorHeap;
 	Microsoft::WRL::ComPtr<ID3D12RootSignature>		m_pd3dGraphicsRootsignature; // 루트 시그니쳐의 인터페이스 포인터
@@ -33,5 +34,5 @@ protected:
 
 	std::shared_ptr<CPlayerGameObject>				m_pPlayersGameObject;
 	std::shared_ptr<CLight>							m_pLightObject;
-
+	bool											m_bChangeScene = false;
 };
