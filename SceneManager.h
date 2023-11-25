@@ -18,5 +18,6 @@ public:
 	void Release();
 private:
 	std::shared_ptr<CScene> m_pCurrentScene; // ÇöÀç ¾À ÄÄÆ÷³ÍÆ®
+	std::shared_ptr<CScene> m_pPreScene; // ÇöÀç ¾À ÄÄÆ÷³ÍÆ®
 	std::vector<std::shared_ptr<CScene>> m_pScenes;
 };

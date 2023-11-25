@@ -194,6 +194,9 @@ void CMirrorStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandL
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootsignature.Get());
 	pd3dCommandList->SetDescriptorHeaps(1, m_pd3dDescriptorHeap->m_pd3dCbvSrvDescriptorHeap.GetAddressOf());
 
+	m_pLightObject = std::make_shared<CLight>();
+	m_pLightObject->Init();
+	m_pLightObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
@@ -208,7 +211,66 @@ void CMirrorStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandL
 
 bool CMirrorStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 {
-	return false;
+	static UCHAR pKeysBuffer[256];
+	bool bProcessedByScene = false;
+	if (GetKeyboardState(pKeysBuffer))
+	{
+		DWORD dwDirection = 0;
+		if (pKeysBuffer[VK_UP] & 0xF0) dwDirection |= DIR_FORWARD;
+		if (pKeysBuffer[VK_DOWN] & 0xF0) dwDirection |= DIR_BACKWARD;
+		if (pKeysBuffer[VK_LEFT] & 0xF0) dwDirection |= DIR_LEFT;
+		if (pKeysBuffer[VK_RIGHT] & 0xF0) dwDirection |= DIR_RIGHT;
+		if (pKeysBuffer[VK_PRIOR] & 0xF0) dwDirection |= DIR_UP;
+		if (pKeysBuffer[VK_NEXT] & 0xF0) dwDirection |= DIR_DOWN;
+
+		float cxDelta = 0.0f, cyDelta = 0.0f;
+		POINT ptCursorPos;
+		if (GetCapture() == hWnd)
+		{
+			SetCursor(NULL);
+			GetCursorPos(&ptCursorPos);
+			cxDelta = (float)(ptCursorPos.x - m_ptOldCursorPos.x) / 3.0f;
+			cyDelta = (float)(ptCursorPos.y - m_ptOldCursorPos.y) / 3.0f;
+			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
+		}
+
+		if (pKeysBuffer[VK_SPACE] & 0xF0) // 불렛 높이 지정
+		{
+		}
+		else
+		{
+			if (pPreKeysBuffer[VK_SPACE] & 0xF0) // 이전에 점프
+			{
+			}
+		}
+
+
+		if ((dwDirection != 0) || (cxDelta != 0.0f) || (cyDelta != 0.0f))
+		{
+			if (cxDelta || cyDelta)
+			{
+				if (pKeysBuffer[VK_RBUTTON] & 0xF0)
+					m_pPlayersGameObject->Rotate(cyDelta * 0.3f, 0.0f, -cxDelta * 0.3f);
+				else
+					m_pPlayersGameObject->Rotate(cyDelta * 0.3f, cxDelta * 0.3f, 0.0f);
+			}
+			if (dwDirection)
+			{
+				m_pPlayersGameObject->Move(dwDirection, 1.5f);
+				m_pPlayersGameObject->SetboolMove(true);
+			}
+			else
+			{
+				m_pPlayersGameObject->SetboolMove(false);
+			}
+		}
+
+	}
+
+
+	memcpy(pPreKeysBuffer, pKeysBuffer, sizeof(UCHAR) * 256);
+
+	return true;
 }
 
 void CMirrorStage::AnimateObjects(float fTimeElapsed)
@@ -217,18 +279,35 @@ void CMirrorStage::AnimateObjects(float fTimeElapsed)
 
 void CMirrorStage::UpdateObjects(float fTimeElapsed)
 {
-
-
+	if (m_pCamera)
+		m_pCamera->Update(m_pPlayersGameObject.get(), m_pPlayersGameObject->GetPosition(), fTimeElapsed);
 }
 
 void CMirrorStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 {
+	//// 그래픽 루트 시그니쳐를 설정
+	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootsignature.Get());
+	pd3dCommandList->SetDescriptorHeaps(1, m_pd3dDescriptorHeap->m_pd3dCbvSrvDescriptorHeap.GetAddressOf());
+
+	if (m_pLightObject)
+		m_pLightObject->UpdateShaderVariables(pd3dCommandList);
 
 }
 
 void CMirrorStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera)
 {
-
+	if (m_pCamera)
+	{
+		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
+		m_pCamera->UpdateShaderVariables(pd3dCommandList);
+	}
+	if (m_pPlayersGameObject)
+	{
+		float xmfOffsetY = 0.f;
+		XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
+		m_pPlayersGameObject->CGameObject::PrepareRender(pd3dCommandList);
+		m_pPlayersGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+	}
 }
 
 void CMirrorStage::RenderParticle(ID3D12GraphicsCommandList* pd3dCommandList)

@@ -59,5 +59,6 @@ private:
 	bool													m_bResult = false;
 
 	UCHAR													pPreKeysBuffer[256];
+
 };
 

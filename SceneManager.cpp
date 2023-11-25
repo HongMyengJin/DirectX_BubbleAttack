@@ -34,7 +34,6 @@ void CSceneManager::ChangeSceneComponent(SceneType eSceneType)
 	{
 		//Release();
 		m_pCurrentScene = m_pScenes[UINT(SceneType::MirrorStageType)];
-
 		break;
 	}
 	case SceneType::SceneTypeEnd:
@@ -55,21 +54,22 @@ void CSceneManager::UpdateCurrentScene(float fTimeElapsed)
 			m_pCurrentScene->SetChangeScene(false);
 			ChangeSceneComponent(SceneType::MirrorStageType);
 		}
+
 	}
 }
 
 void CSceneManager::PreRenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList)
 {
+
 	if (m_pCurrentScene)
 		m_pCurrentScene->PrepareRender(pd3dCommandList);
 }
 
 void CSceneManager::RenderCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList)
 {
+
 	if (m_pCurrentScene)
-	{
 		m_pCurrentScene->Render(pd3dCommandList);
-	}
 }
 
 void CSceneManager::PostCurrentScene(ID3D12GraphicsCommandList* pd3dCommandList)

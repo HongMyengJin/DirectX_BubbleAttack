@@ -95,6 +95,9 @@
     <Filter Include="GameObject\CubeMapping">
       <UniqueIdentifier>{455b0ef6-67b4-4144-b1cc-9103ab287ae8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Mirror">
+      <UniqueIdentifier>{4e0f0ea9-22cf-4cb7-bb2e-6dbeb33c4c73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -280,6 +283,9 @@
     <ClInclude Include="MirrorStage.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="MirrorObject.h">
+      <Filter>GameObject\Mirror</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -452,6 +458,9 @@
     </ClCompile>
     <ClCompile Include="MirrorStage.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MirrorObject.cpp">
+      <Filter>GameObject\Mirror</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

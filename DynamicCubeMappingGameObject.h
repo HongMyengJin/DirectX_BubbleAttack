@@ -19,7 +19,6 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>	m_pd3dDsvDescriptorHeap;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource>			m_pd3dDepthStencilBuffer;
-	//std::shared_ptr<CMaterialsComponent>			m_pRenderTargetMaterialComponent;
 
 	D3D12_CPU_DESCRIPTOR_HANDLE						m_pd3dRtvCPUDescriptorHandles[6];
 	D3D12_CPU_DESCRIPTOR_HANDLE						m_d3dDsvDescriptorCPUHandle;
