@@ -1,14 +1,20 @@
 #include "MirrorObject.h"
 #include "MaterialComponent.h"
 #include "TransformComponent.h"
+#include "TextureRectMeshComponent.h"
 void CMirrorObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap)
 {
-	UINT MirrorSize = 50;
+	UINT MirrorSize = 500;
 	m_pComponents.resize(4);
+
+	
+
 
 	m_pComponents[UINT(ComponentType::ComponentMaterial)] = std::make_shared<CMaterialsComponent>();
 	m_pComponents[UINT(ComponentType::ComponentTransform)] = std::make_shared<CTransformComponent>();
-	m_pComponents[UINT(ComponentType::ComponentMesh)] = std::make_shared<CMeshComponent>();
+	m_pComponents[UINT(ComponentType::ComponentMesh)] = std::make_shared<CTextureRectMeshComponent>();
+
+	dynamic_cast<CTextureRectMeshComponent*>(m_pComponents[UINT(ComponentType::ComponentMesh)].get())->Init(pd3dDevice, pd3dCommandList, MirrorSize, MirrorSize, 20.f);
 
 	std::vector<ResourceTextureType> m_vTextureType;
 	m_vTextureType.resize(1);
@@ -16,7 +22,7 @@ void CMirrorObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd
 	D3D12_CLEAR_VALUE d3dRtvClearValue = { DXGI_FORMAT_R8G8B8A8_UNORM, { 0.0f, 0.0f, 0.0f, 1.0f } };
 
 	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->Init(1, 1, m_vTextureType);
-	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->CreateTexture(pd3dDevice, MirrorSize, MirrorSize, 1, 1, DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ, &d3dRtvClearValue, UINT(ResourceTextureType::ResourceTextureCUBE), 0, 0);
+	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->CreateTexture(pd3dDevice, MirrorSize, MirrorSize, 1, 1, DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ, &d3dRtvClearValue, UINT(ResourceTextureType::ResourceTexture2D), 0, 0);
 	dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->CreateShaderResourceView(pd3dDevice, pDescriptorHeap, 0, 9, 1); // 수정 필요
 
 	//
@@ -69,7 +75,7 @@ void CMirrorObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd
 
 void CMirrorObject::OnScenePreRender(ID3D12GraphicsCommandList* pd3dCommandList, CScene* pStage)
 {
-	static XMFLOAT3 pxmf3LookAts[6] = { XMFLOAT3(+100.0f, 0.0f, 0.0f), XMFLOAT3(-100.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, +100.0f, 0.0f), XMFLOAT3(0.0f, -100.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, +100.0f), XMFLOAT3(0.0f, 0.0f, -100.0f) };
+	static XMFLOAT3 pxmf3LookAts[6] = { XMFLOAT3(+200.f, 0.0f, 0.0f), XMFLOAT3(-200.f, 0.0f, 0.0f), XMFLOAT3(0.0f, +200.f, 0.0f), XMFLOAT3(0.0f, -200.f, 0.0f), XMFLOAT3(0.0f, 0.0f, +200.f), XMFLOAT3(0.0f, 0.0f, -200.f) };
 	static XMFLOAT3 pxmf3Ups[6] = { XMFLOAT3(0.0f, +1.0f, 0.0f), XMFLOAT3(0.0f, +1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, +1.0f), XMFLOAT3(0.0f, +1.0f, 0.0f), XMFLOAT3(0.0f, +1.0f, 0.0f) };
 
 	float pfClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -79,7 +85,7 @@ void CMirrorObject::OnScenePreRender(ID3D12GraphicsCommandList* pd3dCommandList,
 	xmf3Position.y += 15.f;
 
 	m_pCameras->SetPosition(xmf3Position);
-	m_pCameras->GenerateViewMatrix(xmf3Position, Vector3::Add(xmf3Position, pxmf3LookAts[5]), pxmf3Ups[5]); // z 축방향으로 앞에 위치
+	m_pCameras->GenerateViewMatrix(xmf3Position, Vector3::Add(xmf3Position, pxmf3LookAts[4]), pxmf3Ups[4]); // z 축방향으로 앞에 위치
 
 	pd3dCommandList->ClearRenderTargetView(m_pd3dRtvCPUDescriptorHandles, pfClearColor, 0, NULL);
 	pd3dCommandList->ClearDepthStencilView(m_pd3dDsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, NULL);

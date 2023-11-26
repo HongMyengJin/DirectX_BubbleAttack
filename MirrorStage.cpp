@@ -1,5 +1,7 @@
 #include "MirrorStage.h"
-
+#include "MirrorObjectShaderComponent.h"
+#include "TerrainObjectShaderComponent.h"
+#include "SkyBoxShaderComponent.h"
 void CMirrorStage::CreateGraphicsRootSignature(ID3D12Device* pd3dDevice)
 {
 	// 루트 시그니쳐 생성
@@ -198,6 +200,17 @@ void CMirrorStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandL
 	m_pLightObject->Init();
 	m_pLightObject->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
+	XMFLOAT3 xmf3TerrainScale(4.0f, 0.4f, 4.0f);
+	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
+
+	std::shared_ptr<CTerrainObjectShaderComponent> pTerrainShaderComponent = std::make_shared<CTerrainObjectShaderComponent>();
+	pTerrainShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
+
+	m_pTerrain = std::make_shared<CTerrainObject>();
+	m_pTerrain->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), _T("Image/HeightMap.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 17, 17, xmf3TerrainScale, xmf4Color);
+	m_pTerrain->AddShaderComponent(pTerrainShaderComponent);
+	m_pTerrain->SetPosition(XMFLOAT3(-400.f, -50.f, -400.f));
+
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
 	m_pPlayersGameObject = std::make_shared<CPlayerGameObject>();
@@ -207,6 +220,21 @@ void CMirrorStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandL
 	m_pPlayersGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/Penguin.bin", m_pTextureLoader);
 	m_pPlayersGameObject->LoadPlayerFrameData();
 	m_pPlayersGameObject->SetPosition(XMFLOAT3(0.f, 5.f, 130.f));
+
+	std::shared_ptr<CSkyBoxShaderComponent> pSkyBoxShaderComponent = std::make_shared<CSkyBoxShaderComponent>();
+	pSkyBoxShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
+
+	m_pSkyBoxObject = std::make_unique<CSkyBoxObject>();
+	m_pSkyBoxObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get());
+	m_pSkyBoxObject->AddShaderComponent(pSkyBoxShaderComponent);
+
+	std::shared_ptr<CMirrorObjectShaderComponent> pMirrorObjectShaderComponent = std::make_shared<CMirrorObjectShaderComponent>();
+	pMirrorObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+
+	m_pMirrorObject = std::make_shared<CMirrorObject>();
+	m_pMirrorObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get());
+	m_pMirrorObject->SetPosition(XMFLOAT3(0.f, 30.f, 0.f));
+	m_pMirrorObject->AddShaderComponent(pMirrorObjectShaderComponent);
 }
 
 bool CMirrorStage::ProcessInput(HWND hWnd, float fTimeElapsed)
@@ -281,6 +309,9 @@ void CMirrorStage::UpdateObjects(float fTimeElapsed)
 {
 	if (m_pCamera)
 		m_pCamera->Update(m_pPlayersGameObject.get(), m_pPlayersGameObject->GetPosition(), fTimeElapsed);
+
+	if (m_pMirrorObject)
+		m_pMirrorObject->Update(fTimeElapsed, NULL);
 }
 
 void CMirrorStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -292,22 +323,57 @@ void CMirrorStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 	if (m_pLightObject)
 		m_pLightObject->UpdateShaderVariables(pd3dCommandList);
 
+	if (m_pMirrorObject)
+		m_pMirrorObject->OnPreRender(pd3dCommandList, this);
+
 }
 
 void CMirrorStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera)
 {
-	if (m_pCamera)
+	if (!m_bFirst)
 	{
-		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
-		m_pCamera->UpdateShaderVariables(pd3dCommandList);
+		m_bFirst = true;
+		return;
+	}
+	CCamera* pCameraData = pCamera;
+	if (!pCameraData)
+		pCameraData = m_pCamera.get();
+
+	if (pCameraData)
+	{
+		pCameraData->SetViewportsAndScissorRects(pd3dCommandList);
+		pCameraData->UpdateShaderVariables(pd3dCommandList);
+	}
+
+	if (m_pSkyBoxObject)
+	{
+		m_pSkyBoxObject->SetPosition(pCameraData->GetPosition());
+		m_pSkyBoxObject->PrepareRender(pd3dCommandList);
+		m_pSkyBoxObject->Render(pd3dCommandList, pCameraData, nullptr);
 	}
 	if (m_pPlayersGameObject)
 	{
 		float xmfOffsetY = 0.f;
 		XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
 		m_pPlayersGameObject->CGameObject::PrepareRender(pd3dCommandList);
-		m_pPlayersGameObject->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+		m_pPlayersGameObject->Render(pd3dCommandList, pCameraData, nullptr);
 	}
+
+	if (m_pTerrain)
+	{
+		m_pTerrain->PrepareRender(pd3dCommandList);
+		m_pTerrain->Render(pd3dCommandList, pCameraData, nullptr);
+	}
+
+	if (pCameraData == m_pCamera.get())
+	{
+		if (m_pMirrorObject)
+		{
+			m_pMirrorObject->PrepareRender(pd3dCommandList);
+			m_pMirrorObject->Render(pd3dCommandList, pCameraData, nullptr);
+		}
+	}
+
 }
 
 void CMirrorStage::RenderParticle(ID3D12GraphicsCommandList* pd3dCommandList)

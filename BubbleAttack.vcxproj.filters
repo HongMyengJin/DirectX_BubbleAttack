@@ -98,6 +98,9 @@
     <Filter Include="GameObject\Mirror">
       <UniqueIdentifier>{4e0f0ea9-22cf-4cb7-bb2e-6dbeb33c4c73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Shader\ObjectShader\MirrorShader">
+      <UniqueIdentifier>{3d870d1d-390d-4c3f-9b39-42a7ddfe8f80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -286,6 +289,9 @@
     <ClInclude Include="MirrorObject.h">
       <Filter>GameObject\Mirror</Filter>
     </ClInclude>
+    <ClInclude Include="MirrorObjectShaderComponent.h">
+      <Filter>Component\Shader\ObjectShader\MirrorShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -462,6 +468,9 @@
     <ClCompile Include="MirrorObject.cpp">
       <Filter>GameObject\Mirror</Filter>
     </ClCompile>
+    <ClCompile Include="MirrorObjectShaderComponent.cpp">
+      <Filter>Component\Shader\ObjectShader\MirrorShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BubbleAttack.rc">
@@ -547,6 +556,15 @@
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
     <FxCompile Include="CubeMappingObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="MirrorObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="MirrorObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="MiirorObjectGeometryShader.hlsl">
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
   </ItemGroup>

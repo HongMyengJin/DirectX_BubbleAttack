@@ -16,6 +16,7 @@
 #include "DynamicCubeMappingGameObject.h"
 #include "DynamicCubeMappingShaderComponent.h"
 #include "ObjectShaderComponent.h"
+#include "MirrorObject.h"
 
 class CMirrorStage : public CScene
 {
@@ -48,6 +49,10 @@ private:
 	std::vector<std::shared_ptr<CMonsterGameObject>>		m_pMonsterObjects;
 	std::vector<std::shared_ptr<CUINumberGameObject>>		m_pUINumberObjects;
 	std::vector<std::shared_ptr<CUIGameObject>>				m_pUIObjects;
+	std::shared_ptr<CMirrorObject>							m_pMirrorObject;
+	std::shared_ptr<CTerrainObject>							m_pTerrain;
+	std::unique_ptr<CSkyBoxObject>							m_pSkyBoxObject;
+
 	std::shared_ptr<CTextureLoader>							m_pTextureLoader;
 
 	std::shared_ptr<CShadowMapShaderComponent>				m_pShadowShader;
@@ -59,6 +64,8 @@ private:
 	bool													m_bResult = false;
 
 	UCHAR													pPreKeysBuffer[256];
+
+	bool													m_bFirst = false;
 
 };
 
