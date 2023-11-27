@@ -231,10 +231,31 @@ void CMirrorStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandL
 	std::shared_ptr<CMirrorObjectShaderComponent> pMirrorObjectShaderComponent = std::make_shared<CMirrorObjectShaderComponent>();
 	pMirrorObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 
-	m_pMirrorObject = std::make_shared<CMirrorObject>();
-	m_pMirrorObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get());
-	m_pMirrorObject->SetPosition(XMFLOAT3(0.f, 30.f, 0.f));
-	m_pMirrorObject->AddShaderComponent(pMirrorObjectShaderComponent);
+	std::shared_ptr<CMirrorObject> pMirrorObject = std::make_shared<CMirrorObject>();
+	pMirrorObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), MirrorData::Mirror_Back);
+	pMirrorObject->SetPosition(XMFLOAT3(0.f, 100.f, 200.f));
+	pMirrorObject->AddShaderComponent(pMirrorObjectShaderComponent);
+	m_pMirrorObjects.push_back(pMirrorObject);
+
+	pMirrorObject = std::make_shared<CMirrorObject>();
+	pMirrorObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), MirrorData::Mirror_Front); // 왜 반대로 그려질까요?
+	pMirrorObject->SetPosition(XMFLOAT3(0.f, 100.f, -200.f));
+	pMirrorObject->AddShaderComponent(pMirrorObjectShaderComponent); 
+	m_pMirrorObjects.push_back(pMirrorObject);
+
+	pMirrorObject = std::make_shared<CMirrorObject>();
+	pMirrorObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), MirrorData::Mirror_Light);
+	pMirrorObject->Rotate(0.f, 90.f, 0.f);
+	pMirrorObject->SetPosition(XMFLOAT3(300.f, 100.f, 0.f));
+	pMirrorObject->AddShaderComponent(pMirrorObjectShaderComponent);
+	m_pMirrorObjects.push_back(pMirrorObject);
+
+	pMirrorObject = std::make_shared<CMirrorObject>();
+	pMirrorObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), MirrorData::Mirror_Left);
+	pMirrorObject->Rotate(0.f, -90.f, 0.f);
+	pMirrorObject->SetPosition(XMFLOAT3(-300.f, 100.f, 0.f));
+	pMirrorObject->AddShaderComponent(pMirrorObjectShaderComponent);
+	m_pMirrorObjects.push_back(pMirrorObject);
 }
 
 bool CMirrorStage::ProcessInput(HWND hWnd, float fTimeElapsed)
@@ -310,8 +331,11 @@ void CMirrorStage::UpdateObjects(float fTimeElapsed)
 	if (m_pCamera)
 		m_pCamera->Update(m_pPlayersGameObject.get(), m_pPlayersGameObject->GetPosition(), fTimeElapsed);
 
-	if (m_pMirrorObject)
-		m_pMirrorObject->Update(fTimeElapsed, NULL);
+	for (int i = 0; i < m_pMirrorObjects.size(); i++)
+	{
+		m_pMirrorObjects[i]->Update(fTimeElapsed, NULL);
+	}
+		
 }
 
 void CMirrorStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -323,8 +347,11 @@ void CMirrorStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 	if (m_pLightObject)
 		m_pLightObject->UpdateShaderVariables(pd3dCommandList);
 
-	if (m_pMirrorObject)
-		m_pMirrorObject->OnPreRender(pd3dCommandList, this);
+
+	for (int i = 0; i < m_pMirrorObjects.size(); i++)
+	{
+		m_pMirrorObjects[i]->OnPreRender(pd3dCommandList, this);
+	}
 
 }
 
@@ -367,11 +394,11 @@ void CMirrorStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* p
 
 	if (pCameraData == m_pCamera.get())
 	{
-		if (m_pMirrorObject)
+		for (int i = 0; i < m_pMirrorObjects.size(); i++)
 		{
-			m_pMirrorObject->PrepareRender(pd3dCommandList);
-			m_pMirrorObject->Render(pd3dCommandList, pCameraData, nullptr);
-		}
+			m_pMirrorObjects[i]->PrepareRender(pd3dCommandList);
+			m_pMirrorObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
+		}	
 	}
 
 }

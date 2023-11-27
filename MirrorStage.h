@@ -49,7 +49,7 @@ private:
 	std::vector<std::shared_ptr<CMonsterGameObject>>		m_pMonsterObjects;
 	std::vector<std::shared_ptr<CUINumberGameObject>>		m_pUINumberObjects;
 	std::vector<std::shared_ptr<CUIGameObject>>				m_pUIObjects;
-	std::shared_ptr<CMirrorObject>							m_pMirrorObject;
+	std::vector<std::shared_ptr<CMirrorObject>>				m_pMirrorObjects;
 	std::shared_ptr<CTerrainObject>							m_pTerrain;
 	std::unique_ptr<CSkyBoxObject>							m_pSkyBoxObject;
 
