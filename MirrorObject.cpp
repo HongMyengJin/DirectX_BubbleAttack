@@ -1,7 +1,7 @@
 #include "MirrorObject.h"
 #include "MaterialComponent.h"
 #include "TransformComponent.h"
-#include "TextureRectMeshComponent.h"
+#include "TextureRectMesh2Component.h"
 void CMirrorObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, CDescriptorHeap* pDescriptorHeap)
 {
 	UINT MirrorSize = 500;
@@ -12,9 +12,9 @@ void CMirrorObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd
 
 	m_pComponents[UINT(ComponentType::ComponentMaterial)] = std::make_shared<CMaterialsComponent>();
 	m_pComponents[UINT(ComponentType::ComponentTransform)] = std::make_shared<CTransformComponent>();
-	m_pComponents[UINT(ComponentType::ComponentMesh)] = std::make_shared<CTextureRectMeshComponent>();
+	m_pComponents[UINT(ComponentType::ComponentMesh)] = std::make_shared<CTextureRectMesh2Component>();
 
-	dynamic_cast<CTextureRectMeshComponent*>(m_pComponents[UINT(ComponentType::ComponentMesh)].get())->Init(pd3dDevice, pd3dCommandList, MirrorSize, MirrorSize, 20.f);
+	dynamic_cast<CTextureRectMesh2Component*>(m_pComponents[UINT(ComponentType::ComponentMesh)].get())->Init(pd3dDevice, pd3dCommandList, MirrorSize, MirrorSize, 20.f);
 
 	std::vector<ResourceTextureType> m_vTextureType;
 	m_vTextureType.resize(1);

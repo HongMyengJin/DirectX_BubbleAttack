@@ -13,7 +13,7 @@ public:
 
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(); // VertexShader
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(); // PixelShader
-	virtual D3D12_SHADER_BYTECODE CreateGeometryShader(); // GeometryShader
+	//virtual D3D12_SHADER_BYTECODE CreateGeometryShader(); // GeometryShader
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 
 	virtual void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);

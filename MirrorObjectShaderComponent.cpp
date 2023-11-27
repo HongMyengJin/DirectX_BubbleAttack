@@ -15,7 +15,7 @@ void CMirrorObjectShaderComponent::PostRender(ID3D12GraphicsCommandList* pd3dCom
 
 D3D12_SHADER_BYTECODE CMirrorObjectShaderComponent::CreateVertexShader()
 {
-    D3DReadFileToBlob(L"MirrorObjectVertexShader.cso", m_pd3dVertexShaderBlob.GetAddressOf()); 
+    D3DReadFileToBlob(L"TextureObjectVertexShader.cso", m_pd3dVertexShaderBlob.GetAddressOf()); 
 
     D3D12_SHADER_BYTECODE d3dShaderByteCode;
     d3dShaderByteCode.BytecodeLength = m_pd3dVertexShaderBlob->GetBufferSize();
@@ -26,7 +26,7 @@ D3D12_SHADER_BYTECODE CMirrorObjectShaderComponent::CreateVertexShader()
 
 D3D12_SHADER_BYTECODE CMirrorObjectShaderComponent::CreatePixelShader()
 {
-    D3DReadFileToBlob(L"MirrorObjectPixelShader.cso", m_pd3dPixelShaderBlob.GetAddressOf());
+    D3DReadFileToBlob(L"TextureObjectPixelShader.cso", m_pd3dPixelShaderBlob.GetAddressOf());
 
     D3D12_SHADER_BYTECODE d3dShaderByteCode;
     d3dShaderByteCode.BytecodeLength = m_pd3dPixelShaderBlob->GetBufferSize();
@@ -35,16 +35,16 @@ D3D12_SHADER_BYTECODE CMirrorObjectShaderComponent::CreatePixelShader()
     return d3dShaderByteCode;
 }
 
-D3D12_SHADER_BYTECODE CMirrorObjectShaderComponent::CreateGeometryShader()
-{
-    D3DReadFileToBlob(L"MiirorObjectGeometryShader.cso", m_pd3dGeometrylShaderBlob.GetAddressOf());
-
-    D3D12_SHADER_BYTECODE d3dShaderByteCode;
-    d3dShaderByteCode.BytecodeLength = m_pd3dGeometrylShaderBlob->GetBufferSize();
-    d3dShaderByteCode.pShaderBytecode = m_pd3dGeometrylShaderBlob->GetBufferPointer();
-
-    return d3dShaderByteCode;
-}
+//D3D12_SHADER_BYTECODE CMirrorObjectShaderComponent::CreateGeometryShader()
+//{
+//    D3DReadFileToBlob(L"MiirorObjectGeometryShader.cso", m_pd3dGeometrylShaderBlob.GetAddressOf());
+//
+//    D3D12_SHADER_BYTECODE d3dShaderByteCode;
+//    d3dShaderByteCode.BytecodeLength = m_pd3dGeometrylShaderBlob->GetBufferSize();
+//    d3dShaderByteCode.pShaderBytecode = m_pd3dGeometrylShaderBlob->GetBufferPointer();
+//
+//    return d3dShaderByteCode;
+//}
 
 D3D12_INPUT_LAYOUT_DESC CMirrorObjectShaderComponent::CreateInputLayout()
 {
@@ -53,7 +53,7 @@ D3D12_INPUT_LAYOUT_DESC CMirrorObjectShaderComponent::CreateInputLayout()
     m_d3dPdInputElementDescs.resize(nInputElementDescs);
 
     m_d3dPdInputElementDescs[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
-    m_d3dPdInputElementDescs[1] = { "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
+    m_d3dPdInputElementDescs[1] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
 
     D3D12_INPUT_LAYOUT_DESC d3dInputLayoutDesc;
     d3dInputLayoutDesc.pInputElementDescs = &m_d3dPdInputElementDescs[0];

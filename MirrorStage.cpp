@@ -229,7 +229,7 @@ void CMirrorStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandL
 	m_pSkyBoxObject->AddShaderComponent(pSkyBoxShaderComponent);
 
 	std::shared_ptr<CMirrorObjectShaderComponent> pMirrorObjectShaderComponent = std::make_shared<CMirrorObjectShaderComponent>();
-	pMirrorObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+	pMirrorObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 
 	m_pMirrorObject = std::make_shared<CMirrorObject>();
 	m_pMirrorObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get());
@@ -284,7 +284,7 @@ bool CMirrorStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 			}
 			if (dwDirection)
 			{
-				m_pPlayersGameObject->Move(dwDirection, 1.5f);
+				m_pPlayersGameObject->Move(dwDirection, 5.f);
 				m_pPlayersGameObject->SetboolMove(true);
 			}
 			else

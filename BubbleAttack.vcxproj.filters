@@ -292,6 +292,9 @@
     <ClInclude Include="MirrorObjectShaderComponent.h">
       <Filter>Component\Shader\ObjectShader\MirrorShader</Filter>
     </ClInclude>
+    <ClInclude Include="TextureRectMesh2Component.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -471,6 +474,9 @@
     <ClCompile Include="MirrorObjectShaderComponent.cpp">
       <Filter>Component\Shader\ObjectShader\MirrorShader</Filter>
     </ClCompile>
+    <ClCompile Include="TextureRectMesh2Component.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BubbleAttack.rc">
@@ -565,6 +571,12 @@
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
     <FxCompile Include="MiirorObjectGeometryShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureObjectPixelShader.hlsl">
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
   </ItemGroup>
