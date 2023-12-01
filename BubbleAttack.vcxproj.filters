@@ -101,6 +101,45 @@
     <Filter Include="Component\Shader\ObjectShader\MirrorShader">
       <UniqueIdentifier>{3d870d1d-390d-4c3f-9b39-42a7ddfe8f80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="쉐이더 파일\Mirror">
+      <UniqueIdentifier>{bc49e291-22fb-4d60-8105-3492a950e7b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\CubeMapping">
+      <UniqueIdentifier>{e1a4b5c5-7db3-4323-8353-9f6ddb0baf84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\Shdow">
+      <UniqueIdentifier>{61601446-397b-4856-b9b8-ac45a20d5929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\SkyBox">
+      <UniqueIdentifier>{21a48636-cb52-43ac-a778-afbeac355524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\Particle">
+      <UniqueIdentifier>{9734ef7f-4d4e-49ee-9e67-a9e1b1159e21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\Terrain">
+      <UniqueIdentifier>{31efe2b3-fa3f-4f1b-90c6-0a5e8b8df9de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\Rect">
+      <UniqueIdentifier>{cd5c9fdb-b2a7-4ba4-9adc-2ee33beda598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\Rect\BillBoard">
+      <UniqueIdentifier>{cf93c2dd-4e5d-4a4d-9416-2bf3c63fa04d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\MeshRender">
+      <UniqueIdentifier>{e3ff89bf-be98-4745-9519-3db39ac48449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\UI">
+      <UniqueIdentifier>{95290350-bf0b-463c-82a7-2b42ddd4926c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Terrain\WaterTerrain">
+      <UniqueIdentifier>{fd51f506-e449-4006-95fe-b53aa4942167}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Terrain\ParallexMappingTerrain">
+      <UniqueIdentifier>{f40b03e9-99d1-42a1-9bcc-bf080f1b6bae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\Terrain\Tessellation">
+      <UniqueIdentifier>{9208c296-8881-4971-8ff8-624ab9150569}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -226,9 +265,6 @@
     <ClInclude Include="TerrainObject.h">
       <Filter>GameObject\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="RippleWaterObject.h">
-      <Filter>GameObject\Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="SkyBoxObject.h">
       <Filter>GameObject\SkyBox</Filter>
     </ClInclude>
@@ -294,6 +330,9 @@
     </ClInclude>
     <ClInclude Include="TextureRectMesh2Component.h">
       <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="RippleWaterObject.h">
+      <Filter>GameObject\Terrain\WaterTerrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -408,9 +447,6 @@
     <ClCompile Include="TerrainObject.cpp">
       <Filter>GameObject\Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="RippleWaterObject.cpp">
-      <Filter>GameObject\Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="SkyBoxObject.cpp">
       <Filter>GameObject\SkyBox</Filter>
     </ClCompile>
@@ -477,6 +513,9 @@
     <ClCompile Include="TextureRectMesh2Component.cpp">
       <Filter>Component\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="RippleWaterObject.cpp">
+      <Filter>GameObject\Terrain\WaterTerrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BubbleAttack.rc">
@@ -492,92 +531,104 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="ObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="ObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
     <FxCompile Include="Light.hlsl">
       <Filter>쉐이더 파일</Filter>
     </FxCompile>
-    <FxCompile Include="TerrainObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="TerrainObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="TerrainWaterObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="TerrainWaterObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="SkyBoxObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="SkyBoxObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="BillBoardObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="BillBoardObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="BillBoardObjectGeometryShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="ParticleObjectStreamOutputVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="ParticleObjectDrawPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="ParticleObjectDrawVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="ParticleObjectStreamOutputGeometryShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="ParticleObjectDrawGeometryShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="UIObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="UIObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="ShadowMapObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="ShadowMapObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="DepthWritePixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="CubeMappingObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="CubeMappingObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="MirrorObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
+    <FxCompile Include="MiirorObjectGeometryShader.hlsl">
+      <Filter>쉐이더 파일\Mirror</Filter>
     </FxCompile>
     <FxCompile Include="MirrorObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
+      <Filter>쉐이더 파일\Mirror</Filter>
     </FxCompile>
-    <FxCompile Include="MiirorObjectGeometryShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
+    <FxCompile Include="MirrorObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\Mirror</Filter>
     </FxCompile>
-    <FxCompile Include="TextureObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
+    <FxCompile Include="CubeMappingObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\CubeMapping</Filter>
+    </FxCompile>
+    <FxCompile Include="CubeMappingObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일\CubeMapping</Filter>
+    </FxCompile>
+    <FxCompile Include="BillBoardObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\Rect\BillBoard</Filter>
+    </FxCompile>
+    <FxCompile Include="BillBoardObjectGeometryShader.hlsl">
+      <Filter>쉐이더 파일\Rect\BillBoard</Filter>
+    </FxCompile>
+    <FxCompile Include="BillBoardObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일\Rect\BillBoard</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyBoxObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일\SkyBox</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyBoxObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\SkyBox</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticleObjectDrawGeometryShader.hlsl">
+      <Filter>쉐이더 파일\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticleObjectDrawPixelShader.hlsl">
+      <Filter>쉐이더 파일\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticleObjectDrawVertexShader.hlsl">
+      <Filter>쉐이더 파일\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticleObjectStreamOutputGeometryShader.hlsl">
+      <Filter>쉐이더 파일\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticleObjectStreamOutputVertexShader.hlsl">
+      <Filter>쉐이더 파일\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowMapObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일\Shdow</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowMapObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\Shdow</Filter>
+    </FxCompile>
+    <FxCompile Include="DepthWritePixelShader.hlsl">
+      <Filter>쉐이더 파일\Shdow</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainWaterObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\Terrain</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일\Terrain</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\Terrain</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainWaterObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일\Terrain</Filter>
     </FxCompile>
     <FxCompile Include="TextureObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일</Filter>
+      <Filter>쉐이더 파일\Rect</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\Rect</Filter>
+    </FxCompile>
+    <FxCompile Include="ObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일\MeshRender</Filter>
+    </FxCompile>
+    <FxCompile Include="ObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\MeshRender</Filter>
+    </FxCompile>
+    <FxCompile Include="UIObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="UIObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainTessellationObjectVertexShader.hlsl">
+      <Filter>쉐이더 파일\Terrain\Tessellation</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainTessellationObjectDomainShader.hlsl">
+      <Filter>쉐이더 파일\Terrain\Tessellation</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainTessellationObjectHullShader.hlsl">
+      <Filter>쉐이더 파일\Terrain\Tessellation</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainTessellationObjectPixelShader.hlsl">
+      <Filter>쉐이더 파일\Terrain\Tessellation</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

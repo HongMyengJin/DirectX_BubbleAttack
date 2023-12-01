@@ -101,7 +101,7 @@ void CMirrorObject::OnScenePreRender(ID3D12GraphicsCommandList* pd3dCommandList,
 	::SynchronizeResourceTransition(pd3dCommandList, dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->m_MaterialDatas[0]->m_Textures[0]->GetTextureResource(0).Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 	XMFLOAT3 xmf3Position = GetPosition();
-	xmf3Position.y += 15.f;
+	xmf3Position.y += -0.f;
 
 	m_pCameras->SetPosition(xmf3Position);
 	m_pCameras->GenerateViewMatrix(xmf3Position, Vector3::Add(xmf3Position, m_xmf3LookAt), m_xmf3Up); // z 축방향으로 앞에 위치
