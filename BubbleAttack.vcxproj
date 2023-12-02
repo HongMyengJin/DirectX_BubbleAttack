@@ -173,6 +173,7 @@
     <ClInclude Include="TerrainMeshComponent.h" />
     <ClInclude Include="TerrainObject.h" />
     <ClInclude Include="TerrainObjectShaderComponent.h" />
+    <ClInclude Include="TerrainTessellationShaderComponent.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="TexturedMeshComponent.h" />
     <ClInclude Include="TextureLoader.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="TerrainMeshComponent.cpp" />
     <ClCompile Include="TerrainObject.cpp" />
     <ClCompile Include="TerrainObjectShaderComponent.cpp" />
+    <ClCompile Include="TerrainTessellationShaderComponent.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="TexturedMeshComponent.cpp" />
     <ClCompile Include="TextureLoader.cpp" />

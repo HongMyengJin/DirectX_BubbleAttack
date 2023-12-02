@@ -140,6 +140,9 @@
     <Filter Include="쉐이더 파일\Terrain\Tessellation">
       <UniqueIdentifier>{9208c296-8881-4971-8ff8-624ab9150569}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Shader\ObjectShader\TerrainTessellationShader">
+      <UniqueIdentifier>{62f5e3ab-3458-44db-b699-0dcf729e4d36}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -334,6 +337,9 @@
     <ClInclude Include="RippleWaterObject.h">
       <Filter>GameObject\Terrain\WaterTerrain</Filter>
     </ClInclude>
+    <ClInclude Include="TerrainTessellationShaderComponent.h">
+      <Filter>Component\Shader\ObjectShader\TerrainTessellationShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -515,6 +521,9 @@
     </ClCompile>
     <ClCompile Include="RippleWaterObject.cpp">
       <Filter>GameObject\Terrain\WaterTerrain</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainTessellationShaderComponent.cpp">
+      <Filter>Component\Shader\ObjectShader\TerrainTessellationShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

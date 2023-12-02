@@ -28,6 +28,8 @@ void CShaderComponent::CreateShader(ID3D12Device* pd3dDevice, ID3D12GraphicsComm
 	m_d3dPipelineStateDesc.VS = CreateVertexShader();
 	m_d3dPipelineStateDesc.PS = CreatePixelShader();
 	m_d3dPipelineStateDesc.GS = CreateGeometryShader();
+	m_d3dPipelineStateDesc.HS = CreateHullShader();
+	m_d3dPipelineStateDesc.DS = CreateDomainShader();
 	m_d3dPipelineStateDesc.RasterizerState = CreateRasterizerState();
 	m_d3dPipelineStateDesc.BlendState = CreateBlendState();
 	m_d3dPipelineStateDesc.DepthStencilState = CreateDepthStencilState();

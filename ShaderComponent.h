@@ -20,6 +20,8 @@ public:
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader() { return D3D12_SHADER_BYTECODE(); }; // VertexShader
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader() { return D3D12_SHADER_BYTECODE(); }; // PixelShader
 	virtual D3D12_SHADER_BYTECODE CreateGeometryShader() { return D3D12_SHADER_BYTECODE(); };
+	virtual	D3D12_SHADER_BYTECODE CreateHullShader() { return D3D12_SHADER_BYTECODE(); }
+	virtual	D3D12_SHADER_BYTECODE CreateDomainShader() { return D3D12_SHADER_BYTECODE(); }
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout() { return D3D12_INPUT_LAYOUT_DESC(); };
 	virtual D3D12_STREAM_OUTPUT_DESC CreateStreamOutputLayout() { return D3D12_STREAM_OUTPUT_DESC(); };
 
@@ -34,6 +36,8 @@ public:
 protected:
 	Microsoft::WRL::ComPtr<ID3DBlob>									m_pd3dVertexShaderBlob;
 	Microsoft::WRL::ComPtr<ID3DBlob>									m_pd3dPixelShaderBlob;
+	Microsoft::WRL::ComPtr<ID3DBlob>									m_pd3dHullShaderBlob;
+	Microsoft::WRL::ComPtr<ID3DBlob>									m_pd3dDomainShaderBlob;
 
 	int																	m_nPipelineStates = 1;
 	int																	m_iCurrentPipelineState = 0;
