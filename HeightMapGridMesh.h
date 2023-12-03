@@ -32,6 +32,11 @@ public:
 
 	void Init(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale);
 	float GetHeight(float x, float z, bool bReverseQuad = false);
+
+	float GetTerrainTessellationHeight(float fx, float fz, XMFLOAT3 xmf3Scale);
+	float GetTerrainTessellationInterpolatedHeight(int x, int y, float fxFractional, float fzFractional, bool bReverseQuad = false);
+	XMFLOAT3 GetTerrainTessellationHeightMapNormal(int x, int z, XMFLOAT3 xmf3Scale);
+
 	XMFLOAT3 GetHeightMapNormal(int x, int z);
 	XMFLOAT3 GetScale() { return(m_xmf3Scale); }
 

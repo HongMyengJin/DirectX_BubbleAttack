@@ -27,6 +27,24 @@ XMFLOAT3 CHeightMapImage::GetHeightMapNormal(int x, int z)
 	return(xmf3Normal);
 }
 
+XMFLOAT3 CHeightMapImage::GetTerrainTessellationHeightMapNormal(int x, int z, XMFLOAT3 xmf3Scale)
+{
+	if ((x < 0.0f) || (z < 0.0f) || (x >= m_nWidth) || (z >= m_nLength)) return(XMFLOAT3(0.0f, 1.0f, 0.0f));
+
+	int nHeightMapIndex = x + (z * m_nWidth);
+	int xHeightMapAdd = (x < (m_nWidth - 1)) ? 1 : -1;
+	int zHeightMapAdd = (z < (m_nLength - 1)) ? m_nWidth : -m_nWidth;
+	float y1 = (float)m_pHeightMapPixels[nHeightMapIndex] * xmf3Scale.y;
+	float y2 = (float)m_pHeightMapPixels[nHeightMapIndex + xHeightMapAdd] * xmf3Scale.y;
+	float y3 = (float)m_pHeightMapPixels[nHeightMapIndex + zHeightMapAdd] * xmf3Scale.y;
+	XMFLOAT3 xmf3Edge1 = XMFLOAT3(0.0f, y3 - y1, xmf3Scale.z);
+	XMFLOAT3 xmf3Edge2 = XMFLOAT3(xmf3Scale.x, y2 - y1, 0.0f);
+	XMFLOAT3 xmf3Normal = Vector3::CrossProduct(xmf3Edge1, xmf3Edge2, true);
+
+	return(xmf3Normal);
+}
+
+
 #define _WITH_APPROXIMATE_OPPOSITE_CORNER
 
 void CHeightMapImage::Init(LPCTSTR pFileName, int nWidth, int nLength, XMFLOAT3 xmf3Scale)
@@ -89,6 +107,54 @@ float CHeightMapImage::GetHeight(float fx, float fz, bool bReverseQuad) // ¿©±â¼
 	float fTopHeight = fTopLeft * (1 - fxPercent) + fTopRight * fxPercent;
 	float fBottomHeight = fBottomLeft * (1 - fxPercent) + fBottomRight * fxPercent;
 	float fHeight = fBottomHeight * (1 - fzPercent) + fTopHeight * fzPercent;
+
+	return(fHeight);
+}
+
+float CHeightMapImage::GetTerrainTessellationHeight(float fx, float fz, XMFLOAT3 xmf3Scale)
+{
+	fx /= xmf3Scale.x;
+	fz /= xmf3Scale.z;
+
+	int x = (int)fx;
+	int z = (int)fz;
+	float xFractional = fx - x;
+	float zFractional = fz - z;
+
+	bool bReverseQuad = ((z % 2) != 0);
+	float fHeight = GetTerrainTessellationInterpolatedHeight(x, z, xFractional, zFractional, bReverseQuad);
+
+	return(fHeight * xmf3Scale.y);
+}
+
+#define _WITH_APPROXIMATE_OPPOSITE_CORNER
+float CHeightMapImage::GetTerrainTessellationInterpolatedHeight(int x, int z, float fxFractional, float fzFractional, bool bReverseQuad)
+{
+	if ((x < 0) || (z < 0) || (x >= m_nWidth) || (z >= m_nLength)) return(0.0f);
+
+	float fBottomLeft = (float)m_pHeightMapPixels[x + (z * m_nWidth)];
+	float fBottomRight = (float)m_pHeightMapPixels[(x + 1) + (z * m_nWidth)];
+	float fTopLeft = (float)m_pHeightMapPixels[x + ((z + 1) * m_nWidth)];
+	float fTopRight = (float)m_pHeightMapPixels[(x + 1) + ((z + 1) * m_nWidth)];
+#ifdef _WITH_APPROXIMATE_OPPOSITE_CORNER
+	if (bReverseQuad)
+	{
+		if (fzFractional >= fxFractional)
+			fBottomRight = fBottomLeft + (fTopRight - fTopLeft);
+		else
+			fTopLeft = fTopRight + (fBottomLeft - fBottomRight);
+	}
+	else
+	{
+		if (fzFractional < (1.0f - fxFractional))
+			fTopRight = fTopLeft + (fBottomRight - fBottomLeft);
+		else
+			fBottomLeft = fTopLeft + (fBottomRight - fTopRight);
+	}
+#endif
+	float fTopHeight = fTopLeft * (1 - fxFractional) + fTopRight * fxFractional;
+	float fBottomHeight = fBottomLeft * (1 - fxFractional) + fBottomRight * fxFractional;
+	float fHeight = fBottomHeight * (1 - fzFractional) + fTopHeight * fzFractional;
 
 	return(fHeight);
 }

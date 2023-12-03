@@ -134,14 +134,14 @@
     <Filter Include="GameObject\Terrain\WaterTerrain">
       <UniqueIdentifier>{fd51f506-e449-4006-95fe-b53aa4942167}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObject\Terrain\ParallexMappingTerrain">
-      <UniqueIdentifier>{f40b03e9-99d1-42a1-9bcc-bf080f1b6bae}</UniqueIdentifier>
-    </Filter>
     <Filter Include="쉐이더 파일\Terrain\Tessellation">
       <UniqueIdentifier>{9208c296-8881-4971-8ff8-624ab9150569}</UniqueIdentifier>
     </Filter>
     <Filter Include="Component\Shader\ObjectShader\TerrainTessellationShader">
       <UniqueIdentifier>{62f5e3ab-3458-44db-b699-0dcf729e4d36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Terrain\TessellationTerrain">
+      <UniqueIdentifier>{f40b03e9-99d1-42a1-9bcc-bf080f1b6bae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -340,6 +340,15 @@
     <ClInclude Include="TerrainTessellationShaderComponent.h">
       <Filter>Component\Shader\ObjectShader\TerrainTessellationShader</Filter>
     </ClInclude>
+    <ClInclude Include="TessellationTerrainMeshComponent.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="TessellationGridMeshComponent.h">
+      <Filter>Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="TessellationTerrainObject.h">
+      <Filter>GameObject\Terrain\TessellationTerrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -524,6 +533,15 @@
     </ClCompile>
     <ClCompile Include="TerrainTessellationShaderComponent.cpp">
       <Filter>Component\Shader\ObjectShader\TerrainTessellationShader</Filter>
+    </ClCompile>
+    <ClCompile Include="TessellationTerrainMeshComponent.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="TessellationGridMeshComponent.cpp">
+      <Filter>Component\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="TessellationTerrainObject.cpp">
+      <Filter>GameObject\Terrain\TessellationTerrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

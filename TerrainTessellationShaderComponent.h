@@ -16,6 +16,8 @@ class CTerrainTessellationShaderComponent : public CShaderComponent
 		virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 		virtual D3D12_RASTERIZER_DESC CreateRasterizerState();
 
+		virtual void CreateShader(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, DXGI_FORMAT pdxgiRtvFormats, DXGI_FORMAT dxgiDsvFormat, D3D12_PRIMITIVE_TOPOLOGY_TYPE eprimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+
 		virtual void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
 		virtual void UpdateShaderVariables(ID3D12GraphicsCommandList* pd3dCommandList);
 		virtual void UpdateShaderVariable(ID3D12GraphicsCommandList* pd3dCommandList, XMFLOAT4X4* pxmf4x4World);
