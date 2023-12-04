@@ -1,4 +1,4 @@
-#include "Stage.h"
+ #include "Stage.h"
 #include "RippleWaterObjectShaderComponent.h"
 #include "TextureRectMeshShaderComponent.h"
 #include "ParticleObjectShaderComponent.h"
@@ -292,7 +292,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	//XMFLOAT3 xmf3TerrainScale(4.0f, 0.4f, 4.0f);
 	XMFLOAT3 xmf3WaterTerrainScale(10.f, 2.0f, 10.f);
 
-	XMFLOAT3 xmf3Scale(16.0f, 3.0f, 16.0f);
+	XMFLOAT3 xmf3Scale(5.0f, 2.0f, 5.0f);
 
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 
@@ -617,7 +617,7 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera
 	{
 		float xmfOffsetY = 0.f;
 		XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
-		m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x + 400.f, xmfPosition.z + 400.f) + xmfOffsetY, xmfPosition.z));
+		m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTessellationTerrainObject->GetHeight(xmfPosition.x, xmfPosition.z) + xmfOffsetY, xmfPosition.z));
 		m_pPlayersGameObject->CGameObject::PrepareRender(pd3dCommandList);
 		m_pPlayersGameObject->Render(pd3dCommandList, pCameraData, nullptr);
 	}
