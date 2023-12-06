@@ -1,3 +1,5 @@
+#include "Define.hlsl"
+
 struct VS_PARTICLE_INPUT
 {
 	float3 position : POSITION;

@@ -1,3 +1,5 @@
+#include "Define.hlsl"
+
 struct VS_STANDARD_OUTPUT
 {
 	float4 position : SV_POSITION;

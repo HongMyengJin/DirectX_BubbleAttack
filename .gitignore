@@ -46,4 +46,5 @@ x64/
 *.jpg
 *.png
 Executable/
+Debug/
 *.sln

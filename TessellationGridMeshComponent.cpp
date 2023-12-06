@@ -35,6 +35,7 @@ void CTessellationGridMeshComponent::Init(ID3D12Device* pd3dDevice, ID3D12Graphi
 			pVertices[i].m_xmf4Diffuse = Vector4::Add(OnGetColor(int(x), int(z), pContext), xmf4Color);
 			pVertices[i].m_xmf2TexCoord0 = XMFLOAT2(float(x) / float(cxHeightMap - 1), float(czHeightMap - 1 - z) / float(czHeightMap - 1));
 			pVertices[i].m_xmf2TexCoord1 = XMFLOAT2(float(x) / float(m_xmf3Scale.x * 0.5f), float(z) / float(m_xmf3Scale.z * 0.5f));
+			if (pHeightMapImage) XMStoreFloat3(&pVertices[i].m_xmf3Normal, DirectX::XMVector3Normalize(XMLoadFloat3(&pHeightMapImage->GetTerrainTessellationHeightMapNormal(x, z, m_xmf3Scale))));
 			if (fHeight < fMinHeight) fMinHeight = fHeight;
 			if (fHeight > fMaxHeight) fMaxHeight = fHeight;
 		}

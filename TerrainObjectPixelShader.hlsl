@@ -1,26 +1,4 @@
-struct MATERIAL
-{
-	float4					m_cAmbient;
-	float4					m_cDiffuse;
-	float4					m_cSpecular; //a = power
-	float4					m_cEmissive;
-};
-
-cbuffer cbCameraInfo : register(b1)
-{
-	matrix		gmtxView : packoffset(c0);
-	matrix		gmtxProjection : packoffset(c4);
-	matrix		gmtxInverseView : packoffset(c8);
-	float3		gvCameraPosition : packoffset(c12);
-};
-
-
-cbuffer cbGameObjectInfo : register(b2)
-{
-	matrix		gmtxGameObject : packoffset(c0);
-	MATERIAL	gMaterial : packoffset(c4);
-	uint		gnTexturesMask : packoffset(c8);
-};
+#include "Light.hlsl"
 
 #define MATERIAL_ALBEDO_MAP			0x01
 #define MATERIAL_SPECULAR_MAP		0x02
@@ -30,7 +8,6 @@ cbuffer cbGameObjectInfo : register(b2)
 #define MATERIAL_DETAIL_ALBEDO_MAP	0x20
 #define MATERIAL_DETAIL_NORMAL_MAP	0x40
 
-#include "Light.hlsl"
 Texture2D gtxtTexture0 : register(t6);
 Texture2D gtxtTexture1 : register(t7);
 Texture2D gtxtTexture2 : register(t8);

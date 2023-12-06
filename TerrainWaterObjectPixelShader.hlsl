@@ -1,42 +1,4 @@
-struct MATERIAL
-{
-	float4					m_cAmbient;
-	float4					m_cDiffuse;
-	float4					m_cSpecular; //a = power
-	float4					m_cEmissive;
-};
-
-cbuffer cbCameraInfo : register(b1)
-{
-	matrix		gmtxView : packoffset(c0);
-	matrix		gmtxProjection : packoffset(c4);
-	matrix		gmtxInverseView : packoffset(c8);
-	float3		gvCameraPosition : packoffset(c12);
-};
-
-
-cbuffer cbGameObjectInfo : register(b2)
-{
-	matrix		gmtxGameObject : packoffset(c0);
-	MATERIAL	gMaterial : packoffset(c4);
-	uint		gnTexturesMask : packoffset(c8);
-};
-
-cbuffer cbFrameworkInfo : register(b12)
-{
-	float		gfCurrentTime : packoffset(c0.x);
-	float		gfElapsedTime : packoffset(c0.y);
-	float		gfSecondsPerFirework : packoffset(c0.z);
-	int			gnFlareParticlesToEmit : packoffset(c0.w);;
-	float3		gf3Gravity : packoffset(c1.x);
-	int			gnMaxFlareType2Particles : packoffset(c1.w);;
-};
-
-cbuffer cbWaterInfo : register(b5)
-{
-	matrix		gf4x4TextureAnimation : packoffset(c0);
-};
-
+#include "Define.hlsl"
 
 Texture2D gtxtTexture0 : register(t6);
 Texture2D gtxtTexture1 : register(t7);

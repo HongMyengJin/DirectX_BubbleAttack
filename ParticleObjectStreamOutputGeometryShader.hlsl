@@ -1,14 +1,6 @@
-Buffer<float4> gRandomSphereBuffer : register(t13);
+#include "Define.hlsl"
 
-cbuffer cbFrameworkInfo : register(b12)
-{
-	float		gfCurrentTime : packoffset(c0.x);
-	float		gfElapsedTime : packoffset(c0.y);
-	float		gfSecondsPerFirework : packoffset(c0.z);
-	int			gnFlareParticlesToEmit : packoffset(c0.w);;
-	float3		gf3Gravity : packoffset(c1.x);
-	int			gnMaxFlareType2Particles : packoffset(c1.w);;
-};
+Buffer<float4> gRandomSphereBuffer : register(t13);
 
 struct VS_PARTICLE_INPUT
 {

@@ -1,27 +1,4 @@
-struct MATERIAL
-{
-	float4					m_cAmbient;
-	float4					m_cDiffuse;
-	float4					m_cSpecular; //a = power
-	float4					m_cEmissive;
-};
-
-cbuffer cbCameraInfo : register(b1)
-{
-	matrix		gmtxView : packoffset(c0);
-	matrix		gmtxProjection : packoffset(c4);
-	matrix		gmtxInverseView : packoffset(c8);
-	float3		gvCameraPosition : packoffset(c12);
-};
-
-
-cbuffer cbGameObjectInfo : register(b2)
-{
-	matrix		gmtxGameObject : packoffset(c0);
-	MATERIAL	gMaterial : packoffset(c4);
-	uint		gnTexturesMask : packoffset(c8);
-};
-
+#include "Define.hlsl"
 void BernsteinCoeffcient5x5(float t, out float fBernstein[5])
 {
 	float tInv = 1.0f - t;
@@ -45,6 +22,7 @@ struct DS_TERRAIN_TESSELLATION_OUTPUT
 	float2 uv0 : TEXCOORD0;
 	float2 uv1 : TEXCOORD1;
 	float4 tessellation : TEXCOORD2;
+	float3 normalW : NORMAL;
 };
 
 struct HS_TERRAIN_TESSELLATION_OUTPUT
@@ -53,6 +31,7 @@ struct HS_TERRAIN_TESSELLATION_OUTPUT
 	float4 color : COLOR;
 	float2 uv0 : TEXCOORD0;
 	float2 uv1 : TEXCOORD1;
+	float3 normalW : NORMAL;
 };
 
 float3 CubicBezierSum5x5(OutputPatch<HS_TERRAIN_TESSELLATION_OUTPUT, 25> patch, float uB[5], float vB[5])
@@ -84,7 +63,7 @@ DS_TERRAIN_TESSELLATION_OUTPUT DSTerrainTessellation(HS_TERRAIN_TESSELLATION_CON
 	float3 position = CubicBezierSum5x5(patch, uB, vB);
 	matrix mtxWorldViewProjection = mul(mul(gmtxGameObject, gmtxView), gmtxProjection);
 	output.position = mul(float4(position, 1.0f), mtxWorldViewProjection);
-
+	output.normalW =  lerp(lerp(patch[0].normalW, patch[4].normalW, uv.x), lerp(patch[20].normalW, patch[24].normalW, uv.x), uv.y);
 	output.tessellation = float4(patchConstant.fTessEdges[0], patchConstant.fTessEdges[1], patchConstant.fTessEdges[2], patchConstant.fTessEdges[3]);
 
 	return(output);

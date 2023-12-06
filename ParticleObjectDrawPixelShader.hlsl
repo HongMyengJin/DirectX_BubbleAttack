@@ -1,3 +1,5 @@
+#include "Define.hlsl"
+
 struct GS_PARTICLE_DRAW_OUTPUT
 {
 	float4 position : SV_Position;

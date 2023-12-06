@@ -413,43 +413,45 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 
 	//DXGI_FORMAT	pdxgiRtvFormats[1] = { DXGI_FORMAT_D32_FLOAT };
 
-	//m_pDepthRenderShader = std::make_shared<CDepthRenderShaderComponent>();
-	//m_pDepthRenderShader->Init(m_pLightObject);
-	//m_pDepthRenderShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_D32_FLOAT);
-	//m_pDepthRenderShader->BuildObjects(pd3dDevice, pd3dCommandList, NULL);
-
-
-	//m_pDepthRenderShader->AddGameObject(m_pPlayersGameObject);
-	//m_pDepthRenderShader->AddGameObject(m_pMonsterObjects[0]);
-	////m_pDepthRenderShader->AddGameObject(m_pTerrain);
-
-	//m_pShadowShader = std::make_shared<CShadowMapShaderComponent>();
-	//m_pShadowShader->Init();
-	//m_pShadowShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
-	//m_pShadowShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pDepthRenderShader->GetDepthFromLightMaterialComponent(), m_pd3dDescriptorHeap.get());
-
-
-	//m_pShadowShader->AddGameObject(m_pTerrain);
-
-
-
-	//std::shared_ptr<CDynamicCubeMappingShaderComponent> pDynamicCubeMappingShaderComponent = std::make_shared<CDynamicCubeMappingShaderComponent>();
-	//pDynamicCubeMappingShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
-
-	//m_pDynamicCubeMappingGameObject = std::make_shared<CDynamicCubeMappingGameObject>();
-	//m_pDynamicCubeMappingGameObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 256, XMFLOAT3(XMFLOAT3(45.f, 45.f, 45.f)));
-	//m_pDynamicCubeMappingGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/BP_Mini_Ice_Bear_C.bin", m_pTextureLoader);
-	//m_pDynamicCubeMappingGameObject->SetScale(XMFLOAT3(15.f, 15.f, 15.f));
-	//m_pDynamicCubeMappingGameObject->SetPosition(XMFLOAT3(0.f, 15.f, 0.f));
-	//m_pDynamicCubeMappingGameObject->AddShaderComponent(pDynamicCubeMappingShaderComponent);
-
-	//_T("Image/HeightMap.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 17, 17, xmf3TerrainScale, xmf4Color
 
 	std::shared_ptr<CTerrainTessellationShaderComponent> pTerrainTessellationShaderComponent = std::make_shared<CTerrainTessellationShaderComponent>();
 	pTerrainTessellationShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH);
 	m_pTessellationTerrainObject = std::make_shared<CTessellationTerrainObject>();
 	m_pTessellationTerrainObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), _T("Image/HeightMap2.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 13, 13, xmf3Scale, xmf4Color);
 	m_pTessellationTerrainObject->AddShaderComponent(pTerrainTessellationShaderComponent);
+
+	m_pDepthRenderShader = std::make_shared<CDepthRenderShaderComponent>();
+	m_pDepthRenderShader->Init(m_pLightObject);
+	m_pDepthRenderShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_D32_FLOAT);
+	m_pDepthRenderShader->BuildObjects(pd3dDevice, pd3dCommandList, NULL);
+
+
+	m_pDepthRenderShader->AddGameObject(m_pPlayersGameObject);
+	m_pDepthRenderShader->AddGameObject(m_pMonsterObjects[0]);
+	///m_pDepthRenderShader->AddGameObject(m_pTerrain);
+
+	m_pShadowShader = std::make_shared<CShadowMapShaderComponent>();
+	m_pShadowShader->Init();
+	m_pShadowShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
+	m_pShadowShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pDepthRenderShader->GetDepthFromLightMaterialComponent(), m_pd3dDescriptorHeap.get());
+
+
+	m_pShadowShader->AddGameObject(m_pTessellationTerrainObject);
+
+
+
+	std::shared_ptr<CDynamicCubeMappingShaderComponent> pDynamicCubeMappingShaderComponent = std::make_shared<CDynamicCubeMappingShaderComponent>();
+	pDynamicCubeMappingShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
+
+	m_pDynamicCubeMappingGameObject = std::make_shared<CDynamicCubeMappingGameObject>();
+	m_pDynamicCubeMappingGameObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 256, XMFLOAT3(XMFLOAT3(45.f, 45.f, 45.f)));
+	m_pDynamicCubeMappingGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/BP_Mini_Ice_Bear_C.bin", m_pTextureLoader);
+	m_pDynamicCubeMappingGameObject->SetScale(XMFLOAT3(15.f, 15.f, 15.f));
+	m_pDynamicCubeMappingGameObject->SetPosition(XMFLOAT3(500.f, 200.f, 500.f));
+	m_pDynamicCubeMappingGameObject->AddShaderComponent(pDynamicCubeMappingShaderComponent);
+
+	//_T("Image/HeightMap.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 17, 17, xmf3TerrainScale, xmf4Color
+
 		//pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Image/HeightMap.raw"), 257, 257, 13, 13, xmf3Scale, xmf4Color
 }
 
@@ -580,7 +582,7 @@ void CStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 	if (m_pLightObject)
 		m_pLightObject->UpdateShaderVariables(pd3dCommandList);
 
-	//m_pDepthRenderShader->PreRender(pd3dCommandList);
+	m_pDepthRenderShader->PreRender(pd3dCommandList);
 
 	if(m_pDynamicCubeMappingGameObject)
 		m_pDynamicCubeMappingGameObject->OnPreRender(pd3dCommandList, this);
@@ -656,28 +658,28 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera
 	//m_pDepthRenderShader->UpdateShaderVariable(pd3dCommandList);
 	//m_pShadowShader->Render(pd3dCommandList, pCameraData, nullptr);
 
-	//if (m_pDynamicCubeMappingGameObject)
-	//{
-	//	m_pDynamicCubeMappingGameObject->PrepareRender(pd3dCommandList);
-	//	m_pDynamicCubeMappingGameObject->Render(pd3dCommandList, pCameraData, nullptr);
-	//}
-	//if (!pCamera)
-	//{
-	//	if (m_pCamera)
-	//	{
-	//		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
-	//		m_pCamera->UpdateShaderVariables(pd3dCommandList);
-	//	}
+	if (m_pDynamicCubeMappingGameObject)
+	{
+		m_pDynamicCubeMappingGameObject->PrepareRender(pd3dCommandList);
+		m_pDynamicCubeMappingGameObject->Render(pd3dCommandList, pCameraData, nullptr);
+	}
+	if (!pCamera)
+	{
+		if (m_pCamera)
+		{
+			m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
+			m_pCamera->UpdateShaderVariables(pd3dCommandList);
+		}
 
-	//	//m_pDepthRenderShader->UpdateShaderVariable(pd3dCommandList);
-	//	//m_pShadowShader->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+		m_pDepthRenderShader->UpdateShaderVariable(pd3dCommandList);
+		m_pShadowShader->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 
-	//	if (m_pCamera)
-	//	{
-	//		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
-	//		m_pCamera->UpdateShaderVariables(pd3dCommandList);
-	//	}
-	//}
+		if (m_pCamera)
+		{
+			m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
+			m_pCamera->UpdateShaderVariables(pd3dCommandList);
+		}
+	}
 }
 
 void CStage::RenderParticle(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -715,11 +717,11 @@ void CStage::CollisionCheck()
 	//	
 	//}
 
-	//if (m_pPlayersGameObject->CollisionCheck(m_pDynamicCubeMappingGameObject)) // Ãæµ¹
-	//{
-	//	// ¾À ÀüÈ¯
-	//	m_bChangeScene = true;
-	//}
+	if (m_pPlayersGameObject->CollisionCheck(m_pDynamicCubeMappingGameObject)) // Ãæµ¹
+	{
+		// ¾À ÀüÈ¯
+		m_bChangeScene = true;
+	}
 
 	// Player - Monster
 	for (int i = 0; i < m_pMonsterObjects.size(); i++)
