@@ -507,7 +507,7 @@ bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 			}
 			if (dwDirection)
 			{
-				m_pPlayersGameObject->Move(dwDirection, 1.5f);
+				m_pPlayersGameObject->Move(dwDirection,5.f);
 				m_pPlayersGameObject->SetboolMove(true);
 			}
 			else

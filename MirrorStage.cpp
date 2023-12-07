@@ -211,6 +211,8 @@ void CMirrorStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandL
 	m_pTerrain->AddShaderComponent(pTerrainShaderComponent);
 	m_pTerrain->SetPosition(XMFLOAT3(-400.f, -50.f, -400.f));
 
+
+
 	std::shared_ptr<CObjectShaderComponent> pObjectShaderComponent = std::make_shared<CObjectShaderComponent>();
 	pObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
 	m_pPlayersGameObject = std::make_shared<CPlayerGameObject>();
@@ -256,6 +258,24 @@ void CMirrorStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandL
 	pMirrorObject->SetPosition(XMFLOAT3(-300.f, 100.f, 0.f));
 	pMirrorObject->AddShaderComponent(pMirrorObjectShaderComponent);
 	m_pMirrorObjects.push_back(pMirrorObject);
+
+
+	m_pDepthRenderShader = std::make_shared<CDepthRenderShaderComponent>();
+	m_pDepthRenderShader->Init(m_pLightObject);
+	m_pDepthRenderShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_D32_FLOAT);
+	m_pDepthRenderShader->BuildObjects(pd3dDevice, pd3dCommandList, NULL);
+
+
+	m_pDepthRenderShader->AddGameObject(m_pPlayersGameObject);
+	///m_pDepthRenderShader->AddGameObject(m_pTerrain);
+
+	m_pShadowShader = std::make_shared<CShadowMapShaderComponent>();
+	m_pShadowShader->Init();
+	m_pShadowShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
+	m_pShadowShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pDepthRenderShader->GetDepthFromLightMaterialComponent(), m_pd3dDescriptorHeap.get());
+
+
+	m_pShadowShader->AddGameObject(m_pTerrain);
 }
 
 bool CMirrorStage::ProcessInput(HWND hWnd, float fTimeElapsed)
@@ -348,6 +368,8 @@ void CMirrorStage::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
 		m_pLightObject->UpdateShaderVariables(pd3dCommandList);
 
 
+	m_pDepthRenderShader->PreRender(pd3dCommandList);
+
 	for (int i = 0; i < m_pMirrorObjects.size(); i++)
 	{
 		m_pMirrorObjects[i]->OnPreRender(pd3dCommandList, this);
@@ -380,18 +402,21 @@ void CMirrorStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* p
 	}
 	if (m_pPlayersGameObject)
 	{
-		float xmfOffsetY = 0.f;
+		//-400.f, -50.f, -400.f
+		float xmfOffsetY = -50.f;
 		XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
+		m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x + 400.f, xmfPosition.z + 400.f) + xmfOffsetY, xmfPosition.z));
 		m_pPlayersGameObject->CGameObject::PrepareRender(pd3dCommandList);
 		m_pPlayersGameObject->Render(pd3dCommandList, pCameraData, nullptr);
 	}
 
-	if (m_pTerrain)
-	{
-		m_pTerrain->PrepareRender(pd3dCommandList);
-		m_pTerrain->Render(pd3dCommandList, pCameraData, nullptr);
-	}
-
+	//if (m_pTerrain)
+	//{
+	//	m_pTerrain->PrepareRender(pd3dCommandList);
+	//	m_pTerrain->Render(pd3dCommandList, pCameraData, nullptr);
+	//}
+	m_pDepthRenderShader->UpdateShaderVariable(pd3dCommandList);
+	m_pShadowShader->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 	if (pCameraData == m_pCamera.get())
 	{
 		for (int i = 0; i < m_pMirrorObjects.size(); i++)

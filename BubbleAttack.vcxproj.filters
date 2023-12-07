@@ -107,9 +107,6 @@
     <Filter Include="쉐이더 파일\CubeMapping">
       <UniqueIdentifier>{e1a4b5c5-7db3-4323-8353-9f6ddb0baf84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="쉐이더 파일\Shdow">
-      <UniqueIdentifier>{61601446-397b-4856-b9b8-ac45a20d5929}</UniqueIdentifier>
-    </Filter>
     <Filter Include="쉐이더 파일\SkyBox">
       <UniqueIdentifier>{21a48636-cb52-43ac-a778-afbeac355524}</UniqueIdentifier>
     </Filter>
@@ -142,6 +139,9 @@
     </Filter>
     <Filter Include="GameObject\Terrain\TessellationTerrain">
       <UniqueIdentifier>{f40b03e9-99d1-42a1-9bcc-bf080f1b6bae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="쉐이더 파일\Terrain\Tessellation\Shdow">
+      <UniqueIdentifier>{61601446-397b-4856-b9b8-ac45a20d5929}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -607,13 +607,13 @@
       <Filter>쉐이더 파일\Particle</Filter>
     </FxCompile>
     <FxCompile Include="ShadowMapObjectPixelShader.hlsl">
-      <Filter>쉐이더 파일\Shdow</Filter>
+      <Filter>쉐이더 파일\Terrain\Tessellation\Shdow</Filter>
     </FxCompile>
     <FxCompile Include="ShadowMapObjectVertexShader.hlsl">
-      <Filter>쉐이더 파일\Shdow</Filter>
+      <Filter>쉐이더 파일\Terrain\Tessellation\Shdow</Filter>
     </FxCompile>
     <FxCompile Include="DepthWritePixelShader.hlsl">
-      <Filter>쉐이더 파일\Shdow</Filter>
+      <Filter>쉐이더 파일\Terrain\Tessellation\Shdow</Filter>
     </FxCompile>
     <FxCompile Include="TerrainWaterObjectVertexShader.hlsl">
       <Filter>쉐이더 파일\Terrain</Filter>
