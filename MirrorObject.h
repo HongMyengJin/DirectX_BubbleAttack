@@ -36,6 +36,8 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE						m_pd3dRtvCPUDescriptorHandles;
 	D3D12_CPU_DESCRIPTOR_HANDLE						m_d3dDsvDescriptorCPUHandle;
 
+
+	MirrorData										m_eMirrorType;
 };
 
 

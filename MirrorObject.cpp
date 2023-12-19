@@ -8,8 +8,8 @@ void CMirrorObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd
 	UINT MirrorHeightSize = 500;
 	m_pComponents.resize(4);
 
-
-	static XMFLOAT3 pxmf3LookAts[6] = { XMFLOAT3(+250.f, 45.0f, 0.0f), XMFLOAT3(-250.f, 45.0f, 0.0f), XMFLOAT3(0.0f, +250.f, 0.0f), XMFLOAT3(0.0f, -250.f, 0.0f), XMFLOAT3(0.0f, 45.0f, +250.f), XMFLOAT3(0.0f, 45.0f, -250.f) };
+	//																																											Front
+	static XMFLOAT3 pxmf3LookAts[6] = { XMFLOAT3(+250.f, 45.0f, 0.0f), XMFLOAT3(-250.f, 45.0f, 0.0f), XMFLOAT3(0.0f, +250.f, 0.0f), XMFLOAT3(0.0f, -250.f, 0.0f), XMFLOAT3(0.0f, 45.0f, +250.f), XMFLOAT3(0.0f, 45.0f, -250.f) }; // 가운데가 아닌 조금 위에서 그려지도록
 	static XMFLOAT3 pxmf3Ups[6] = { XMFLOAT3(0.0f, +1.0f, 0.0f), XMFLOAT3(0.0f, +1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, +1.0f), XMFLOAT3(0.0f, +1.0f, 0.0f), XMFLOAT3(0.0f, +1.0f, 0.0f) };
 
 	m_xmf3LookAt = pxmf3LookAts[UINT(eMirrorData)];
@@ -92,7 +92,11 @@ void CMirrorObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd
 	m_pCameras->SetViewport(0, 0, MirrorWidthSize, MirrorHeightSize, 0.0f, 1.0f);
 	m_pCameras->SetScissorRect(0, 0, MirrorWidthSize, MirrorHeightSize);
 	m_pCameras->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	m_pCameras->GenerateProjectionMatrix(0.1f, 5000.0f, 1.0f/*Aspect Ratio*/, 130.f/*FOV*/);
+	m_pCameras->GenerateProjectionMatrix(0.1f, 5000.0f, 1.0f/*Aspect Ratio*/, 140.f/*FOV*/);
+
+
+	m_eMirrorType = eMirrorData;
+
 }
 
 void CMirrorObject::OnScenePreRender(ID3D12GraphicsCommandList* pd3dCommandList, CScene* pStage)
@@ -103,6 +107,30 @@ void CMirrorObject::OnScenePreRender(ID3D12GraphicsCommandList* pd3dCommandList,
 	XMFLOAT3 xmf3Position = GetPosition();
 	xmf3Position.y += -55.f;
 
+	switch (m_eMirrorType)
+	{
+	case MirrorData::Mirror_Left:
+		xmf3Position.x -= 88.f;
+		break;
+	case MirrorData::Mirror_Light:
+		xmf3Position.x += 88.f;
+		break;
+	case MirrorData::Mirror_Up:
+		break;
+	case MirrorData::Mirror_Down:
+		break;
+	case MirrorData::Mirror_Front:
+		xmf3Position.z -= 88.f;
+		break;
+	case MirrorData::Mirror_Back:
+		xmf3Position.z += 88.f;
+		break;
+	case MirrorData::MirrorData_End:
+		break;
+	default:
+		break;
+	}
+	
 	m_pCameras->SetPosition(xmf3Position);
 	m_pCameras->GenerateViewMatrix(xmf3Position, Vector3::Add(xmf3Position, m_xmf3LookAt), m_xmf3Up); // z 축방향으로 앞에 위치
 

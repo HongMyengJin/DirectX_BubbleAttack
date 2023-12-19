@@ -67,5 +67,6 @@ private:
 
 	bool													m_bFirst = false;
 
+	MirrorData												m_eMirrorType = MirrorData::MirrorData_End;
 };
 

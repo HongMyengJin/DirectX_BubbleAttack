@@ -248,14 +248,14 @@ void CMirrorStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandL
 	pMirrorObject = std::make_shared<CMirrorObject>();
 	pMirrorObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), MirrorData::Mirror_Light);
 	pMirrorObject->Rotate(0.f, 90.f, 0.f);
-	pMirrorObject->SetPosition(XMFLOAT3(300.f, 100.f, 0.f));
+	pMirrorObject->SetPosition(XMFLOAT3(230.f, 100.f, 0.f));
 	pMirrorObject->AddShaderComponent(pMirrorObjectShaderComponent);
 	m_pMirrorObjects.push_back(pMirrorObject);
 
 	pMirrorObject = std::make_shared<CMirrorObject>();
 	pMirrorObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), MirrorData::Mirror_Left);
 	pMirrorObject->Rotate(0.f, -90.f, 0.f);
-	pMirrorObject->SetPosition(XMFLOAT3(-300.f, 100.f, 0.f));
+	pMirrorObject->SetPosition(XMFLOAT3(-230.f, 100.f, 0.f));
 	pMirrorObject->AddShaderComponent(pMirrorObjectShaderComponent);
 	m_pMirrorObjects.push_back(pMirrorObject);
 
