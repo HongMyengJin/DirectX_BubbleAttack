@@ -12,6 +12,7 @@ public:
 	virtual void Animate(float fTimeElapsed);
 	virtual void Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent);
 
+	void SetShaderCurrentPipeline(UINT iCurrentPipeline);
 	float GetHeight(float x, float z);
 	XMFLOAT3 GetNormal(float x, float z) { return(m_pHeightMapImage->GetTerrainTessellationHeightMapNormal(int(x / m_xmf3Scale.x), int(z / m_xmf3Scale.z), m_xmf3Scale)); }
 
@@ -33,4 +34,5 @@ private:
 
 	XMFLOAT3						m_xmf3Scale;
 	float							m_fOffSetPositoin = 0.f;
+
 };

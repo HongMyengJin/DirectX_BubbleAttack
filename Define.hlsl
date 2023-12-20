@@ -60,6 +60,7 @@ cbuffer cbFrameworkInfo : register(b12)
 	int			gnFlareParticlesToEmit : packoffset(c0.w);;
 	float3		gf3Gravity : packoffset(c1.x);
 	int			gnMaxFlareType2Particles : packoffset(c1.w);;
+	bool		gbTessellationWire : packoffset(c2.x);
 };
 
 

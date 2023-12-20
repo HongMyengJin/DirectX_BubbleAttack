@@ -1,6 +1,7 @@
 #include "TessellationTerrainObject.h"
 #include "MaterialComponent.h"
 #include "TransformComponent.h"
+
 void CTessellationTerrainObject::Init(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, LPCTSTR pFileName, CDescriptorHeap* pDescriptorHeap, int nWidth, int nLength, int nBlockWidth, int nBlockLength, XMFLOAT3 xmf3Scale, XMFLOAT4 xmf4Color)
 {
 	m_pComponents.resize(4);
@@ -62,6 +63,14 @@ void CTessellationTerrainObject::Animate(float fTimeElapsed)
 
 void CTessellationTerrainObject::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent)
 {
+}
+
+void CTessellationTerrainObject::SetShaderCurrentPipeline(UINT iCurrentPipeline)
+{
+	if (m_pComponents[UINT(ComponentType::ComponentShader)])
+	{
+		dynamic_cast<CShaderComponent*>(m_pComponents[UINT(ComponentType::ComponentShader)].get())->SetCurrentPipeline(iCurrentPipeline);
+	}
 }
 
 float CTessellationTerrainObject::GetHeight(float x, float z)

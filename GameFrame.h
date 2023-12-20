@@ -10,6 +10,7 @@ struct CB_FRAMEWORK_INFO
 	int						m_nFlareParticlesToEmit = 300;
 	XMFLOAT3				m_xmf3Gravity = XMFLOAT3(0.0f, -9.8f, 0.0f);
 	int						m_nMaxFlareType2Particles = 150;
+	bool					m_bTessellationWire = false;
 
 };
 class CBubbleAttackGameFrame
@@ -92,4 +93,5 @@ private:
 	std::shared_ptr<CB_FRAMEWORK_INFO>						m_pcbMappedFrameworkInfo;
 
 	bool													m_bStart = false;
+	bool													m_bTessellationWire = false;
 };

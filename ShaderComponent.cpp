@@ -107,3 +107,8 @@ D3D12_DEPTH_STENCIL_DESC CShaderComponent::CreateDepthStencilState()
 
 	return(d3dDepthStencilDesc);
 }
+
+void CShaderComponent::SetCurrentPipeline(UINT iCurrentPipeline)
+{
+	m_iCurrentPipelineState = iCurrentPipeline;
+}

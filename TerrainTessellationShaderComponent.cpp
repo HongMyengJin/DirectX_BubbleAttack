@@ -8,6 +8,8 @@ void CTerrainTessellationShaderComponent::Update(float fTimeElapsed, void* pData
 {
 }
 
+
+
 D3D12_SHADER_BYTECODE CTerrainTessellationShaderComponent::CreateVertexShader()
 {
 	D3DReadFileToBlob(L"TerrainTessellationObjectVertexShader.cso", m_pd3dVertexShaderBlob.GetAddressOf());
@@ -22,6 +24,17 @@ D3D12_SHADER_BYTECODE CTerrainTessellationShaderComponent::CreateVertexShader()
 D3D12_SHADER_BYTECODE CTerrainTessellationShaderComponent::CreatePixelShader()
 {
 	D3DReadFileToBlob(L"TerrainTessellationObjectPixelShader.cso", m_pd3dPixelShaderBlob.GetAddressOf());
+
+	D3D12_SHADER_BYTECODE d3dShaderByteCode;
+	d3dShaderByteCode.BytecodeLength = m_pd3dPixelShaderBlob->GetBufferSize();
+	d3dShaderByteCode.pShaderBytecode = m_pd3dPixelShaderBlob->GetBufferPointer();
+
+	return d3dShaderByteCode;
+}
+
+D3D12_SHADER_BYTECODE CTerrainTessellationShaderComponent::CreatePixel2Shader()
+{
+	D3DReadFileToBlob(L"TerrainTessellationObjectWirePixel.cso", m_pd3dPixelShaderBlob.GetAddressOf());
 
 	D3D12_SHADER_BYTECODE d3dShaderByteCode;
 	d3dShaderByteCode.BytecodeLength = m_pd3dPixelShaderBlob->GetBufferSize();
@@ -92,12 +105,12 @@ D3D12_RASTERIZER_DESC CTerrainTessellationShaderComponent::CreateRasterizerState
 
 void CTerrainTessellationShaderComponent::CreateShader(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, ID3D12RootSignature* pd3dGraphicsRootSignature, DXGI_FORMAT pdxgiRtvFormats, DXGI_FORMAT dxgiDsvFormat, D3D12_PRIMITIVE_TOPOLOGY_TYPE eprimitiveTopologyType)
 {
-	m_ppd3dPipelineStates.resize(1);
+	m_ppd3dPipelineStates.resize(2);
 
 	::ZeroMemory(&m_d3dPipelineStateDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
 	m_d3dPipelineStateDesc.pRootSignature = pd3dGraphicsRootSignature;
 	m_d3dPipelineStateDesc.VS = CreateVertexShader();
-	m_d3dPipelineStateDesc.PS = CreatePixelShader();
+	m_d3dPipelineStateDesc.PS = CreatePixel2Shader();
 	m_d3dPipelineStateDesc.GS = CreateGeometryShader();
 	m_d3dPipelineStateDesc.HS = CreateHullShader();
 	m_d3dPipelineStateDesc.DS = CreateDomainShader();
@@ -113,9 +126,12 @@ void CTerrainTessellationShaderComponent::CreateShader(ID3D12Device* pd3dDevice,
 	m_d3dPipelineStateDesc.DSVFormat = dxgiDsvFormat;//DXGI_FORMAT_D24_UNORM_S8_UINT;
 	m_d3dPipelineStateDesc.SampleDesc.Count = 1;
 	m_d3dPipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
-	//m_d3dPipelineStateDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 
 	HRESULT hResult = pd3dDevice->CreateGraphicsPipelineState(&m_d3dPipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)(m_ppd3dPipelineStates[0].GetAddressOf()));
+
+	m_d3dPipelineStateDesc.PS = CreatePixelShader();
+	m_d3dPipelineStateDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+	hResult = pd3dDevice->CreateGraphicsPipelineState(&m_d3dPipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)(m_ppd3dPipelineStates[1].GetAddressOf()));
 }
 
 void CTerrainTessellationShaderComponent::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)

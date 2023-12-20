@@ -33,6 +33,9 @@ public:
 	virtual D3D12_BLEND_DESC CreateBlendState();
 	virtual D3D12_DEPTH_STENCIL_DESC CreateDepthStencilState();
 
+
+	void SetCurrentPipeline(UINT iCurrentPipeline);
+
 protected:
 	Microsoft::WRL::ComPtr<ID3DBlob>									m_pd3dVertexShaderBlob;
 	Microsoft::WRL::ComPtr<ID3DBlob>									m_pd3dPixelShaderBlob;
