@@ -292,7 +292,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	//XMFLOAT3 xmf3TerrainScale(4.0f, 0.4f, 4.0f);
 	XMFLOAT3 xmf3WaterTerrainScale(10.f, 2.0f, 10.f);
 
-	XMFLOAT3 xmf3Scale(5.0f, 2.0f, 5.0f);
+	XMFLOAT3 xmf3Scale(5.0f, 0.5f, 5.0f);
 
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 
@@ -350,75 +350,51 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	std::shared_ptr<CUIObjectShaderComponent> pUIShaderComponent = std::make_shared<CUIObjectShaderComponent>();
 	pUIShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
 
-	//for (int i = 0; i < 1; i++)
-	//{
-	//	std::shared_ptr<CUIGameObject> pUIObject = std::make_shared<CUIGameObject>();
 
-	//	pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/IceScoreFrame2.dds");
-	//	pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
-	//	pUIObject->SetSize(XMFLOAT2(500.f, 180.f));
-	//	pUIObject->AddShaderComponent(pUIShaderComponent);
-	//	m_pUIObjects.push_back(pUIObject);
-	//}
-	//for (int i = 0; i < 2; i++)
-	//{
-	//	std::shared_ptr<CUINumberGameObject> pUIObject = std::make_shared<CUINumberGameObject>();
+	std::shared_ptr<CUIGameObject> pUIObject = std::make_shared<CUIGameObject>();
 
-	//	pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/NumberUI.dds");
-	//	pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.42f + FRAME_BUFFER_WIDTH * 0.13f * i, FRAME_BUFFER_HEIGHT * 0.9f));
-	//	pUIObject->SetSize(XMFLOAT2(50.f, 50.f));
-	//	pUIObject->AddShaderComponent(pUIShaderComponent);
-	//	m_pUINumberObjects.push_back(pUIObject);
-	//}
+	pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/IceScoreFrame2.dds");
+	pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
+	pUIObject->SetSize(XMFLOAT2(500.f, 180.f));
+	pUIObject->AddShaderComponent(pUIShaderComponent);
+	m_pUIObjects.push_back(pUIObject);
+	
+	for (int i = 0; i < 2; i++)
+	{
+		std::shared_ptr<CUINumberGameObject> pUIObject = std::make_shared<CUINumberGameObject>();
 
-	//std::shared_ptr<CUIGameObject> pUIObject = std::make_shared<CUIGameObject>();
+		pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/NumberUI.dds");
+		pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.42f + FRAME_BUFFER_WIDTH * 0.13f * i, FRAME_BUFFER_HEIGHT * 0.9f));
+		pUIObject->SetSize(XMFLOAT2(50.f, 50.f));
+		pUIObject->AddShaderComponent(pUIShaderComponent);
+		m_pUINumberObjects.push_back(pUIObject);
+	}
 
-	//pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/Win.dds");
-	//pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
-	//pUIObject->SetSize(XMFLOAT2(180.f, 180.f));
-	//pUIObject->AddShaderComponent(pUIShaderComponent);
-	//pUIObject->SetEnable(false);
-	//m_pUIObjects.push_back(pUIObject);
+	pUIObject = std::make_shared<CUIGameObject>();
 
-	//pUIObject = std::make_shared<CUIGameObject>();
+	pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/Win.dds");
+	pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
+	pUIObject->SetSize(XMFLOAT2(180.f, 180.f));
+	pUIObject->AddShaderComponent(pUIShaderComponent);
+	pUIObject->SetEnable(false);
+	m_pUIObjects.push_back(pUIObject);
 
-	//pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/Lose.dds");
-	//pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
-	//pUIObject->SetSize(XMFLOAT2(180.f, 180.f));
-	//pUIObject->AddShaderComponent(pUIShaderComponent);
-	//pUIObject->SetEnable(false);
-	//m_pUIObjects.push_back(pUIObject);
+	pUIObject = std::make_shared<CUIGameObject>();
 
-
-	//pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/SlideBar.dds");
-	//pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
-	//pUIObject->SetSize(XMFLOAT2(180.f, 180.f));
-	//pUIObject->AddShaderComponent(pUIShaderComponent);
-	//pUIObject->SetEnable(true);
-	//m_pUIObjects.push_back(pUIObject);
+	pUIObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(10.f, 10.f), L"Image/Lose.dds");
+	pUIObject->SetScreenPosition(XMFLOAT2(FRAME_BUFFER_WIDTH * 0.5f, FRAME_BUFFER_HEIGHT * 0.9f));
+	pUIObject->SetSize(XMFLOAT2(180.f, 180.f));
+	pUIObject->AddShaderComponent(pUIShaderComponent);
+	pUIObject->SetEnable(false);
+	m_pUIObjects.push_back(pUIObject);
 
 
-	//std::shared_ptr<CVelocityGaugeUIGameObject> pUIVelocityObject = std::make_shared<CVelocityGaugeUIGameObject>();
-	//pUIVelocityObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get());
-	//pUIVelocityObject->AddShaderComponent(pUIShaderComponent);
-	//pUIVelocityObject->SetEnable(true);
-	//m_pUIObjects.push_back(pUIVelocityObject);
+	std::shared_ptr<CVelocityGaugeUIGameObject> pUIVelocityObject = std::make_shared<CVelocityGaugeUIGameObject>();
+	pUIVelocityObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get());
+	pUIVelocityObject->AddShaderComponent(pUIShaderComponent);
+	pUIVelocityObject->SetEnable(true);
+	m_pUIObjects.push_back(pUIVelocityObject);
 
-	//std::shared_ptr<CParticleObjectShaderComponent> pParticleObjectShaderComponent = std::make_shared<CParticleObjectShaderComponent>();
-	//pParticleObjectShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
-
-	//m_pParticleObject = std::make_unique<CParticleObject>();
-	//m_pParticleObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 65.0f, 0.0f), 0.0f, XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(8.0f, 8.0f), MAX_PARTICLES);
-	//m_pParticleObject->AddShaderComponent(pParticleObjectShaderComponent);
-
-	//DXGI_FORMAT	pdxgiRtvFormats[1] = { DXGI_FORMAT_D32_FLOAT };
-
-
-	std::shared_ptr<CTerrainTessellationShaderComponent> pTerrainTessellationShaderComponent = std::make_shared<CTerrainTessellationShaderComponent>();
-	pTerrainTessellationShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH);
-	m_pTessellationTerrainObject = std::make_shared<CTessellationTerrainObject>();
-	m_pTessellationTerrainObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), _T("Image/HeightMap2.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 13, 13, xmf3Scale, xmf4Color);
-	m_pTessellationTerrainObject->AddShaderComponent(pTerrainTessellationShaderComponent);
 
 	m_pDepthRenderShader = std::make_shared<CDepthRenderShaderComponent>();
 	m_pDepthRenderShader->Init(m_pLightObject);
@@ -436,7 +412,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pShadowShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pDepthRenderShader->GetDepthFromLightMaterialComponent(), m_pd3dDescriptorHeap.get());
 
 
-	m_pShadowShader->AddGameObject(m_pTessellationTerrainObject);
+	m_pShadowShader->AddGameObject(m_pTerrain);
 
 
 
@@ -480,20 +456,10 @@ bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 			SetCursorPos(m_ptOldCursorPos.x, m_ptOldCursorPos.y);
 		}
 
-		if ((pKeysBuffer['W'] & 0xF0) || (pKeysBuffer['w'] & 0xF0)) // 불렛 높이 지정
-		{
-			m_pTessellationTerrainObject->SetShaderCurrentPipeline(TerrainTessellationWire);
-		}
-		else if ((pKeysBuffer['T'] & 0xF0) || (pKeysBuffer['t'] & 0xF0))
-		{
-			m_pTessellationTerrainObject->SetShaderCurrentPipeline(TerrainTessellationTexture);
-		}
-		
-
 		if (pKeysBuffer[VK_SPACE] & 0xF0) // 불렛 높이 지정
 		{
 			m_pPlayersGameObject->Acceleration(fTimeElapsed);
-			//dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, m_pPlayersGameObject->GetBombGameObject()->GetVelocity().y);
+			dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, m_pPlayersGameObject->GetBombGameObject()->GetVelocity().y);
 		}
 		else
 		{
@@ -501,7 +467,7 @@ bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
 			{
 				// Terrain 높이 체크
 				m_pPlayersGameObject->MoveBomb(0.001f, m_pPlayersGameObject->GetLookVector());
-				//dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, 0.f);
+				dynamic_cast<CVelocityGaugeUIGameObject*>(m_pUIObjects[3].get())->SetBarValue(MAX_VELOCITY, 0.f);
 			}
 		}
 
@@ -566,15 +532,15 @@ void CStage::UpdateObjects(float fTimeElapsed)
 		m_pPlayersGameObject->UpdateFrame(fTimeElapsed);
 		m_pPlayersGameObject->Update(fTimeElapsed, nullptr, m_pTerrain);
 	}
-	//for (int i = 0; i < m_pUINumberObjects.size(); i++)
-	//{
-	//	m_pUINumberObjects[i]->Animate(fTimeElapsed);
-	//}
+	for (int i = 0; i < m_pUINumberObjects.size(); i++)
+	{
+		m_pUINumberObjects[i]->Animate(fTimeElapsed);
+	}
 	
-	//for (int i = 0; i < m_pUIObjects.size(); i++)
-	//{
-	//	m_pUIObjects[i]->Animate(fTimeElapsed);
-	//}
+	for (int i = 0; i < m_pUIObjects.size(); i++)
+	{
+		m_pUIObjects[i]->Animate(fTimeElapsed);
+	}
 
 	for (int i = 0; i < m_pEffectRectObjects.size(); i++)
 	{
@@ -619,17 +585,12 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera
 		m_pSkyBoxObject->Render(pd3dCommandList, pCameraData, nullptr);
 	}
 
-	if (m_pTessellationTerrainObject)
-	{
-		m_pTessellationTerrainObject->PrepareRender(pd3dCommandList);
-		m_pTessellationTerrainObject->Render(pd3dCommandList, pCameraData, nullptr);
-	}
 
 	if (m_pPlayersGameObject)
 	{
 		float xmfOffsetY = 0.f;
 		XMFLOAT3 xmfPosition = m_pPlayersGameObject->GetPosition();
-		m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTessellationTerrainObject->GetHeight(xmfPosition.x, xmfPosition.z) + xmfOffsetY, xmfPosition.z));
+		m_pPlayersGameObject->SetPosition(XMFLOAT3(xmfPosition.x, m_pTerrain->GetHeight(xmfPosition.x + 400.f, xmfPosition.z + 400.f) + xmfOffsetY, xmfPosition.z));
 		m_pPlayersGameObject->CGameObject::PrepareRender(pd3dCommandList);
 		m_pPlayersGameObject->Render(pd3dCommandList, pCameraData, nullptr);
 	}
@@ -651,43 +612,35 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera
 	}
 
 
-
-	//for (int i = 0; i < m_pUIObjects.size(); i++)
-	//{
-	//	m_pUIObjects[i]->PrepareRender(pd3dCommandList);
-	//	m_pUIObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
-	//}
-
-
-	//for (int i = 0; i < m_pUINumberObjects.size(); i++)
-	//{
-	//	m_pUINumberObjects[i]->PrepareRender(pd3dCommandList);
-	//	m_pUINumberObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
-	//}
-
-	//m_pDepthRenderShader->UpdateShaderVariable(pd3dCommandList);
-	//m_pShadowShader->Render(pd3dCommandList, pCameraData, nullptr);
-
 	if (m_pDynamicCubeMappingGameObject)
 	{
 		m_pDynamicCubeMappingGameObject->PrepareRender(pd3dCommandList);
 		m_pDynamicCubeMappingGameObject->Render(pd3dCommandList, pCameraData, nullptr);
+
 	}
 	if (!pCamera)
 	{
-		if (m_pCamera)
-		{
-			m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
-			m_pCamera->UpdateShaderVariables(pd3dCommandList);
-		}
+
+		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
+		m_pCamera->UpdateShaderVariables(pd3dCommandList);
 
 		m_pDepthRenderShader->UpdateShaderVariable(pd3dCommandList);
 		m_pShadowShader->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 
-		if (m_pCamera)
+		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
+		m_pCamera->UpdateShaderVariables(pd3dCommandList);
+
+		for (int i = 0; i < m_pUIObjects.size(); i++)
 		{
-			m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
-			m_pCamera->UpdateShaderVariables(pd3dCommandList);
+			m_pUIObjects[i]->PrepareRender(pd3dCommandList);
+			m_pUIObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
+		}
+
+
+		for (int i = 0; i < m_pUINumberObjects.size(); i++)
+		{
+			m_pUINumberObjects[i]->PrepareRender(pd3dCommandList);
+			m_pUINumberObjects[i]->Render(pd3dCommandList, m_pCamera.get(), nullptr);
 		}
 	}
 }
@@ -800,21 +753,21 @@ void CStage::CollisionCheck()
 			}
 		}
 	}
-	//if (!m_bResult)
-	//{
-	//	if (m_iPlayerAttack >= 10)
-	//	{
-	//		m_pUIObjects[1]->SetEnable(true);
-	//		m_bResult = true;
-	//	}
-	//	else if (m_iMonsterAttack >= 10)
-	//	{
-	//		m_pUIObjects[2]->SetEnable(true);
-	//		m_bResult = true;
-	//	}
-	//}
-	//m_pUINumberObjects[0]->UpdateNumber(m_iPlayerAttack);
-	//m_pUINumberObjects[1]->UpdateNumber(m_iMonsterAttack);
+	if (!m_bResult)
+	{
+		if (m_iPlayerAttack >= 10)
+		{
+			m_pUIObjects[1]->SetEnable(true);
+			m_bResult = true;
+		}
+		else if (m_iMonsterAttack >= 10)
+		{
+			m_pUIObjects[2]->SetEnable(true);
+			m_bResult = true;
+		}
+	}
+	m_pUINumberObjects[0]->UpdateNumber(m_iPlayerAttack);
+	m_pUINumberObjects[1]->UpdateNumber(m_iMonsterAttack);
 }
 
 void CStage::Release()
