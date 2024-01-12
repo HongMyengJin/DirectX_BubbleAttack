@@ -304,41 +304,14 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pTerrain->AddShaderComponent(pTerrainShaderComponent);
 	m_pTerrain->SetPosition(XMFLOAT3(-400.f, 0.f, -400.f));
 
-	std::shared_ptr<CRippleWaterObjectShaderComponent> pTerrainWaterShaderComponent = std::make_shared<CRippleWaterObjectShaderComponent>();
-	pTerrainWaterShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
+	//std::shared_ptr<CRippleWaterObjectShaderComponent> pTerrainWaterShaderComponent = std::make_shared<CRippleWaterObjectShaderComponent>();
+	//pTerrainWaterShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
 
-	m_pTerrainWater = std::make_unique<CRippleWaterObject>();
-	m_pTerrainWater->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 257, 257, 100, 100, xmf3WaterTerrainScale, xmf4Color);
-	m_pTerrainWater->AddShaderComponent(pTerrainWaterShaderComponent);
-	m_pTerrainWater->SetPosition(XMFLOAT3(-120.f + 0.f +(257 * 0.5f), 0.f, -80.f + (257 * 0.5f)));
-	//m_pTerrainWater->SetPosition(XMFLOAT3((257 * xmf3TerrainScale.x * 0.5f), 155.0f - 250.f, +(257 * xmf3TerrainScale.z * 0.5f)));
-
-	//for (int i = 0; i < 5; i++)
-	//{
-	//	XMFLOAT3 xmf3Position = XMFLOAT3(50.f + i * 80.f, 0.f, 680.f + -i * i * 40.f);
-	//	std::shared_ptr<CTextureRectObject> pTextureRectObject = std::make_shared<CTextureRectObject>();
-
-	//	pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(45.f, 45.f), L"Image/Tree01.dds");
-	//	pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
-	//	pTextureRectObject->SetAnimateLifeTime(1.f);
-	//	pTextureRectObject->SetLoop(true);
-	//	pTextureRectObject->SetPosition(XMFLOAT3(xmf3Position.x, m_pTerrain->GetHeight(xmf3Position.x, xmf3Position.z) - 200.f + 22.f, xmf3Position.z));
-	//	m_pTreesRectObjects.push_back(pTextureRectObject);
-	//}
-
-
-	//for (int i = 0; i < 5; i++)
-	//{
-	//	XMFLOAT3 xmf3Position = XMFLOAT3(1200.f + i * 80.f, 0.f, 680.f + -i * i * 40.f);
-	//	std::shared_ptr<CTextureRectObject> pTextureRectObject = std::make_shared<CTextureRectObject>();
-
-	//	pTextureRectObject->Init(pd3dDevice, pd3dCommandList, m_pd3dDescriptorHeap.get(), XMFLOAT2(45.f, 45.f), L"Image/Tree02.dds");
-	//	pTextureRectObject->AddShaderComponent(pTextureRectMeshShaderComponent);
-	//	pTextureRectObject->SetAnimateLifeTime(1.f);
-	//	pTextureRectObject->SetLoop(true);
-	//	pTextureRectObject->SetPosition(XMFLOAT3(xmf3Position.x, m_pTerrain->GetHeight(xmf3Position.x, xmf3Position.z) - 200.f + 22.f, xmf3Position.z));
-	//	m_pTreesRectObjects.push_back(pTextureRectObject);
-	//}
+	//m_pTerrainWater = std::make_unique<CRippleWaterObject>();
+	//m_pTerrainWater->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 257, 257, 100, 100, xmf3WaterTerrainScale, xmf4Color);
+	//m_pTerrainWater->AddShaderComponent(pTerrainWaterShaderComponent);
+	//m_pTerrainWater->SetPosition(XMFLOAT3(-120.f + 0.f +(257 * 0.5f), 0.f, -80.f + (257 * 0.5f)));
+	////m_pTerrainWater->SetPosition(XMFLOAT3((257 * xmf3TerrainScale.x * 0.5f), 155.0f - 250.f, +(257 * xmf3TerrainScale.z * 0.5f)));
 
 	std::shared_ptr<CSkyBoxShaderComponent> pSkyBoxShaderComponent = std::make_shared<CSkyBoxShaderComponent>();
 	pSkyBoxShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
@@ -423,12 +396,9 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pDynamicCubeMappingGameObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 256, XMFLOAT3(XMFLOAT3(45.f, 45.f, 45.f)));
 	m_pDynamicCubeMappingGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/BP_Mini_Ice_Bear_C.bin", m_pTextureLoader);
 	m_pDynamicCubeMappingGameObject->SetScale(XMFLOAT3(15.f, 15.f, 15.f));
-	m_pDynamicCubeMappingGameObject->SetPosition(XMFLOAT3(500.f, 200.f, 500.f));
+	m_pDynamicCubeMappingGameObject->SetPosition(XMFLOAT3(500.f, 10.f, 500.f));
 	m_pDynamicCubeMappingGameObject->AddShaderComponent(pDynamicCubeMappingShaderComponent);
 
-	//_T("Image/HeightMap.raw"), m_pd3dDescriptorHeap.get(), 257, 257, 17, 17, xmf3TerrainScale, xmf4Color
-
-		//pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, _T("Image/HeightMap.raw"), 257, 257, 13, 13, xmf3Scale, xmf4Color
 }
 
 bool CStage::ProcessInput(HWND hWnd, float fTimeElapsed)
@@ -586,6 +556,7 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera
 	}
 
 
+
 	if (m_pPlayersGameObject)
 	{
 		float xmfOffsetY = 0.f;
@@ -610,6 +581,9 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera
 		m_pEffectRectObjects[i]->PrepareRender(pd3dCommandList);
 		m_pEffectRectObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
 	}
+
+
+
 
 
 	if (m_pDynamicCubeMappingGameObject)
