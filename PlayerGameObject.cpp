@@ -19,8 +19,6 @@ void CPlayerGameObject::Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent, st
 		m_pPlayerBombGameObject->Update(fTimeElapsed, GetWorldPosition(), pTerrainObject);
 		m_pPlayerBombGameObject->UpdateCollisionBox(m_pPlayerBombGameObject->GetPosition());
 	}
-
-
 }
 
 void CPlayerGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList)
@@ -30,18 +28,7 @@ void CPlayerGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList
 
 void CPlayerGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
 {
-	//CGameObject::PrepareRender(pd3dCommandList);
 	CGameObject::Render(pd3dCommandList, pCamera, pxmf4x4World);
-
-	XMFLOAT3	xmf3Position = GetPosition();
-	TCHAR pstrDebug[256] = { 0 };
-	_stprintf_s(pstrDebug, 256, _T("World Position = %f, %f, %f\n"), xmf3Position.x, xmf3Position.y, xmf3Position.z);
-	OutputDebugString(pstrDebug);
-	//if (m_pPlayerBombGameObject)
-	//{
-	//	m_pPlayerBombGameObject->PrepareRender(pd3dCommandList);
-	//	m_pPlayerBombGameObject->Render(pd3dCommandList, pCamera, NULL);
-	//}
 }
 
 void CPlayerGameObject::LoadPlayerFrameData()

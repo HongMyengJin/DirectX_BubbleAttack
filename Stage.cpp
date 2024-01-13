@@ -374,9 +374,14 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pDepthRenderShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_D32_FLOAT);
 	m_pDepthRenderShader->BuildObjects(pd3dDevice, pd3dCommandList, NULL);
 
+	m_pBombGameObjects.push_back((m_pPlayersGameObject->GetBombGameObject()));
+	m_pBombGameObjects.push_back((m_pMonsterObjects[0]->GetBombGameObject()));
 
 	m_pDepthRenderShader->AddGameObject(m_pPlayersGameObject);
+	m_pDepthRenderShader->AddGameObject(m_pBombGameObjects[0]);
 	m_pDepthRenderShader->AddGameObject(m_pMonsterObjects[0]);
+	m_pDepthRenderShader->AddGameObject(m_pBombGameObjects[1]);
+
 	///m_pDepthRenderShader->AddGameObject(m_pTerrain);
 
 	m_pShadowShader = std::make_shared<CShadowMapShaderComponent>();
@@ -575,16 +580,15 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera
 			m_pMonsterObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
 		}
 	}
-	
-	for (int i = 0; i < m_pEffectRectObjects.size(); i++)
+	for (int i = 0; i < m_pBombGameObjects.size(); i++)
 	{
-		m_pEffectRectObjects[i]->PrepareRender(pd3dCommandList);
-		m_pEffectRectObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
+		if (m_pBombGameObjects[i])
+		{
+			m_pBombGameObjects[i]->PrepareRender(pd3dCommandList);
+			m_pBombGameObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
+		}
 	}
-
-
-
-
+	
 
 	if (m_pDynamicCubeMappingGameObject)
 	{

@@ -76,15 +76,9 @@ void CMonsterGameObject::Update(float fTimeElapsed, XMFLOAT3 xmfTargetPosition, 
 
 void CMonsterGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
 {
-	//CGameObject::PrepareRender(pd3dCommandList);
 	CGameObject::Render(pd3dCommandList, pCamera, pxmf4x4World);
-
-	//if (m_pBombObject)
-	//{
-	//	m_pBombObject->PrepareRender(pd3dCommandList);
-	//	m_pBombObject->Render(pd3dCommandList, pCamera, NULL);
-	//}
 }
+
 
 std::shared_ptr<CBombGameObject> CMonsterGameObject::GetBombGameObject()
 {

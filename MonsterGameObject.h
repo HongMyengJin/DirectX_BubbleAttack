@@ -14,7 +14,6 @@ public:
 	virtual void Animate(float fTimeElapsed);
 	virtual void Update(float fTimeElapsed, XMFLOAT3 xmfTargetPosition, std::shared_ptr<class CTerrainObject> pTerrainObject);
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
-
 	std::shared_ptr<CBombGameObject> GetBombGameObject();
 public:
 	std::shared_ptr<CBombGameObject>		m_pBombObject;

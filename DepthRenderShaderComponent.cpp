@@ -180,9 +180,7 @@ void CDepthRenderShaderComponent::Render(ID3D12GraphicsCommandList* pd3dCommandL
 
     UpdateShaderVariable(pd3dCommandList);
      for (int i = 0; i < m_vGameObjects.size(); i++)
-    {
         m_vGameObjects[i]->Render(pd3dCommandList, pCamera, NULL);
-    }
 }
 
 D3D12_SHADER_BYTECODE CDepthRenderShaderComponent::CreateVertexShader()

@@ -12,6 +12,7 @@ public:
 	virtual void Update(float fTimeElapsed, XMFLOAT4X4* pxmf4x4Parent, std::shared_ptr<CTerrainObject> pTerrainObject);
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
+
 public:
 	void LoadPlayerFrameData();
 	void UpdateFrame(float fTimeElapsed);

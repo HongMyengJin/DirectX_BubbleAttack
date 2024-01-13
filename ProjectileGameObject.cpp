@@ -8,11 +8,11 @@ void CProjectileGameObject::PrepareRender(ID3D12GraphicsCommandList* pd3dCommand
 void CProjectileGameObject::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera, XMFLOAT4X4* pxmf4x4World)
 {
 	CGameObject::Render(pd3dCommandList, pCamera, pxmf4x4World);
-	if (m_pSpriteEffect)
-	{
-		m_pSpriteEffect->PrepareRender(pd3dCommandList);
-		m_pSpriteEffect->Render(pd3dCommandList, pCamera, pxmf4x4World);
-	}
+	//if (m_pSpriteEffect)
+	//{
+	//	m_pSpriteEffect->PrepareRender(pd3dCommandList);
+	//	m_pSpriteEffect->Render(pd3dCommandList, pCamera, pxmf4x4World);
+	//}
 }
 
 void CProjectileGameObject::SetSpriteEffect(std::shared_ptr<CTextureRectObject> pSpriteEffect, XMFLOAT3 xmf3OffSet)

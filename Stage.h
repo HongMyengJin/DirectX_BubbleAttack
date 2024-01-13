@@ -16,6 +16,7 @@
 #include "DynamicCubeMappingGameObject.h"
 #include "DynamicCubeMappingShaderComponent.h"
 #include "TessellationTerrainObject.h"
+#include "BombGameObject.h"
 class CStage : public CScene
 {
 public:
@@ -58,6 +59,9 @@ protected:
 	std::shared_ptr<CDynamicCubeMappingGameObject>			m_pDynamicCubeMappingGameObject;
 
 	std::shared_ptr<CTessellationTerrainObject>				m_pTessellationTerrainObject;
+	std::vector<std::shared_ptr<CBombGameObject>>			m_pBombGameObjects;
+	
+
 	UINT													m_iPlayerAttack = 0;
 	UINT													m_iMonsterAttack = 0;
 	bool													m_bResult = false;
