@@ -389,10 +389,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pShadowShader->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
 	m_pShadowShader->BuildObjects(pd3dDevice, pd3dCommandList, m_pDepthRenderShader->GetDepthFromLightMaterialComponent(), m_pd3dDescriptorHeap.get());
 
-
 	m_pShadowShader->AddGameObject(m_pTerrain);
-
-
 
 	std::shared_ptr<CDynamicCubeMappingShaderComponent> pDynamicCubeMappingShaderComponent = std::make_shared<CDynamicCubeMappingShaderComponent>();
 	pDynamicCubeMappingShaderComponent->CreateShader(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT);
@@ -401,7 +398,7 @@ void CStage::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pDynamicCubeMappingGameObject->Init(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), 256, XMFLOAT3(XMFLOAT3(45.f, 45.f, 45.f)));
 	m_pDynamicCubeMappingGameObject->LoadFrameHierarchyFromFile(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootsignature.Get(), m_pd3dDescriptorHeap.get(), "Model/BP_Mini_Ice_Bear_C.bin", m_pTextureLoader);
 	m_pDynamicCubeMappingGameObject->SetScale(XMFLOAT3(15.f, 15.f, 15.f));
-	m_pDynamicCubeMappingGameObject->SetPosition(XMFLOAT3(500.f, 10.f, 500.f));
+	m_pDynamicCubeMappingGameObject->SetPosition(XMFLOAT3(500.f, 50.f, 500.f));
 	m_pDynamicCubeMappingGameObject->AddShaderComponent(pDynamicCubeMappingShaderComponent);
 
 }
@@ -588,7 +585,12 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera
 			m_pBombGameObjects[i]->Render(pd3dCommandList, pCameraData, nullptr);
 		}
 	}
-	
+
+	if (m_pTerrain)
+	{
+		m_pTerrain->PrepareRender(pd3dCommandList);
+		m_pTerrain->Render(pd3dCommandList, pCameraData, nullptr);
+	}
 
 	if (m_pDynamicCubeMappingGameObject)
 	{
