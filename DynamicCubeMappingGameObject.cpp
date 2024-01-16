@@ -87,7 +87,7 @@ void CDynamicCubeMappingGameObject::OnScenePreRender(ID3D12GraphicsCommandList* 
 	::SynchronizeResourceTransition(pd3dCommandList, dynamic_cast<CMaterialsComponent*>(m_pComponents[UINT(ComponentType::ComponentMaterial)].get())->m_MaterialDatas[0]->m_Textures[0]->GetTextureResource(0).Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 	XMFLOAT3 xmf3Position = GetPosition();
-	xmf3Position.y += 15.f;
+	xmf3Position.y += 10.f;
 	for (int j = 0; j < 6; j++)
 	{
 		m_pCameras[j]->SetPosition(xmf3Position);
