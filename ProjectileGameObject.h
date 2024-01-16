@@ -14,7 +14,7 @@ public:
 	virtual void Update(float fTimeElapsed, XMFLOAT3 xmf3Position, std::shared_ptr<class CTerrainObject> pTerrainObject) {};
 	virtual void PrepareRender(ID3D12GraphicsCommandList* pd3dCommandList);
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
-
+	virtual void SpriteEffectRender(ID3D12GraphicsCommandList* pd3dCommandList, class CCamera* pCamera, XMFLOAT4X4* pxmf4x4World);
 
 	void SetVelocity(XMFLOAT3 xmf3Velocity) {m_xmfVelocity = xmf3Velocity;}
 	void SetDirection(XMFLOAT3 xmf3Direction) { m_xmf3Direction = xmf3Direction; }

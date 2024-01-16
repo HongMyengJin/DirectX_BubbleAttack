@@ -608,6 +608,13 @@ void CStage::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera
 		m_pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 		m_pCamera->UpdateShaderVariables(pd3dCommandList);
 
+		for (int i = 0; i < m_pBombGameObjects.size(); i++)
+		{
+			if (m_pBombGameObjects[i])
+				m_pBombGameObjects[i]->SpriteEffectRender(pd3dCommandList, pCameraData, nullptr);
+		}
+
+
 		for (int i = 0; i < m_pUIObjects.size(); i++)
 		{
 			m_pUIObjects[i]->PrepareRender(pd3dCommandList);
